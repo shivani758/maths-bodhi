@@ -14,6 +14,63 @@ const INITIAL_VISIBLE_TUTORS = 6;
 const TUTOR_LOAD_STEP = 6;
 const MAX_VISIBLE_TUTORS = 50;
 
+const DEFAULT_CLASS_OPTIONS = [
+  "All Classes",
+  "Class 6",
+  "Class 7",
+  "Class 8",
+  "Class 9",
+  "Class 10",
+  "Class 11",
+  "Class 12",
+  "IB MYP",
+  "IB DP",
+  "IGCSE",
+  "JEE Main",
+  "JEE Advanced",
+];
+
+const DEFAULT_BOARD_OPTIONS = [
+  "All Boards",
+  "CBSE",
+  "ICSE",
+  "ISC",
+  "IB",
+  "IGCSE",
+  "Cambridge",
+  "JEE",
+  "SAT Math",
+];
+
+const DEFAULT_SECTOR_OPTIONS = [
+  "All Sectors",
+  "DLF Phase 1",
+  "DLF Phase 2",
+  "DLF Phase 3",
+  "DLF Phase 4",
+  "DLF Phase 5",
+  "Sector 14",
+  "Sector 15",
+  "Sector 23",
+  "Sector 31",
+  "Sector 45",
+  "Sector 46",
+  "Sector 47",
+  "Sector 49",
+  "Sector 50",
+  "Sector 52",
+  "Sector 54",
+  "Sector 56",
+  "Sector 57",
+  "Sector 67",
+  "Sector 70",
+  "Sohna Road",
+  "Golf Course Road",
+  "Golf Course Extension Road",
+];
+
+const GENERIC_FILTER_PARTS = new Set(["class", "math", "maths", "road", "sector", "tuition", "tutor"]);
+
 const BOARD_SEARCH_ITEMS = [
   { label: "CBSE maths tutor", route: mathsRouteMap.cbse },
   { label: "ICSE maths tutor", route: mathsRouteMap["icse-isc"] },
@@ -141,6 +198,44 @@ function getClassSortOrder(value) {
 
   const index = orderedClasses.indexOf(value);
   return index === -1 ? orderedClasses.length + 1 : index;
+}
+
+function normalizeFilterValue(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function mergeFilterOptions(defaultOptions, dynamicOptions = []) {
+  const seen = new Set();
+
+  return [...defaultOptions, ...dynamicOptions.filter(Boolean)].filter((option) => {
+    const key = normalizeFilterValue(option);
+
+    if (!key || seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function filterTextMatches(selectedValue, values = []) {
+  const selected = normalizeFilterValue(selectedValue);
+  const searchable = values.flatMap((value) => getList(Array.isArray(value) ? value : [value]));
+  const normalizedSearchable = normalizeFilterValue(searchable.join(" "));
+
+  return (
+    normalizedSearchable.includes(selected) ||
+    selected
+      .split(" ")
+      .some(
+        (part) =>
+          part.length > 2 && !GENERIC_FILTER_PARTS.has(part) && normalizedSearchable.includes(part),
+      )
+  );
 }
 
 function toAbsoluteUrl(siteUrl, path) {
@@ -324,16 +419,24 @@ function Home() {
       (first, second) => getClassSortOrder(first) - getClassSortOrder(second),
     );
 
-    return ["All Classes", ...classes];
+    return mergeFilterOptions(DEFAULT_CLASS_OPTIONS, classes);
   }, [tutors]);
 
   const sectorOptions = useMemo(
-    () => ["All Sectors", ...new Set(sectorPages.map((sector) => sector.sectorLabel))],
-    [sectorPages],
+    () =>
+      mergeFilterOptions(DEFAULT_SECTOR_OPTIONS, [
+        ...sectorPages.map((sector) => sector.sectorLabel),
+        ...tutors.flatMap((tutor) => tutor.sectors ?? []),
+      ]),
+    [sectorPages, tutors],
   );
 
   const boardOptions = useMemo(
-    () => ["All Boards", ...new Set(tutors.map((tutor) => tutor.board))],
+    () =>
+      mergeFilterOptions(DEFAULT_BOARD_OPTIONS, [
+        ...tutors.map((tutor) => tutor.board),
+        ...tutors.flatMap((tutor) => tutor.boards ?? []),
+      ]),
     [tutors],
   );
 
@@ -342,10 +445,33 @@ function Home() {
 
     return tutors.filter((tutor) => {
       const classMatch =
-        selectedClass === "All Classes" || tutor.classLevel === selectedClass;
+        selectedClass === "All Classes" ||
+        filterTextMatches(selectedClass, [
+          tutor.classLevel,
+          tutor.classesSupported,
+          tutor.title,
+          tutor.summary,
+          tutor.board,
+          tutor.boards,
+        ]);
       const sectorMatch =
-        selectedSector === "All Sectors" || tutor.sectors.includes(selectedSector);
-      const boardMatch = selectedBoard === "All Boards" || tutor.board === selectedBoard;
+        selectedSector === "All Sectors" ||
+        filterTextMatches(selectedSector, [
+          tutor.sectors,
+          tutor.localities,
+          tutor.location,
+          tutor.summary,
+        ]);
+      const boardMatch =
+        selectedBoard === "All Boards" ||
+        filterTextMatches(selectedBoard, [
+          tutor.board,
+          tutor.boards,
+          tutor.title,
+          tutor.summary,
+          ...(tutor.topics ?? []),
+          ...(tutor.schoolFocus ?? []),
+        ]);
       const modeMatch =
         selectedMode === "All Modes" || tutor.mode.includes(selectedMode);
       const topicMatch =
@@ -418,6 +544,14 @@ function Home() {
       behavior: "smooth",
       block: "start",
     });
+  }
+
+  function resetTutorFilters() {
+    setSelectedClass("All Classes");
+    setSelectedBoard("All Boards");
+    setSelectedSector("All Sectors");
+    setSelectedMode("All Modes");
+    setSelectedTopic("All Topics");
   }
 
   function applySearchChip(item) {
@@ -525,7 +659,7 @@ function Home() {
       />
 
       <div className="bg-white">
-        <section className="relative overflow-hidden bg-white px-6 py-16">
+        <section className="relative overflow-hidden bg-white px-5 py-12 sm:px-6 sm:py-16">
           <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl" />
           <div className="absolute right-0 top-10 h-72 w-72 rounded-full bg-cyan-100 blur-3xl" />
 
@@ -535,11 +669,11 @@ function Home() {
                 {home.eyebrow}
               </span>
 
-              <h1 className="mt-6 max-w-5xl text-4xl font-bold leading-tight text-slate-950 md:text-6xl">
+              <h1 className="mt-6 max-w-5xl text-4xl font-bold leading-tight text-slate-950 sm:text-5xl md:text-6xl">
                 {home.heroTitle}
               </h1>
 
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
                 {home.heroSubtitle}
               </p>
 
@@ -579,10 +713,10 @@ function Home() {
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   to="/book-demo"
-                  className="rounded-2xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700"
+                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 sm:w-auto"
                 >
                   Book Free Maths Demo
                 </Link>
@@ -590,13 +724,13 @@ function Home() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
                 >
                   WhatsApp Maths Bodhi
                 </a>
                 <Link
                   to="/login"
-                  className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3.5 font-semibold text-slate-900 transition hover:bg-slate-100"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:bg-slate-100 sm:w-auto"
                 >
                   Open Student or Tutor Login
                 </Link>
@@ -629,6 +763,9 @@ function Home() {
               <img
                 src="/images/hero-maths-home.svg"
                 alt="Premium maths home tutoring dashboard illustration showing concept learning, progress tracking, and local Gurugram service coverage"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="h-auto w-full rounded-[24px] border border-slate-100 bg-slate-50"
               />
 
@@ -753,46 +890,52 @@ function Home() {
                   </div>
                   <p className="mt-3 text-sm leading-6 text-slate-600">{group.description}</p>
 
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {group.items.map((item) => {
-                      const chipClassName =
-                        "rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold transition";
+                  {group.items.length ? (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {group.items.map((item) => {
+                        const chipClassName =
+                          "rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold transition";
 
-                      if (item.route) {
+                        if (item.route) {
+                          return (
+                            <Link
+                              key={item.label}
+                              to={item.route}
+                              className={`${chipClassName} bg-white text-slate-700 hover:border-blue-200 hover:text-blue-700`}
+                            >
+                              {item.label}
+                            </Link>
+                          );
+                        }
+
+                        if (item.classLevel || item.mode || item.sectorLabel || item.topic) {
+                          return (
+                            <button
+                              key={item.label}
+                              type="button"
+                              onClick={() => applySearchChip(item)}
+                              className={`${chipClassName} bg-slate-50 text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700`}
+                            >
+                              {item.label}
+                            </button>
+                          );
+                        }
+
                         return (
-                          <Link
+                          <span
                             key={item.label}
-                            to={item.route}
-                            className={`${chipClassName} bg-white text-slate-700 hover:border-blue-200 hover:text-blue-700`}
+                            className={`${chipClassName} bg-slate-50 text-slate-600`}
                           >
                             {item.label}
-                          </Link>
+                          </span>
                         );
-                      }
-
-                      if (item.classLevel || item.mode || item.sectorLabel || item.topic) {
-                        return (
-                          <button
-                            key={item.label}
-                            type="button"
-                            onClick={() => applySearchChip(item)}
-                            className={`${chipClassName} bg-slate-50 text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700`}
-                          >
-                            {item.label}
-                          </button>
-                        );
-                      }
-
-                      return (
-                        <span
-                          key={item.label}
-                          className={`${chipClassName} bg-slate-50 text-slate-600`}
-                        >
-                          {item.label}
-                        </span>
-                      );
-                    })}
-                  </div>
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-5 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
+                      More shortcuts will appear here as matching public pages are added.
+                    </p>
+                  )}
                 </article>
               ))}
             </div>
@@ -810,7 +953,10 @@ function Home() {
                 <h2 className="mt-4 text-3xl font-bold text-slate-950 md:text-4xl">
                   Compare tutors that match your current filters
                 </h2>
-                <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">
+                <p
+                  className="mt-3 max-w-3xl text-base leading-7 text-slate-600 md:text-lg"
+                  aria-live="polite"
+                >
                   {tutorsLoading
                     ? "Loading live tutor profiles from the backend."
                     : `Showing ${visibleTutorCards.length} of ${cappedTutorMatches.length} tutor${
@@ -823,25 +969,19 @@ function Home() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
                 {activeTutorFilters.length ? (
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedClass("All Classes");
-                      setSelectedBoard("All Boards");
-                      setSelectedSector("All Sectors");
-                      setSelectedMode("All Modes");
-                      setSelectedTopic("All Topics");
-                    }}
-                    className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                    onClick={resetTutorFilters}
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
                   >
                     Clear filters
                   </button>
                 ) : null}
                 <Link
                   to="/book-demo"
-                  className="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   Request custom tutor matching
                 </Link>
@@ -862,12 +1002,33 @@ function Home() {
             </div>
 
             {tutorsLoading ? (
-              <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-3">
+              <div
+                className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-3"
+                role="status"
+                aria-label="Loading tutor cards"
+              >
                 {Array.from({ length: 6 }, (_, index) => (
                   <div
                     key={`tutor-loading-${index}`}
-                    className="h-80 animate-pulse rounded-[24px] border border-slate-200 bg-slate-50"
-                  />
+                    className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm"
+                  >
+                    <div className="flex animate-pulse items-start gap-4">
+                      <div className="h-14 w-14 rounded-2xl bg-slate-100" />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-4 w-2/3 rounded-full bg-slate-100" />
+                        <div className="h-3 w-1/2 rounded-full bg-slate-100" />
+                      </div>
+                    </div>
+                    <div className="mt-6 animate-pulse space-y-3">
+                      <div className="h-3 rounded-full bg-slate-100" />
+                      <div className="h-3 w-5/6 rounded-full bg-slate-100" />
+                      <div className="grid gap-3 pt-3 sm:grid-cols-3">
+                        <div className="h-20 rounded-2xl bg-slate-100" />
+                        <div className="h-20 rounded-2xl bg-slate-100" />
+                        <div className="h-20 rounded-2xl bg-slate-100" />
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : visibleTutorCards.length ? (
@@ -910,8 +1071,32 @@ function Home() {
               <div className="mt-8 rounded-[28px] border border-slate-200 bg-slate-50 p-8 text-center shadow-sm">
                 <h3 className="text-xl font-bold text-slate-950">No tutors matched these filters yet</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  Try a broader class, board, locality, or topic to reopen the shortlist.
+                  These dropdowns include useful Gurugram search defaults, but tutor cards only
+                  appear when a real profile matches the selected filters.
                 </p>
+                <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+                  <button
+                    type="button"
+                    onClick={resetTutorFilters}
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
+                  >
+                    Reset filters
+                  </button>
+                  <Link
+                    to="/book-demo"
+                    className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
+                  >
+                    Book a demo
+                  </Link>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
+                  >
+                    WhatsApp tutor matching
+                  </a>
+                </div>
               </div>
             )}
           </div>
@@ -978,33 +1163,44 @@ function Home() {
 
             <div className="mt-10 -mx-6 overflow-x-auto px-6 pb-2">
               <div className="flex min-w-full gap-5">
-                {localContextCards.map((item) => (
-                  <article
-                    key={item.key}
-                    className="min-w-[280px] max-w-[320px] flex-1 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                      {item.eyebrow}
-                    </p>
-                    <h3 className="mt-4 text-2xl font-bold text-slate-950">{item.title}</h3>
-                    <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
-                    <div className="mt-5 rounded-2xl bg-slate-50 p-4">
-                      <p className="text-sm font-semibold text-slate-900">{item.note}</p>
-                    </div>
-                    {item.chips?.length ? (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {item.chips.map((chip) => (
-                          <span
-                            key={`${item.key}-${chip}`}
-                            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
-                          >
-                            {chip}
-                          </span>
-                        ))}
+                {localContextCards.length ? (
+                  localContextCards.map((item) => (
+                    <article
+                      key={item.key}
+                      className="min-w-[280px] max-w-[320px] flex-1 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:rounded-[28px] sm:p-6"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
+                        {item.eyebrow}
+                      </p>
+                      <h3 className="mt-4 text-xl font-bold leading-tight text-slate-950 sm:text-2xl">
+                        {item.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
+                      <div className="mt-5 rounded-2xl bg-slate-50 p-4">
+                        <p className="text-sm font-semibold text-slate-900">{item.note}</p>
                       </div>
-                    ) : null}
+                      {item.chips?.length ? (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {item.chips.map((chip) => (
+                            <span
+                              key={`${item.key}-${chip}`}
+                              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
+                            >
+                              {chip}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                    </article>
+                  ))
+                ) : (
+                  <article className="min-w-[280px] max-w-[420px] rounded-[24px] border border-dashed border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 className="text-xl font-bold text-slate-950">Local context is loading</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                      Gurugram school and locality notes will appear here once public data is available.
+                    </p>
                   </article>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -1042,6 +1238,8 @@ function Home() {
               <img
                 src="/images/tutor-premium-school.svg"
                 alt="Maths tutor matching flow for Gurugram families comparing board, class, and locality fit"
+                loading="lazy"
+                decoding="async"
                 className="aspect-[4/3] w-full rounded-[24px] border border-slate-200 bg-white object-cover"
               />
 
@@ -1078,6 +1276,8 @@ function Home() {
               <img
                 src="/images/tutor-classroom-progress.svg"
                 alt="Maths progress illustration showing planning, regular review, and demo-class readiness"
+                loading="lazy"
+                decoding="async"
                 className="aspect-[4/3] w-full rounded-[24px] border border-slate-200 bg-slate-50 object-cover"
               />
 
@@ -1128,76 +1328,89 @@ function Home() {
               subtitle="A more professional locality view for parents who want fast sector-level clarity before booking a demo."
             />
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {sectorPages.slice(0, visibleSectors).map((sector) => (
-                <Link
-                  key={sector.slug}
-                  to={`/city/${sector.citySlug}/${sector.slug}`}
-                  className="group rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                        Gurugram Locality
+            {sectorPages.length ? (
+              <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {sectorPages.slice(0, visibleSectors).map((sector) => (
+                  <Link
+                    key={sector.slug}
+                    to={`/city/${sector.citySlug}/${sector.slug}`}
+                    className="group rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg sm:p-6"
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
+                          Gurugram Locality
+                        </p>
+                        <h3 className="mt-3 text-2xl font-bold text-slate-950">
+                          {sector.sectorLabel}
+                        </h3>
+                      </div>
+                      <div className="w-fit rounded-2xl bg-slate-950 px-3 py-2 text-xs font-semibold text-white">
+                        {sector.nearbySchools.length} school zones
+                      </div>
+                    </div>
+
+                    <p className="mt-4 text-sm leading-6 text-slate-600">{sector.subtitle}</p>
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {sector.landmarks.slice(0, 2).map((landmark) => (
+                        <span
+                          key={landmark}
+                          className="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
+                        >
+                          {landmark}
+                        </span>
+                      ))}
+                      {sector.nearbySchools[0] ? (
+                        <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
+                          {sector.nearbySchools[0]}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-sm font-medium text-slate-600">
+                        Home tuition and online support
                       </p>
-                      <h3 className="mt-3 text-2xl font-bold text-slate-950">
-                        {sector.sectorLabel}
-                      </h3>
+                      <p className="text-sm font-semibold text-blue-700 transition group-hover:translate-x-1">
+                        Explore sector
+                      </p>
                     </div>
-                    <div className="rounded-2xl bg-slate-950 px-3 py-2 text-xs font-semibold text-white">
-                      {sector.nearbySchools.length} school zones
-                    </div>
-                  </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-10 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
+                <h3 className="text-xl font-bold text-slate-950">Locality pages are being prepared</h3>
+                <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                  Sector links will appear here once Gurugram locality content is available.
+                </p>
+              </div>
+            )}
 
-                  <p className="mt-4 text-sm leading-6 text-slate-600">{sector.subtitle}</p>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {sector.landmarks.slice(0, 2).map((landmark) => (
-                      <span
-                        key={landmark}
-                        className="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
-                      >
-                        {landmark}
-                      </span>
-                    ))}
-                    {sector.nearbySchools[0] ? (
-                      <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
-                        {sector.nearbySchools[0]}
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
-                    <p className="text-sm font-medium text-slate-600">Home tuition and online support</p>
-                    <p className="text-sm font-semibold text-blue-700 transition group-hover:translate-x-1">
-                      Explore sector
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-8 flex justify-center">
-              {visibleSectors < sectorPages.length ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleSectors((current) => Math.min(current + 3, sectorPages.length))
-                  }
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
-                >
-                  Load more sectors
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setVisibleSectors(6)}
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
-                >
-                  Show fewer sectors
-                </button>
-              )}
-            </div>
+            {sectorPages.length > 6 ? (
+              <div className="mt-8 flex justify-center">
+                {visibleSectors < sectorPages.length ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVisibleSectors((current) => Math.min(current + 3, sectorPages.length))
+                    }
+                    className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Load more sectors
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setVisibleSectors(6)}
+                    className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Show fewer sectors
+                  </button>
+                )}
+              </div>
+            ) : null}
           </div>
         </section>
 
@@ -1206,55 +1419,70 @@ function Home() {
             <SectionTitle
               badge="What Gurugram Parents Say"
               title="Real-looking parent feedback from Gurugram sectors with more honest rating spread"
-              subtitle={`Showing ${visibleReviews} of ${reviews.length} review cards. Ratings are intentionally mixed instead of repeating a flat 5.0 on every card.`}
+              subtitle={
+                reviews.length
+                  ? `Showing ${Math.min(visibleReviews, reviews.length)} of ${reviews.length} review cards. Ratings are intentionally mixed instead of repeating a flat 5.0 on every card.`
+                  : "Parent feedback will appear here once public reviews are available."
+              }
             />
 
-            <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-              {reviews.slice(0, visibleReviews).map((review) => (
-                <article
-                  key={review.id}
-                  className="group rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-                      {Number(review.rating).toFixed(1)}/5
-                    </span>
-                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      {review.board}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-base font-bold text-slate-950">
-                    {review.parent}
-                  </h3>
-                  <p className="mt-1 text-xs font-medium text-slate-500">
-                    {review.sector} | {review.school}
-                  </p>
-                  <p className="mt-4 text-sm leading-6 text-slate-700">{review.quote}</p>
-                </article>
-              ))}
-            </div>
+            {reviews.length ? (
+              <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                {reviews.slice(0, visibleReviews).map((review) => (
+                  <article
+                    key={review.id}
+                    className="group rounded-[22px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                        {Number(review.rating).toFixed(1)}/5
+                      </span>
+                      <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        {review.board}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-base font-bold text-slate-950">
+                      {review.parent}
+                    </h3>
+                    <p className="mt-1 text-xs font-medium text-slate-500">
+                      {review.sector} | {review.school}
+                    </p>
+                    <p className="mt-4 text-sm leading-6 text-slate-700">{review.quote}</p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-10 rounded-[24px] border border-dashed border-slate-200 bg-white p-6 text-center shadow-sm">
+                <h3 className="text-xl font-bold text-slate-950">Reviews are not published yet</h3>
+                <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                  Parent feedback cards will show here after reviews are available in the public content feed.
+                </p>
+              </div>
+            )}
 
-            <div className="mt-8 flex justify-center">
-              {visibleReviews < reviews.length ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisibleReviews((current) => Math.min(current + 10, reviews.length))
-                  }
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
-                >
-                  Load 10 more reviews
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setVisibleReviews(10)}
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
-                >
-                  Show fewer reviews
-                </button>
-              )}
-            </div>
+            {reviews.length > 10 ? (
+              <div className="mt-8 flex justify-center">
+                {visibleReviews < reviews.length ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVisibleReviews((current) => Math.min(current + 10, reviews.length))
+                    }
+                    className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Load 10 more reviews
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setVisibleReviews(10)}
+                    className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Show fewer reviews
+                  </button>
+                )}
+              </div>
+            ) : null}
           </div>
         </section>
 

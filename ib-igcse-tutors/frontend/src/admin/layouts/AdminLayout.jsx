@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Seo from "../../components/Seo";
 import { getAdminBreadcrumbs, adminNavigationGroups, getAdminNavLabel } from "../navigation";
 import { useAdminAuth } from "../providers/AdminAuthContext";
@@ -35,6 +35,12 @@ function AdminLayout() {
               <p className="mt-4 text-sm leading-6 text-slate-300">
                 Frontend-only content workspace built to swap to real APIs later.
               </p>
+              <Link
+                to="/"
+                className="mt-4 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+              >
+                Back to website
+              </Link>
             </div>
 
             <nav className="mt-6 space-y-6">
@@ -82,7 +88,13 @@ function AdminLayout() {
                   </h1>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <Link
+                    to="/"
+                    className="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-center text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
+                  >
+                    View public site
+                  </Link>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <p className="text-sm font-semibold text-slate-900">
                       {session?.profile?.name ?? "Maths Bodhi Admin"}

@@ -23,19 +23,72 @@ function splitParagraphs(text) {
     .filter(Boolean);
 }
 
-function Chip({ children, tone = "slate" }) {
+function getBoardPath(board = "") {
+  const normalized = String(board).toLowerCase();
+
+  if (normalized.includes("igcse")) {
+    return "/subjects/maths/igcse";
+  }
+
+  if (normalized.includes("ib")) {
+    return "/subjects/maths/ib";
+  }
+
+  if (normalized.includes("jee")) {
+    return "/subjects/maths/jee";
+  }
+
+  if (normalized.includes("icse") || normalized.includes("isc")) {
+    return "/subjects/maths/icse-isc";
+  }
+
+  if (normalized.includes("cbse")) {
+    return "/subjects/maths/cbse";
+  }
+
+  return "/subjects/maths";
+}
+
+function normalizeLabel(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+const CLASS_ROUTE_MAP = {
+  "class 10": "/maths/class/class-10-maths-home-tutor",
+  "class 12": "/maths/class/class-12-maths-home-tutor",
+};
+
+function getClassPath(classLevel = "") {
+  return CLASS_ROUTE_MAP[normalizeLabel(classLevel)] ?? "";
+}
+
+function getSectorPath(sector) {
+  return sector?.citySlug && sector?.slug ? `/city/${sector.citySlug}/${sector.slug}` : "";
+}
+
+function Chip({ children, tone = "slate", to = "" }) {
   const tones = {
     slate: "border border-slate-200 bg-white text-slate-700",
     cyan: "border border-cyan-200 bg-cyan-50 text-cyan-700",
     blue: "border border-blue-100 bg-blue-50 text-blue-700",
     emerald: "border border-emerald-100 bg-emerald-50 text-emerald-700",
   };
+  const className = `rounded-full px-3 py-1.5 text-sm font-semibold ${
+    tones[tone] ?? tones.slate
+  }`;
 
-  return (
-    <span className={`rounded-full px-3 py-1.5 text-sm font-semibold ${tones[tone] ?? tones.slate}`}>
-      {children}
-    </span>
-  );
+  if (to) {
+    return (
+      <Link to={to} className={`${className} transition hover:border-blue-200 hover:text-blue-700`}>
+        {children}
+      </Link>
+    );
+  }
+
+  return <span className={className}>{children}</span>;
 }
 
 function InfoCard({ label, value }) {
@@ -53,6 +106,16 @@ function TutorProfile() {
   const tutor = useMemo(
     () => (slug ? getTutorProfileBySlug(slug) : getTutorProfileById(id)),
     [id, slug, siteData.tutors],
+  );
+  const sectorPageByLabel = useMemo(
+    () =>
+      new Map(
+        (siteData.sectorPages ?? []).map((sector) => [
+          normalizeLabel(sector.sectorLabel),
+          sector,
+        ]),
+      ),
+    [siteData.sectorPages],
   );
 
   if (!tutor && isSiteDataLoading) {
@@ -80,6 +143,11 @@ function TutorProfile() {
     : `${tutor.name}, maths tutor`;
   const intro = tutor.summary ?? tutor.shortBio ?? tutor.title;
   const fullBioParagraphs = splitParagraphs(tutor.longFormProfile);
+  const profileParagraphs = fullBioParagraphs.length
+    ? fullBioParagraphs
+    : [
+        "This profile is being completed. Families can still compare the tutor's board fit, class coverage, lesson mode, and enquiry options before booking.",
+      ];
   const teachingParagraphs = splitParagraphs(tutor.teachingStyle);
   const boardChips = uniqueValues(tutor.boards ?? []);
   const classChips = uniqueValues(tutor.classesSupported ?? []);
@@ -88,6 +156,10 @@ function TutorProfile() {
   const localityChips = uniqueValues(tutor.localities ?? []);
   const tagChips = uniqueValues(tutor.associatedTags ?? []);
   const primaryBoard = boardChips[0] ?? "Maths";
+  const primaryBoardPath = getBoardPath(primaryBoard);
+  const ratingLabel = tutor.rating ? `${tutor.rating}/5 rated` : "New profile";
+  const experienceLabel = tutor.experience || "Experience shared on enquiry";
+  const feeLabel = tutor.startingFee ?? tutor.price ?? "Shared on enquiry";
   const subjectsAndSchools = uniqueValues([
     ...(topicChips ?? []).slice(0, 2),
     ...(tutor.schoolFocus ?? []).slice(0, 2),
@@ -137,16 +209,19 @@ function TutorProfile() {
       />
 
       <div className="bg-white">
-        <section className="relative overflow-hidden px-6 py-16 md:py-20">
+        <section className="relative overflow-hidden px-5 py-12 sm:px-6 sm:py-16 md:py-20">
           <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-100 blur-3xl" />
           <div className="absolute right-0 top-16 h-72 w-72 rounded-full bg-cyan-100 blur-3xl" />
 
           <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div className="rounded-[36px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
+            <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-4 shadow-sm sm:rounded-[36px] sm:p-6">
               <img
-                src={tutor.image}
-                alt={tutor.imageAlt}
-                className="w-full rounded-[28px] border border-slate-200 bg-white"
+                src={tutor.image || "/images/hero-maths-home.svg"}
+                alt={tutor.imageAlt || `${tutor.name} maths tutor profile`}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="w-full rounded-[22px] border border-slate-200 bg-white sm:rounded-[28px]"
               />
             </div>
 
@@ -154,39 +229,47 @@ function TutorProfile() {
               <span className="inline-flex rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
                 Public Tutor Profile
               </span>
-              <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-slate-950 md:text-5xl">
+              <h1 className="mt-6 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-950 md:text-5xl">
                 {tutor.name}
               </h1>
-              <h2 className="mt-4 text-2xl font-bold text-blue-700">
-                {tutor.experience || "Experienced"} + {primaryBoard}
+              <h2 className="mt-4 text-xl font-bold text-blue-700 sm:text-2xl">
+                {experienceLabel} + {primaryBoard}
               </h2>
               <h3 className="mt-3 text-lg font-semibold text-slate-800">
                 {subjectsAndSchools || tutor.title}
               </h3>
               <p className="mt-4 text-base font-semibold text-slate-600">{tutor.title}</p>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">{intro}</p>
+              <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
+                {intro}
+              </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <Chip tone="blue">{tutor.rating}/5 rated</Chip>
-                <Chip tone="cyan">{tutor.experience}</Chip>
-                <Chip tone="emerald">{tutor.startingFee ?? tutor.price}</Chip>
+                <Chip tone="blue">{ratingLabel}</Chip>
+                <Chip tone="cyan">{experienceLabel}</Chip>
+                <Chip tone="emerald">{feeLabel}</Chip>
                 {boardChips[0] ? <Chip>{boardChips[0]}</Chip> : null}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-2xl bg-blue-600 px-6 py-3.5 font-semibold text-white transition hover:bg-blue-700"
+                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   Ask about this tutor on WhatsApp
                 </a>
                 <Link
                   to="/book-demo"
-                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
                 >
                   Book a demo class
+                </Link>
+                <Link
+                  to={primaryBoardPath}
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:bg-white hover:text-blue-700 sm:w-auto"
+                >
+                  Explore {primaryBoard} support
                 </Link>
               </div>
 
@@ -200,12 +283,12 @@ function TutorProfile() {
           </div>
         </section>
 
-        <section className="bg-slate-50 px-6 py-16">
+        <section className="bg-slate-50 px-5 py-12 sm:px-6 sm:py-16">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-8">
               <h2 className="text-2xl font-bold text-slate-950">About this maths tutor</h2>
               <div className="mt-6 space-y-4">
-                {fullBioParagraphs.map((paragraph) => (
+                {profileParagraphs.map((paragraph) => (
                   <p key={paragraph} className="text-sm leading-7 text-slate-600">
                     {paragraph}
                   </p>
@@ -226,32 +309,48 @@ function TutorProfile() {
               ) : null}
             </div>
 
-            <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-8">
               <h2 className="text-2xl font-bold text-slate-950">Boards and classes supported</h2>
 
               <h3 className="mt-6 text-lg font-semibold text-slate-950">Boards</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {boardChips.map((item) => (
-                  <Chip key={item} tone="cyan">
-                    {item}
-                  </Chip>
-                ))}
+                {boardChips.length ? (
+                  boardChips.map((item) => (
+                    <Chip key={item} tone="cyan" to={getBoardPath(item)}>
+                      {item}
+                    </Chip>
+                  ))
+                ) : (
+                  <p className="text-sm leading-7 text-slate-600">
+                    Board fit can be confirmed during the enquiry.
+                  </p>
+                )}
               </div>
 
               <h3 className="mt-8 text-lg font-semibold text-slate-950">Classes supported</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {classChips.map((item) => (
-                  <Chip key={item} tone="blue">
-                    {item}
-                  </Chip>
-                ))}
+                {classChips.length ? (
+                  classChips.map((item) => (
+                    <Chip key={item} tone="blue" to={getClassPath(item)}>
+                      {item}
+                    </Chip>
+                  ))
+                ) : (
+                  <p className="text-sm leading-7 text-slate-600">
+                    Class coverage is flexible and can be checked before booking.
+                  </p>
+                )}
               </div>
 
               <h3 className="mt-8 text-lg font-semibold text-slate-950">Topics supported</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {topicChips.map((item) => (
-                  <Chip key={item}>{item}</Chip>
-                ))}
+                {topicChips.length ? (
+                  topicChips.map((item) => <Chip key={item}>{item}</Chip>)
+                ) : (
+                  <p className="text-sm leading-7 text-slate-600">
+                    Topic-specific support can be discussed with the team.
+                  </p>
+                )}
               </div>
 
               {tagChips.length ? (
@@ -270,32 +369,48 @@ function TutorProfile() {
           </div>
         </section>
 
-        <section className="bg-white px-6 py-16">
+        <section className="bg-white px-5 py-12 sm:px-6 sm:py-16">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
-            <div className="rounded-[32px] border border-slate-200 bg-slate-50 p-8 shadow-sm">
+            <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-5 shadow-sm sm:rounded-[32px] sm:p-8">
               <h2 className="text-2xl font-bold text-slate-950">Services</h2>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <InfoCard label="Starting fee" value={tutor.startingFee ?? tutor.price ?? "Shared on request"} />
+                <InfoCard label="Starting fee" value={feeLabel} />
                 <InfoCard label="City" value={(tutor.cities ?? []).join(", ") || tutor.location || "Gurugram"} />
               </div>
 
               <h3 className="mt-8 text-lg font-semibold text-slate-950">Lesson modes</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {serviceChips.map((item) => (
-                  <Chip key={item} tone="blue">
-                    {item}
-                  </Chip>
-                ))}
+                {serviceChips.length ? (
+                  serviceChips.map((item) => (
+                    <Chip key={item} tone="blue">
+                      {item}
+                    </Chip>
+                  ))
+                ) : (
+                  <p className="text-sm leading-7 text-slate-600">
+                    Lesson mode can be confirmed during matching.
+                  </p>
+                )}
               </div>
 
               <h3 className="mt-8 text-lg font-semibold text-slate-950">Local tutor availability</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {localityChips.map((item) => (
-                  <Chip key={item} tone="cyan">
-                    {item}
-                  </Chip>
-                ))}
+                {localityChips.length ? (
+                  localityChips.map((item) => (
+                    <Chip
+                      key={item}
+                      tone="cyan"
+                      to={getSectorPath(sectorPageByLabel.get(normalizeLabel(item)))}
+                    >
+                      {item}
+                    </Chip>
+                  ))
+                ) : (
+                  <p className="text-sm leading-7 text-slate-600">
+                    Locality and scheduling fit can be checked before the demo.
+                  </p>
+                )}
               </div>
 
               {tutor.schoolFocus?.length ? (
@@ -310,17 +425,23 @@ function TutorProfile() {
               ) : null}
             </div>
 
-            <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:rounded-[32px] sm:p-8">
               <h2 className="text-2xl font-bold text-slate-950">Qualifications and achievements</h2>
 
               <h3 className="mt-6 text-lg font-semibold text-slate-950">Qualifications</h3>
-              <div className="mt-4 space-y-3">
-                {(tutor.qualifications ?? []).map((item) => (
-                  <div key={item} className="rounded-2xl bg-slate-50 px-5 py-4 text-sm font-medium text-slate-700">
-                    {item}
-                  </div>
-                ))}
-              </div>
+              {(tutor.qualifications ?? []).length ? (
+                <div className="mt-4 space-y-3">
+                  {(tutor.qualifications ?? []).map((item) => (
+                    <div key={item} className="rounded-2xl bg-slate-50 px-5 py-4 text-sm font-medium text-slate-700">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-4 rounded-2xl bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-600">
+                  Qualification details can be shared by the team before the first session.
+                </p>
+              )}
 
               {tutor.achievements?.length ? (
                 <>
@@ -355,20 +476,28 @@ function TutorProfile() {
           </section>
         ) : null}
 
-        <section className="bg-white px-6 py-16">
+        <section className="bg-white px-5 py-12 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-2xl font-bold text-slate-950">Frequently asked questions</h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
               These answers help families understand tutor fit, lesson mode, and how the conversation usually starts.
             </p>
 
-            <div className="mt-8 rounded-[32px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
-              <MathsFaqAccordion items={tutor.faqItems} />
-            </div>
+            {tutor.faqItems?.length ? (
+              <div className="mt-8 rounded-[28px] border border-slate-200 bg-slate-50 p-4 shadow-sm sm:rounded-[32px] sm:p-6">
+                <MathsFaqAccordion items={tutor.faqItems} />
+              </div>
+            ) : (
+              <div className="mt-8 rounded-[28px] border border-dashed border-slate-200 bg-slate-50 p-6 shadow-sm">
+                <p className="text-sm leading-7 text-slate-600">
+                  Tutor-specific FAQs will appear here once they are available.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
-        <section className="bg-slate-50 px-6 py-16">
+        <section className="bg-slate-50 px-5 py-12 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-2xl font-bold text-slate-950">Reviews and related reading</h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
@@ -395,35 +524,49 @@ function TutorProfile() {
 
               <div>
                 <h3 className="text-lg font-semibold text-slate-950">Related blogs</h3>
-                <div className="mt-5 grid gap-4">
-                  {tutor.relatedBlogs.map((blog) => (
-                    <MathsGuideCard key={blog.id} {...blog} />
-                  ))}
-                </div>
+                {tutor.relatedBlogs?.length ? (
+                  <div className="mt-5 grid gap-4">
+                    {tutor.relatedBlogs.map((blog) => (
+                      <MathsGuideCard key={blog.id} {...blog} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mt-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm">
+                    <p className="text-sm leading-7 text-slate-600">
+                      More board-specific reading will appear here as guides are published.
+                    </p>
+                    <Link
+                      to={primaryBoardPath}
+                      className="mt-4 inline-flex text-sm font-semibold text-blue-700 transition hover:text-blue-800"
+                    >
+                      Browse {primaryBoard} maths support
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-white px-6 py-16">
+        <section className="bg-white px-5 py-12 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-7xl">
-            <div className="rounded-[32px] border border-slate-200 bg-slate-950 p-8 text-white shadow-xl shadow-slate-200/70">
+            <div className="rounded-[28px] border border-slate-200 bg-slate-950 p-5 text-white shadow-xl shadow-slate-200/70 sm:rounded-[32px] sm:p-8">
               <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr] xl:items-start">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">
                     Next step
                   </p>
-                  <h2 className="mt-3 text-3xl font-bold tracking-tight">
+                  <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
                     Talk through board fit, class level, and the maths pressure that matters most
                   </h2>
                   <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
                     Families can share the board, class, school, current maths concerns, and preferred mode before deciding on the next conversation.
                   </p>
 
-                  <div className="mt-6 flex flex-wrap gap-3">
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <Link
                       to="/book-demo"
-                      className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+                      className="w-full rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 transition hover:bg-slate-100 sm:w-auto"
                     >
                       Book a demo class
                     </Link>
@@ -431,7 +574,7 @@ function TutorProfile() {
                       href={whatsappUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                      className="w-full rounded-2xl border border-white/15 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
                     >
                       Message Maths Bodhi on WhatsApp
                     </a>
