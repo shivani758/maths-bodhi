@@ -13,7 +13,7 @@ import {
   stripAllFilterOption,
 } from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
-import { getMathsHomeCards } from "../data/mathsBoardPages";
+import { mathsRouteMap } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
 import { getCityPage } from "../services/siteLookup";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
@@ -23,6 +23,42 @@ const GURUGRAM_CITY_ALIASES = ["gurugram", "gurgaon"];
 const FALLBACK_GURUGRAM_SECTORS = stripAllFilterOption(SECTOR_OPTIONS);
 const FALLBACK_GURUGRAM_BOARDS = ["CBSE", "ICSE", "ISC", "IB", "IGCSE", "Cambridge", "JEE"];
 const CITY_TUTOR_LIMIT = 6;
+
+const BOARD_ROUTE_LINKS = [
+  {
+    label: "Maths by Board",
+    to: mathsRouteMap.hub,
+    description: "Compare the main maths board routes before narrowing by class or sector.",
+  },
+  {
+    label: "CBSE",
+    to: mathsRouteMap.cbse,
+    description: "School-paced maths support for worksheets, tests, and board readiness.",
+  },
+  {
+    label: "IB",
+    to: mathsRouteMap.ib,
+    description: "Pathway-aware maths support for MYP and Diploma learners.",
+  },
+  {
+    label: "IGCSE",
+    to: mathsRouteMap.igcse,
+    description: "Core and Extended support with clearer method and paper practice.",
+  },
+];
+
+const CLASS_ROUTE_LINKS = [
+  {
+    label: "Class 10",
+    to: "/gurugram/class-10-maths-home-tutor",
+    description: "Chapter clarity, worksheet correction, and board-style revision support.",
+  },
+  {
+    label: "Class 12",
+    to: "/gurugram/class-12-maths-home-tutor",
+    description: "Senior-school maths support for exam structure and steadier problem solving.",
+  },
+];
 
 function normalizeSlug(value) {
   return String(value ?? "").trim().toLowerCase();
@@ -217,7 +253,12 @@ function CityPage() {
   const [selectedClass, setSelectedClass] = useState("All Classes");
   const [selectedBoard, setSelectedBoard] = useState("All Boards");
   const [selectedSector, setSelectedSector] = useState("All Sectors");
-  const mathsBoardCards = useMemo(() => getMathsHomeCards(), []);
+  const isGurugramPage = page
+    ? [page.slug, page.label, ...getList(page.aliases)]
+        .map(normalizeSlug)
+        .some((value) => GURUGRAM_CITY_ALIASES.includes(value))
+    : false;
+  const h1 = isGurugramPage ? "Maths Tutor in Gurugram" : page?.headline;
 
   const cityClassOptions = useMemo(
     () =>
@@ -338,7 +379,7 @@ function CityPage() {
                   Gurugram city page
                 </span>
                 <h1 className="mt-6 max-w-4xl text-4xl font-bold text-neutral-950 md:text-5xl">
-                  {page.headline}
+                  {h1}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
                   {page.subtitle}
@@ -380,12 +421,14 @@ function CityPage() {
                   >
                     Maths by Board
                   </Link>
-                  <Link
-                    to="/#homepage-tutor-matches"
-                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
-                  >
-                    Tutor Profiles
-                  </Link>
+                  {siteData.tutors.length ? (
+                    <Link
+                      to="/#homepage-tutor-matches"
+                      className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
+                    >
+                      Tutor Profiles
+                    </Link>
+                  ) : null}
                   <Link
                     to="/subjects/maths"
                     className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
@@ -396,9 +439,9 @@ function CityPage() {
               </div>
 
               <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                <h2 className="text-2xl font-bold text-neutral-950">
+                <h3 className="text-2xl font-bold text-neutral-950">
                   Find a tutor in {page.label}
-                </h2>
+                </h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                   Use the same class, board, and sector options as the homepage. Results only show
                   matching published tutor profiles.
@@ -482,22 +525,22 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Boards"
-              title={`Maths boards covered in ${page.label}`}
+              title={isGurugramPage ? "Find maths tutors by board in Gurugram" : `Find maths tutors by board in ${page.label}`}
               subtitle="Start with the board route when curriculum, paper style, and exam timing matter more than locality."
               align="left"
             />
 
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {mathsBoardCards.map((card) => (
+            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {BOARD_ROUTE_LINKS.map((card) => (
                 <Link
-                  key={card.title}
+                  key={card.label}
                   to={card.to}
                   className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
                 >
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
-                    {card.eyebrow}
+                    Existing route
                   </p>
-                  <h3 className="mt-3 text-xl font-bold text-slate-950">{card.title}</h3>
+                  <h3 className="mt-3 text-xl font-bold text-slate-950">{card.label}</h3>
                   <p className="mt-3 text-sm leading-6 text-slate-600">{card.description}</p>
                 </Link>
               ))}
@@ -520,10 +563,26 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Classes"
-              title={`Classes supported for maths tuition in ${page.label}`}
+              title="Choose maths support by class"
               subtitle="Use class level to keep the shortlist practical for school pace, board year needs, or senior exam pressure."
               align="left"
             />
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {CLASS_ROUTE_LINKS.map((card) => (
+                <Link
+                  key={card.label}
+                  to={card.to}
+                  className="rounded-[24px] border border-slate-200 bg-slate-50 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:bg-white hover:shadow-md"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
+                    Existing route
+                  </p>
+                  <h3 className="mt-3 text-xl font-bold text-slate-950">{card.label}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{card.description}</p>
+                </Link>
+              ))}
+            </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {stripAllFilterOption(cityClassOptions).map((classOption) => (
@@ -547,7 +606,7 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Sectors"
-              title={`Gurugram sectors and corridors`}
+              title="Popular Gurugram sectors"
               subtitle="Open locality pages where they are available, or choose a sector to focus the tutor shortlist on this page."
               align="left"
             />
@@ -597,7 +656,7 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Tutor Matches"
-              title={`Tutor matches in ${page.label}`}
+              title="Available tutor matches"
               subtitle="See available Gurugram tutor profiles when the selected class, board, and sector have a match."
               align="left"
             />

@@ -3,6 +3,12 @@ import { Link } from "react-router-dom";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
 import TutorCard from "../components/TutorCard";
+import {
+  BOARD_OPTIONS,
+  CLASS_OPTIONS,
+  SECTOR_OPTIONS,
+  mergeFilterOptions,
+} from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
 import { getMathsHomeCards, mathsRouteMap } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
@@ -13,61 +19,6 @@ import { buildWhatsAppUrl } from "../utils/whatsapp";
 const INITIAL_VISIBLE_TUTORS = 6;
 const TUTOR_LOAD_STEP = 6;
 const MAX_VISIBLE_TUTORS = 50;
-
-const DEFAULT_CLASS_OPTIONS = [
-  "All Classes",
-  "Class 6",
-  "Class 7",
-  "Class 8",
-  "Class 9",
-  "Class 10",
-  "Class 11",
-  "Class 12",
-  "IB MYP",
-  "IB DP",
-  "IGCSE",
-  "JEE Main",
-  "JEE Advanced",
-];
-
-const DEFAULT_BOARD_OPTIONS = [
-  "All Boards",
-  "CBSE",
-  "ICSE",
-  "ISC",
-  "IB",
-  "IGCSE",
-  "Cambridge",
-  "JEE",
-  "SAT Math",
-];
-
-const DEFAULT_SECTOR_OPTIONS = [
-  "All Sectors",
-  "DLF Phase 1",
-  "DLF Phase 2",
-  "DLF Phase 3",
-  "DLF Phase 4",
-  "DLF Phase 5",
-  "Sector 14",
-  "Sector 15",
-  "Sector 23",
-  "Sector 31",
-  "Sector 45",
-  "Sector 46",
-  "Sector 47",
-  "Sector 49",
-  "Sector 50",
-  "Sector 52",
-  "Sector 54",
-  "Sector 56",
-  "Sector 57",
-  "Sector 67",
-  "Sector 70",
-  "Sohna Road",
-  "Golf Course Road",
-  "Golf Course Extension Road",
-];
 
 const GENERIC_FILTER_PARTS = new Set(["class", "math", "maths", "road", "sector", "tuition", "tutor"]);
 
@@ -205,21 +156,6 @@ function normalizeFilterValue(value) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
-}
-
-function mergeFilterOptions(defaultOptions, dynamicOptions = []) {
-  const seen = new Set();
-
-  return [...defaultOptions, ...dynamicOptions.filter(Boolean)].filter((option) => {
-    const key = normalizeFilterValue(option);
-
-    if (!key || seen.has(key)) {
-      return false;
-    }
-
-    seen.add(key);
-    return true;
-  });
 }
 
 function filterTextMatches(selectedValue, values = []) {
@@ -419,12 +355,12 @@ function Home() {
       (first, second) => getClassSortOrder(first) - getClassSortOrder(second),
     );
 
-    return mergeFilterOptions(DEFAULT_CLASS_OPTIONS, classes);
+    return mergeFilterOptions(CLASS_OPTIONS, classes);
   }, [tutors]);
 
   const sectorOptions = useMemo(
     () =>
-      mergeFilterOptions(DEFAULT_SECTOR_OPTIONS, [
+      mergeFilterOptions(SECTOR_OPTIONS, [
         ...sectorPages.map((sector) => sector.sectorLabel),
         ...tutors.flatMap((tutor) => tutor.sectors ?? []),
       ]),
@@ -433,7 +369,7 @@ function Home() {
 
   const boardOptions = useMemo(
     () =>
-      mergeFilterOptions(DEFAULT_BOARD_OPTIONS, [
+      mergeFilterOptions(BOARD_OPTIONS, [
         ...tutors.map((tutor) => tutor.board),
         ...tutors.flatMap((tutor) => tutor.boards ?? []),
       ]),
