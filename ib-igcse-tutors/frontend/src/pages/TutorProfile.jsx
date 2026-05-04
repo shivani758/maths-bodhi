@@ -27,15 +27,15 @@ function getBoardPath(board = "") {
   const normalized = String(board).toLowerCase();
 
   if (normalized.includes("igcse")) {
-    return "/subjects/maths/igcse";
+    return "/igcse-maths-home-tutor";
   }
 
   if (normalized.includes("ib")) {
-    return "/subjects/maths/ib";
+    return "/ib-maths-home-tutor";
   }
 
   if (normalized.includes("jee")) {
-    return "/subjects/maths/jee";
+    return "/jee-maths-coaching";
   }
 
   if (normalized.includes("icse") || normalized.includes("isc")) {
@@ -43,7 +43,7 @@ function getBoardPath(board = "") {
   }
 
   if (normalized.includes("cbse")) {
-    return "/subjects/maths/cbse";
+    return "/cbse-maths-tuition";
   }
 
   return "/subjects/maths";
@@ -57,8 +57,8 @@ function normalizeLabel(value) {
 }
 
 const CLASS_ROUTE_MAP = {
-  "class 10": "/maths/class/class-10-maths-home-tutor",
-  "class 12": "/maths/class/class-12-maths-home-tutor",
+  "class 10": "/class-10-maths-tutor",
+  "class 12": "/class-12-maths-tutor",
 };
 
 function getClassPath(classLevel = "") {

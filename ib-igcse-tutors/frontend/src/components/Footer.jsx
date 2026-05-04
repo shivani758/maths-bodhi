@@ -35,7 +35,7 @@ function Footer() {
             <Link to="/" className="block hover:text-blue-600">Home</Link>
             <Link to="/subjects/maths" className="block hover:text-blue-600">Maths by Board</Link>
             <Link to="/city/gurugram" className="block hover:text-blue-600">Gurugram</Link>
-            <Link to="/book-demo" className="block hover:text-blue-600">Book Demo</Link>
+            <Link to="/book-free-demo-class" className="block hover:text-blue-600">Book Demo</Link>
           </div>
         </div>
 

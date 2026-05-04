@@ -32,7 +32,7 @@ const BOARD_ROUTE_LINKS = [
   },
   {
     label: "CBSE",
-    to: mathsRouteMap.cbse,
+    to: "/cbse-maths-tuition",
     description: "School-paced maths support for worksheets, tests, and board readiness.",
   },
   {
@@ -50,12 +50,12 @@ const BOARD_ROUTE_LINKS = [
 const CLASS_ROUTE_LINKS = [
   {
     label: "Class 10",
-    to: "/gurugram/class-10-maths-home-tutor",
+    to: "/class-10-maths-tutor",
     description: "Chapter clarity, worksheet correction, and board-style revision support.",
   },
   {
     label: "Class 12",
-    to: "/gurugram/class-12-maths-home-tutor",
+    to: "/class-12-maths-tutor",
     description: "Senior-school maths support for exam structure and steadier problem solving.",
   },
 ];
@@ -387,7 +387,7 @@ function CityPage() {
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link
-                    to="/book-demo"
+                    to="/book-free-demo-class"
                     className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo
@@ -410,30 +410,40 @@ function CityPage() {
 
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
                   <Link
-                    to="/"
+                    to="/maths-home-tutor"
                     className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
                   >
-                    Home
+                    Maths Home Tutor
                   </Link>
                   <Link
-                    to="/subjects/maths"
+                    to="/online-maths-home-tuition"
                     className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
                   >
-                    Maths by Board
+                    Online Maths Tuition
                   </Link>
-                  {siteData.tutors.length ? (
-                    <Link
-                      to="/#homepage-tutor-matches"
-                      className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
-                    >
-                      Tutor Profiles
-                    </Link>
-                  ) : null}
                   <Link
-                    to="/subjects/maths"
+                    to="/cbse-maths-home-tutor"
                     className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
                   >
-                    Maths Blogs and Guides
+                    CBSE Home Tutor
+                  </Link>
+                  <Link
+                    to="/jee-maths-coaching"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    JEE Maths Coaching
+                  </Link>
+                  <Link
+                    to="/maths-foundation-program"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Foundation Program
+                  </Link>
+                  <Link
+                    to="/maths-revision-program"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    Revision Program
                   </Link>
                 </div>
               </div>
@@ -502,7 +512,7 @@ function CityPage() {
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <Link
-                    to="/book-demo"
+                    to="/book-free-demo-class"
                     className="rounded-2xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo
@@ -702,7 +712,7 @@ function CityPage() {
                     Reset filters
                   </button>
                   <Link
-                    to="/book-demo"
+                    to="/book-free-demo-class"
                     className="rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo

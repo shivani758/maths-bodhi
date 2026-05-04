@@ -651,7 +651,7 @@ function Home() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
-                  to="/book-demo"
+                  to="/book-free-demo-class"
                   className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 sm:w-auto"
                 >
                   Book Free Maths Demo
@@ -665,11 +665,36 @@ function Home() {
                   WhatsApp Maths Bodhi
                 </a>
                 <Link
+                  to="/city/gurugram"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
+                >
+                  Explore Gurugram Tutors
+                </Link>
+                <Link
                   to="/login"
                   className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:bg-slate-100 sm:w-auto"
                 >
                   Open Student or Tutor Login
                 </Link>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {[
+                  ["Maths Home Tutor", "/maths-home-tutor"],
+                  ["CBSE Tuition", "/cbse-maths-tuition"],
+                  ["Foundation", "/maths-foundation-program"],
+                  ["Revision", "/maths-revision-program"],
+                  ["Premium Schools", "/premium-school-maths-home-tutor"],
+                  ["JEE Maths", "/jee-maths-coaching"],
+                ].map(([label, to]) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
+                  >
+                    {label}
+                  </Link>
+                ))}
               </div>
 
               <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -916,7 +941,7 @@ function Home() {
                   </button>
                 ) : null}
                 <Link
-                  to="/book-demo"
+                  to="/book-free-demo-class"
                   className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   Request custom tutor matching
@@ -1019,7 +1044,7 @@ function Home() {
                     Reset filters
                   </button>
                   <Link
-                    to="/book-demo"
+                    to="/book-free-demo-class"
                     className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                   >
                     Book a demo
