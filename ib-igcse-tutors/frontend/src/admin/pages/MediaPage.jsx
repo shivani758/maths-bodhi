@@ -25,7 +25,7 @@ function MediaPage() {
     <AdminCollectionPage
       eyebrow="Media Library"
       title="Media"
-      description="Use the mock upload flow to validate media UX now, then swap the service for real storage later."
+      description="Manage image assets, alt text, captions, and publishing status for Maths Bodhi content."
       createLabel="Add Media"
       queryPlaceholder="Search by asset name or alt text"
       loader={listMedia}

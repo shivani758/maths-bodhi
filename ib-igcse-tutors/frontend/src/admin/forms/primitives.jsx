@@ -87,7 +87,7 @@ export function SeoFieldsPanel({ value, onChange, errors = {} }) {
   return (
     <FormSection
       title="SEO Fields"
-      description="These fields stay frontend-only for now, but they match the shape a real CMS/API can use later."
+      description="Use these fields to keep public search snippets, canonical URLs, and indexing settings clear."
     >
       <FieldGroup label="Meta Title" error={errors["seo.title"]}>
         <input
@@ -152,7 +152,7 @@ export function MediaPickerField({ label, value, onChange, assets = [], error, r
   return (
     <FieldGroup
       label={label}
-      helpText="Choose a seeded asset now. Replace this with a real media API later."
+      helpText="Choose an approved image asset from the media library."
       error={error}
       required={required}
     >

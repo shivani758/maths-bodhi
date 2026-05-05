@@ -91,11 +91,13 @@ function App() {
           <Route path="/book-free-demo-class" element={<BookDemo />} />
           <Route path="/login" element={<Login />} />
           <Route path="/student-login" element={<StudentLogin />} />
+          <Route path="/student/login" element={<StudentLogin />} />
           <Route path="/tutor-login" element={<TutorLogin />} />
+          <Route path="/tutor/login" element={<TutorLogin />} />
           <Route
             path="/student/dashboard"
             element={
-              <ProtectedRoute allowedRoles={["student"]} fallbackPath="/student-login">
+              <ProtectedRoute allowedRoles={["student"]} fallbackPath="/student/login">
                 <StudentDashboard />
               </ProtectedRoute>
             }
@@ -103,7 +105,7 @@ function App() {
           <Route
             path="/tutor/dashboard"
             element={
-              <ProtectedRoute allowedRoles={["tutor"]} fallbackPath="/tutor-login">
+              <ProtectedRoute allowedRoles={["tutor"]} fallbackPath="/tutor/login">
                 <TutorDashboard />
               </ProtectedRoute>
             }

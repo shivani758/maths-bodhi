@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Seo from "../../components/Seo";
 import { useAdminAuth } from "../providers/AdminAuthContext";
 import { LoadingPanel } from "../components/primitives";
@@ -39,17 +39,23 @@ function AdminLoginPage() {
             </span>
             <h1 className="mt-5 text-4xl font-bold tracking-tight">Maths Bodhi admin login</h1>
             <p className="mt-4 text-lg leading-8 text-slate-300">
-              Sign in to the real admin foundation for tutors, blogs, reviews, and student results.
-              The session is backed by the server so the frontend no longer carries development credentials.
+              Sign in to the connected admin workspace for tutors, blogs, reviews, and student
+              results.
             </p>
             <div className="mt-8 rounded-[24px] border border-white/10 bg-white/5 p-5 text-sm leading-7 text-slate-300">
               <p>
-                Use the seeded admin email and password from the backend environment.
+                Use your admin credentials to continue.
               </p>
               <p className="mt-3">
-                This session uses the backend auth API and secure cookies for local development.
+                Secure dashboard for managing tutors, blogs, reviews, and results.
               </p>
             </div>
+            <Link
+              to="/"
+              className="mt-6 inline-flex rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              View public site
+            </Link>
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">

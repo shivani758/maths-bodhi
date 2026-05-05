@@ -630,7 +630,7 @@ export function UserForm({ draftItem, setDraftItem, roleOptions }) {
         <div className="space-y-3 md:col-span-2">
           <ToggleField
             label="User Active"
-            description="Inactive users stay in the mock store but should not be treated as current admins."
+            description="Inactive users remain listed but should not be treated as current admins."
             checked={draftItem.active}
             onChange={(checked) => setDraftItem((current) => ({ ...current, active: checked }))}
           />
@@ -649,7 +649,7 @@ export function UserForm({ draftItem, setDraftItem, roleOptions }) {
 export function MediaAssetForm({ draftItem, setDraftItem, onFileSelect }) {
   return (
     <div className="space-y-5">
-      <FormSection title="Media Asset" description="This mock upload flow stores browser-only image data for admin prototyping.">
+      <FormSection title="Media Asset" description="Add or update image details for Maths Bodhi content.">
         <FieldGroup label="Asset Name">
           <input
             value={draftItem.name}
@@ -657,7 +657,7 @@ export function MediaAssetForm({ draftItem, setDraftItem, onFileSelect }) {
             className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500"
           />
         </FieldGroup>
-        <FieldGroup label="Image File" helpText="SVG, PNG, JPEG, and WebP are supported in the mock uploader.">
+        <FieldGroup label="Image File" helpText="SVG, PNG, JPEG, and WebP are supported.">
           <input
             type="file"
             accept=".svg,.png,.jpg,.jpeg,.webp"

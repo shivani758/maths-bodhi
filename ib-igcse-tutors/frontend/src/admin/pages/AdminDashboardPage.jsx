@@ -23,7 +23,7 @@ function AdminDashboardPage() {
       <AdminPageHeader
         eyebrow="Overview"
         title="Admin Dashboard"
-        description="A connected control room for Maths Bodhi content, with the first real backend modules now feeding auth, tutors, blogs, reviews, and results."
+        description="Connected admin workspace for managing tutors, blogs, reviews, results, and key Maths Bodhi content."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

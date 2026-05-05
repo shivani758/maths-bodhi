@@ -8,7 +8,7 @@ function UsersPage() {
     <AdminCollectionPage
       eyebrow="Access"
       title="Users"
-      description="Manage admin-facing roles and mock invite/reset controls without pretending this is production auth."
+      description="Manage admin-facing roles and account status for the connected admin workspace."
       createLabel="Add User"
       queryPlaceholder="Search by name, email, or role"
       loader={listUsers}

@@ -55,7 +55,7 @@ function PagesPage() {
       <AdminPageHeader
         eyebrow="Pages"
         title="Pages"
-        description="Board and subject content is centralized here so public pages can shift to future APIs without UI rewrites."
+        description="Board and subject content is centralized here for safer editing and clearer publishing workflows."
         primaryAction={{ label: "Create Page", to: "/admin/pages/new" }}
       />
 
@@ -161,7 +161,7 @@ function PagesPage() {
       <ConfirmDialog
         open={Boolean(itemToDelete)}
         title="Delete page?"
-        description="This removes the page and any linked FAQ records from the frontend mock store."
+        description="This removes the page and any linked FAQ records from the admin content workspace."
         confirmLabel="Delete page"
         onConfirm={handleDelete}
         onCancel={() => setItemToDelete(null)}

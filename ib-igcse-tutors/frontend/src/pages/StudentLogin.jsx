@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Seo from "../components/Seo";
 import { useAuth } from "../contexts/AuthContext";
 import { useSiteData } from "../contexts/SiteDataContext";
@@ -22,6 +22,7 @@ function StudentLogin() {
   const { session, loginStudent } = useAuth();
   const { siteData } = useSiteData();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState(defaultForm);
 
   if (session?.role === "student") {
@@ -33,7 +34,7 @@ function StudentLogin() {
       <Seo
         title="Student Login | Maths Bodhi"
         description="Student dashboard access for maths home tuition in Gurugram. Share your class, board, sector, and learning needs to start tutor matching."
-        canonicalPath="/student-login"
+        canonicalPath={location.pathname === "/student/login" ? "/student/login" : "/student-login"}
         keywords={["student maths dashboard", "maths tutor matching", "gurugram student login"]}
       />
 
@@ -56,6 +57,12 @@ function StudentLogin() {
               <p>Sector-based coverage across premium Gurugram localities.</p>
               <p>Parent-friendly workflow with clear next steps after login.</p>
             </div>
+            <Link
+              to="/"
+              className="mt-8 inline-flex rounded-2xl border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Back to website
+            </Link>
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
@@ -185,7 +192,7 @@ function StudentLogin() {
               ))}
 
               <button className="md:col-span-2 rounded-2xl bg-blue-600 px-5 py-4 font-semibold text-white transition hover:bg-blue-700">
-                Continue to Student Dashboard
+                Continue profile
               </button>
             </form>
           </div>

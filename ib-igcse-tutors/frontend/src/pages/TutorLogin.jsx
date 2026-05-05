@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Seo from "../components/Seo";
 import { useAuth } from "../contexts/AuthContext";
 import { useSiteData } from "../contexts/SiteDataContext";
@@ -20,6 +20,7 @@ const defaultForm = {
 function TutorLogin() {
   const { session, loginTutor } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState(defaultForm);
   const { siteData } = useSiteData();
 
@@ -32,7 +33,7 @@ function TutorLogin() {
       <Seo
         title="Tutor Login | Maths Bodhi"
         description="Tutor dashboard access for maths specialists who want to onboard with Maths Bodhi and connect through a WhatsApp-first workflow."
-        canonicalPath="/tutor-login"
+        canonicalPath={location.pathname === "/tutor/login" ? "/tutor/login" : "/tutor-login"}
         keywords={["maths tutor login", "tutor dashboard", "gurugram maths tutor onboarding"]}
       />
 
@@ -55,6 +56,12 @@ function TutorLogin() {
               <p>Choose preferred sectors for home tuition routing in Gurugram.</p>
               <p>Use the tutor dashboard to submit documents, availability, and profile updates.</p>
             </div>
+            <Link
+              to="/"
+              className="mt-8 inline-flex rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Back to website
+            </Link>
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
@@ -166,7 +173,7 @@ function TutorLogin() {
               </label>
 
               <button className="md:col-span-2 rounded-2xl bg-slate-950 px-5 py-4 font-semibold text-white transition hover:bg-slate-800">
-                Continue to Tutor Dashboard
+                Update profile
               </button>
             </form>
           </div>

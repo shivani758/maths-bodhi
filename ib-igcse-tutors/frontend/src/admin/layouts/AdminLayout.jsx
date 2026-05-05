@@ -14,7 +14,7 @@ function AdminLayout() {
     <>
       <Seo
         title={`${currentLabel} | Maths Bodhi Admin`}
-        description="Frontend-only admin workspace for Maths Bodhi content and operations."
+        description="Connected admin workspace for Maths Bodhi content and operations."
         canonicalPath={location.pathname}
         robots="noindex, nofollow"
       />
@@ -33,13 +33,13 @@ function AdminLayout() {
                 </div>
               </div>
               <p className="mt-4 text-sm leading-6 text-slate-300">
-                Frontend-only content workspace built to swap to real APIs later.
+                Secure dashboard for managing tutors, blogs, reviews, and results.
               </p>
               <Link
                 to="/"
                 className="mt-4 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
               >
-                Back to website
+                View public site
               </Link>
             </div>
 
