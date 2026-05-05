@@ -74,6 +74,18 @@ const TOPIC_SEARCH_ITEMS = [
   { label: "Reasoning and problem-solving tutor", topic: "Problem Solving" },
 ];
 
+const DEFAULT_LOCAL_SEARCH_ITEMS = [
+  "Sector 56",
+  "Sector 57",
+  "Golf Course Road",
+  "Sohna Road",
+  "DLF Phase 4",
+  "DLF Phase 5",
+].map((sectorLabel) => ({
+  label: `Maths home tutor in ${sectorLabel}`,
+  sectorLabel,
+}));
+
 const INTENT_SECTIONS = [
   {
     title: "Board-based matching",
@@ -228,7 +240,7 @@ function toTutorCardData(tutor) {
 
 function buildLocalSearchItems(sectorPages, premiumSchools) {
   const sectorItems = sectorPages.slice(0, 8).map((sector) => ({
-    label: `Maths tutor in ${sector.sectorLabel}`,
+    label: `Maths home tutor in ${sector.sectorLabel}`,
     sectorLabel: sector.sectorLabel,
   }));
   const localityLabels = [...new Set(premiumSchools.map((item) => item.locality).filter(Boolean))]
@@ -237,7 +249,19 @@ function buildLocalSearchItems(sectorPages, premiumSchools) {
       label: `Maths support near ${locality}`,
     }));
 
-  return [...sectorItems, ...localityLabels];
+  const mergedItems = [...sectorItems, ...localityLabels, ...DEFAULT_LOCAL_SEARCH_ITEMS];
+  const seenLabels = new Set();
+
+  return mergedItems.filter((item) => {
+    const key = item.sectorLabel ?? item.label;
+
+    if (seenLabels.has(key)) {
+      return false;
+    }
+
+    seenLabels.add(key);
+    return true;
+  });
 }
 
 function buildPopularSearchGroups(sectorPages, premiumSchools) {
@@ -652,7 +676,7 @@ function Home() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   to="/book-free-demo-class"
-                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 sm:w-auto"
+                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
                 >
                   Book Free Maths Demo
                 </Link>
@@ -660,28 +684,22 @@ function Home() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
                 >
                   WhatsApp Maths Bodhi
                 </a>
                 <Link
                   to="/city/gurugram"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:w-auto"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
                 >
                   Explore Gurugram Tutors
-                </Link>
-                <Link
-                  to="/login"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:bg-slate-100 sm:w-auto"
-                >
-                  Open Student or Tutor Login
                 </Link>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {[
                   ["Maths Home Tutor", "/maths-home-tutor"],
-                  ["CBSE Tuition", "/cbse-maths-tuition"],
+                  ["CBSE Home Tuition", "/cbse-maths-tuition"],
                   ["Foundation", "/maths-foundation-program"],
                   ["Revision", "/maths-revision-program"],
                   ["Premium Schools", "/premium-school-maths-home-tutor"],
@@ -837,25 +855,27 @@ function Home() {
               align="left"
             />
 
-            <div className="mt-10 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-2 xl:grid-cols-3">
               {popularSearchGroups.map((group) => (
                 <article
                   key={group.title}
-                  className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm"
+                  className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-md"
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-xl font-bold text-slate-950">{group.title}</h3>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-h-7 text-xl font-bold leading-7 text-slate-950">{group.title}</h3>
+                    <span className="shrink-0 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
                       {group.items.length} searches
                     </span>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{group.description}</p>
+                  <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
+                    {group.description}
+                  </p>
 
                   {group.items.length ? (
-                    <div className="mt-5 flex flex-wrap gap-2">
+                    <div className="mt-5 flex flex-1 content-start flex-wrap gap-2">
                       {group.items.map((item) => {
                         const chipClassName =
-                          "rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold transition";
+                          "rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold leading-5 transition motion-safe:hover:-translate-y-0.5";
 
                         if (item.route) {
                           return (

@@ -7,7 +7,9 @@ import Login from "./pages/Login";
 import StudentDashboard from "./pages/StudentDashboard";
 import TutorDashboard from "./pages/TutorDashboard";
 import NotFound from "./pages/NotFound";
+import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 import AdminProviders from "./admin/AdminProviders";
 import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
 import AdminLayout from "./admin/layouts/AdminLayout";
@@ -62,6 +64,7 @@ function RouteLoadingFallback() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -119,7 +122,15 @@ function App() {
             }
           >
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="login" element={<AdminLoginPage />} />
+            <Route
+              path="login"
+              element={
+                <>
+                  <Navbar />
+                  <AdminLoginPage />
+                </>
+              }
+            />
             <Route element={<AdminProtectedRoute />}>
               <Route element={<AdminLayout />}>
                 <Route path="dashboard" element={<AdminDashboardPage />} />

@@ -1,8 +1,53 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSiteData } from "../contexts/SiteDataContext";
 
 function Navbar() {
   const { siteData } = useSiteData();
+  const { pathname } = useLocation();
+
+  const navItems = [
+    {
+      label: "Home",
+      to: "/",
+      isActive: pathname === "/",
+    },
+    {
+      label: "Maths by Board",
+      to: "/subjects/maths",
+      isActive:
+        pathname.startsWith("/subjects/maths") ||
+        pathname.startsWith("/maths/class") ||
+        pathname.startsWith("/maths/exam") ||
+        /^\/(cbse|icse|isc|igcse|ib|cambridge|board)-/.test(pathname) ||
+        /^\/class-\d+-applied/.test(pathname),
+    },
+    {
+      label: "Gurugram Sectors",
+      to: "/city/gurugram",
+      isActive: pathname === "/city/gurugram" || pathname.startsWith("/gurugram"),
+    },
+    {
+      label: "Student",
+      to: "/student/login",
+      isActive: pathname.startsWith("/student"),
+    },
+    {
+      label: "Tutor",
+      to: "/tutor/login",
+      isActive: pathname.startsWith("/tutor"),
+    },
+  ];
+  const adminActive = pathname.startsWith("/admin");
+
+  function navClassName(isActive) {
+    return [
+      "rounded-full px-3.5 py-2 text-sm font-semibold transition",
+      "motion-safe:hover:-translate-y-0.5",
+      isActive
+        ? "bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100"
+        : "text-slate-700 hover:bg-slate-50 hover:text-blue-600",
+    ].join(" ");
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
@@ -22,40 +67,22 @@ function Navbar() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          <Link to="/" className="text-sm font-semibold text-slate-700 hover:text-blue-600">
-            Home
-          </Link>
-          <Link
-            to="/subjects/maths"
-            className="text-sm font-semibold text-slate-700 hover:text-blue-600"
-          >
-            Maths by Board
-          </Link>
-          <Link
-            to="/city/gurugram"
-            className="text-sm font-semibold text-slate-700 hover:text-blue-600"
-          >
-            Gurugram Sectors
-          </Link>
-          <Link
-            to="/student-login"
-            className="text-sm font-semibold text-slate-700 hover:text-blue-600"
-          >
-            Student
-          </Link>
-          <Link
-            to="/tutor-login"
-            className="text-sm font-semibold text-slate-700 hover:text-blue-600"
-          >
-            Tutor
-          </Link>
+        <nav className="hidden items-center gap-2 lg:flex">
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to} className={navClassName(item.isActive)}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <Link
-            to="/admin-login"
-            className="hidden rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700 md:inline-flex"
+            to="/admin/login"
+            className={`hidden rounded-xl border px-4 py-2.5 text-sm font-semibold transition motion-safe:hover:-translate-y-0.5 md:inline-flex ${
+              adminActive
+                ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm"
+                : "border-slate-200 text-slate-700 hover:border-blue-200 hover:text-blue-700"
+            }`}
           >
             Admin
           </Link>
@@ -63,7 +90,7 @@ function Navbar() {
             href={`https://wa.me/${siteData.contact.whatsappNumber}`}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 motion-safe:hover:-translate-y-0.5"
           >
             WhatsApp
           </a>
