@@ -70,24 +70,16 @@ function App() {
           <Route path="/subjects/maths/:board/:stage" element={<MathsBoardPage />} />
           <Route path="/subjects/maths/:board/:stage/:track" element={<MathsBoardPage />} />
           <Route path="/subject/:slug" element={<LegacyMathsSubjectRoute />} />
+          <Route path="/maths-home-tutor" element={<ConfigDrivenPageRoute routeType="p1-seo" seoSlug="maths-home-tutor" />} />
+          <Route path="/online-maths-home-tuition" element={<ConfigDrivenPageRoute routeType="p1-seo" seoSlug="online-maths-home-tuition" />} />
+          <Route path="/cbse-maths-tuition" element={<ConfigDrivenPageRoute routeType="p1-seo" seoSlug="cbse-maths-tuition" />} />
+          <Route path="/ib-maths-tuition" element={<ConfigDrivenPageRoute routeType="p1-seo" seoSlug="ib-maths-tuition" />} />
+          <Route path="/igcse-maths-tuition" element={<ConfigDrivenPageRoute routeType="p1-seo" seoSlug="igcse-maths-tuition" />} />
+          <Route path="/class-10-maths-tutor" element={<ConfigDrivenPageRoute routeType="gurugram-entry" entrySlug="class-10-maths-home-tutor" />} />
+          <Route path="/class-12-maths-tutor" element={<ConfigDrivenPageRoute routeType="gurugram-entry" entrySlug="class-12-maths-home-tutor" />} />
           <Route path="/maths/class/:classSlug" element={<ConfigDrivenPageRoute routeType="class" />} />
           <Route path="/maths/exam/:examSlug" element={<ConfigDrivenPageRoute routeType="exam" />} />
-          <Route path="/book-free-demo-class" element={<SeoLandingPage pageKey="book-free-demo-class" />} />
-          <Route path="/maths-home-tutor" element={<SeoLandingPage pageKey="maths-home-tutor" />} />
-          <Route path="/online-maths-home-tuition" element={<SeoLandingPage pageKey="online-maths-home-tuition" />} />
-          <Route path="/one-to-one-maths-tuition" element={<SeoLandingPage pageKey="one-to-one-maths-tuition" />} />
-          <Route path="/maths-foundation-program" element={<SeoLandingPage pageKey="maths-foundation-program" />} />
-          <Route path="/maths-revision-program" element={<SeoLandingPage pageKey="maths-revision-program" />} />
-          <Route path="/premium-school-maths-home-tutor" element={<SeoLandingPage pageKey="premium-school-maths-home-tutor" />} />
-          <Route path="/cbse-maths-home-tutor" element={<SeoLandingPage pageKey="cbse-maths-home-tutor" />} />
-          <Route path="/cbse-maths-tuition" element={<SeoLandingPage pageKey="cbse-maths-tuition" />} />
-          <Route path="/class-10-maths-tutor" element={<SeoLandingPage pageKey="class-10-maths-tutor" />} />
-          <Route path="/class-12-maths-tutor" element={<SeoLandingPage pageKey="class-12-maths-tutor" />} />
-          <Route path="/igcse-maths-home-tutor" element={<SeoLandingPage pageKey="igcse-maths-home-tutor" />} />
-          <Route path="/ib-maths-home-tutor" element={<SeoLandingPage pageKey="ib-maths-home-tutor" />} />
-          <Route path="/jee-maths-coaching" element={<SeoLandingPage pageKey="jee-maths-coaching" />} />
-          <Route path="/tuition-fees" element={<SeoLandingPage pageKey="tuition-fees" />} />
-          <Route path="/city/gurugram/sector-56" element={<SeoLandingPage pageKey="gurugram-sector-56" />} />
+          <Route path="/city/gurugram" element={<ConfigDrivenPageRoute routeType="gurugram-hub" />} />
           <Route path="/city/:city" element={<CityPage />} />
           <Route path="/city/:city/:sector" element={<SectorPage />} />
           <Route path="/gurugram" element={<ConfigDrivenPageRoute routeType="gurugram-hub" />} />
@@ -96,6 +88,7 @@ function App() {
           <Route path="/tutor/:id" element={<TutorProfile />} />
           <Route path="/blogs/:slug" element={<BlogDetailPage />} />
           <Route path="/book-demo" element={<BookDemo />} />
+          <Route path="/book-free-demo-class" element={<BookDemo />} />
           <Route path="/login" element={<Login />} />
           <Route path="/student-login" element={<StudentLogin />} />
           <Route path="/tutor-login" element={<TutorLogin />} />
@@ -151,6 +144,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/admin-login" element={<Navigate to="/admin/login" replace />} />
+          <Route path="/:seoSlug" element={<ConfigDrivenPageRoute routeType="p1-seo" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

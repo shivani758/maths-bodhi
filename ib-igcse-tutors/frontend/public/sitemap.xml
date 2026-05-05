@@ -4,10 +4,13 @@
     <loc>https://www.mathsbodhi.in/</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/book-demo</loc>
+    <loc>https://www.mathsbodhi.in/contact-us</loc>
   </url>
   <url>
     <loc>https://www.mathsbodhi.in/book-free-demo-class</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/tuition-fees</loc>
   </url>
   <url>
     <loc>https://www.mathsbodhi.in/maths-home-tutor</loc>
@@ -31,13 +34,10 @@
     <loc>https://www.mathsbodhi.in/cbse-maths-home-tutor</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/cbse-maths-tuition</loc>
+    <loc>https://www.mathsbodhi.in/icse-maths-home-tutor</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/class-10-maths-tutor</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/class-12-maths-tutor</loc>
+    <loc>https://www.mathsbodhi.in/isc-maths-home-tutor</loc>
   </url>
   <url>
     <loc>https://www.mathsbodhi.in/igcse-maths-home-tutor</loc>
@@ -49,63 +49,162 @@
     <loc>https://www.mathsbodhi.in/jee-maths-coaching</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/tuition-fees</loc>
+    <loc>https://www.mathsbodhi.in/jee-advanced-maths-coaching</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/login</loc>
+    <loc>https://www.mathsbodhi.in/jee-main-maths-coaching</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/student-login</loc>
+    <loc>https://www.mathsbodhi.in/cbse-maths-tuition</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/tutor-login</loc>
+    <loc>https://www.mathsbodhi.in/cbse-class-6-maths-tutor</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/admin/login</loc>
+    <loc>https://www.mathsbodhi.in/cbse-class-7-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cbse-class-8-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cbse-class-9-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cbse-class-10-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cbse-class-11-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cbse-class-12-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-maths-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-class-6-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-class-7-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-class-8-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-class-9-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/icse-class-10-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/isc-maths-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/isc-class-11-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/isc-class-12-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/igcse-maths-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/igcse-grade-9-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/igcse-grade-10-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-maths-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-myp-1-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-myp-2-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-myp-3-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-myp-4-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-myp-5-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-maths-aa-sl-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-maths-aa-hl-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-maths-ai-sl-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/ib-maths-ai-hl-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cambridge-maths-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cambridge-lower-secondary-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cambridge-igcse-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cambridge-as-level-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/cambridge-a-level-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/class-11-applied-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/class-12-applied-maths-tutor</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/premium-school-maths-program</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/school-maths-foundation-program</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/board-maths-syllabus-wise-tuition</loc>
+  </url>
+  <url>
+    <loc>https://www.mathsbodhi.in/book-demo</loc>
   </url>
   <url>
     <loc>https://www.mathsbodhi.in/city/gurugram</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-45</loc>
+    <loc>https://www.mathsbodhi.in/gurugram</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-46</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-49</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths/cbse</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-50</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths/icse-isc</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-52</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths/igcse</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-54</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths/ib</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-55</loc>
+    <loc>https://www.mathsbodhi.in/subjects/maths/jee</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-56</loc>
+    <loc>https://www.mathsbodhi.in/class-10-maths-tutor</loc>
   </url>
   <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-57</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/city/gurugram/sector-65</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/subject/ib-maths-hl</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/subject/igcse-maths</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/subject/cbse-maths</loc>
-  </url>
-  <url>
-    <loc>https://www.mathsbodhi.in/subject/jee-main-maths</loc>
+    <loc>https://www.mathsbodhi.in/class-12-maths-tutor</loc>
   </url>
 </urlset>

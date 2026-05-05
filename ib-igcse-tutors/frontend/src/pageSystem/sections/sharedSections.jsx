@@ -235,6 +235,7 @@ export function PageFeaturedTutorsSection({
   initialVisibleCount = 6,
   loadStep = 3,
   backgroundClassName = "bg-white",
+  emptyState,
 }) {
   const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
 
@@ -243,7 +244,46 @@ export function PageFeaturedTutorsSection({
   }, [initialVisibleCount, tutors]);
 
   if (!tutors.length) {
-    return null;
+    return (
+      <section className={`${backgroundClassName} px-6 py-16`}>
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle badge={badge} title={title} subtitle={subtitle} align="left" />
+
+          <div className="mt-8 rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-6 shadow-sm md:p-8">
+            <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <h3 className="text-2xl font-bold tracking-tight text-slate-950">
+                  {emptyState?.title ?? "No matching published tutor profile is shown yet"}
+                </h3>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+                  {emptyState?.description ??
+                    "Maths Bodhi only shows published tutor profiles here. Share the student's class, board, locality, and topic need so the team can check real tutor availability."}
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:min-w-72 lg:grid-cols-1">
+                {emptyState?.primaryAction?.to ? (
+                  <Link
+                    to={emptyState.primaryAction.to}
+                    className="rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    {emptyState.primaryAction.label}
+                  </Link>
+                ) : null}
+                {emptyState?.secondaryAction?.to ? (
+                  <Link
+                    to={emptyState.secondaryAction.to}
+                    className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                  >
+                    {emptyState.secondaryAction.label}
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   const visibleTutors = tutors.slice(0, visibleCount);

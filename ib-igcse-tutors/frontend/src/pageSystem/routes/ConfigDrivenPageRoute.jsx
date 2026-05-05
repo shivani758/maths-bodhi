@@ -10,6 +10,7 @@ import {
   resolveExamPageConfig,
   resolveGurugramEntryConfig,
   resolveGurugramHubConfig,
+  resolveP1SeoPageConfig,
   resolveSectorAliasConfig,
   resolveSectorPageConfig,
 } from "../pageConfigService";
@@ -29,7 +30,7 @@ const TEMPLATE_MAP = {
   SectorPageTemplate,
 };
 
-function ConfigDrivenPageRoute({ routeType }) {
+function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlug: seoSlugOverride }) {
   const params = useParams();
   const { siteData } = useSiteData();
   const boardSlug = params.boardSlug ?? params.board;
@@ -39,7 +40,8 @@ function ConfigDrivenPageRoute({ routeType }) {
   const sectorSlug = params.sectorSlug ?? params.sector;
   const classSlug = params.classSlug;
   const examSlug = params.examSlug;
-  const entrySlug = params.entrySlug;
+  const entrySlug = entrySlugOverride ?? params.entrySlug;
+  const seoSlug = seoSlugOverride ?? params.seoSlug;
 
   const config = useMemo(() => {
     switch (routeType) {
@@ -49,6 +51,8 @@ function ConfigDrivenPageRoute({ routeType }) {
         return resolveGurugramHubConfig(siteData);
       case "gurugram-entry":
         return resolveGurugramEntryConfig(siteData, entrySlug);
+      case "p1-seo":
+        return resolveP1SeoPageConfig(seoSlug);
       case "city":
         return resolveCityPageConfig(siteData, citySlug);
       case "sector":
@@ -62,7 +66,7 @@ function ConfigDrivenPageRoute({ routeType }) {
       default:
         return null;
     }
-  }, [boardSlug, stageSlug, trackSlug, citySlug, sectorSlug, classSlug, examSlug, entrySlug, routeType, siteData]);
+  }, [boardSlug, stageSlug, trackSlug, citySlug, sectorSlug, classSlug, examSlug, entrySlug, seoSlug, routeType, siteData]);
   const templateData = useMemo(() => resolveConfigPageData(config), [config]);
 
   if (!config || config.publishStatus !== "published") {

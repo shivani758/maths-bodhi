@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Seo from "../components/Seo";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
@@ -6,6 +7,7 @@ import { buildDemoMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 
 function BookDemo() {
   const { siteData } = useSiteData();
+  const { pathname } = useLocation();
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -29,9 +31,9 @@ function BookDemo() {
   return (
     <MainLayout>
       <Seo
-        title="Book Maths Demo Class | Maths Bodhi"
+        title="Book Free Maths Demo Class | Maths Bodhi"
         description="Book a maths demo class in Gurugram for CBSE, IB, IGCSE, ICSE, JEE, and school-specific home tutoring."
-        canonicalPath="/book-demo"
+        canonicalPath={pathname === "/book-free-demo-class" ? "/book-free-demo-class" : "/book-demo"}
         keywords={["book maths demo", "maths demo class gurugram", "home tutor demo"]}
       />
 

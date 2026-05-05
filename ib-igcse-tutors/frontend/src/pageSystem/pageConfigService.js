@@ -4,6 +4,7 @@ import {
   getMathsBoardPageContentBySegments,
 } from "../services/mathsContentService";
 import { getCityPage, getSectorPage } from "../services/siteLookup";
+import { getP1SeoPageConfig } from "./config/p1SeoPageConfigs";
 import {
   futureClassPageConfigs,
   futureExamPageConfigs,
@@ -321,10 +322,6 @@ function buildBatchConfig(config, entity = null) {
 export function resolveGurugramHubConfig(siteData) {
   const cityPage = getCityPage(siteData, "gurugram");
 
-  if (!cityPage) {
-    return null;
-  }
-
   return buildBatchConfig(gurugramHubPageConfig, cityPage);
 }
 
@@ -348,6 +345,16 @@ export function resolveGurugramEntryConfig(siteData, entrySlug) {
   }
 
   return buildBatchConfig(matchedConfig, null);
+}
+
+export function resolveP1SeoPageConfig(slug) {
+  const matchedConfig = getP1SeoPageConfig(normalizeSlug(slug));
+
+  if (!matchedConfig) {
+    return null;
+  }
+
+  return createPageConfig(matchedConfig);
 }
 
 function resolveStaticConfig(configs = [], slug, pageType) {

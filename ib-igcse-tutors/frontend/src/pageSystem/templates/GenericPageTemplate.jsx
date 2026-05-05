@@ -79,6 +79,7 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
             initialVisibleCount={featuredTutorsSection.initialVisibleCount ?? 6}
             loadStep={featuredTutorsSection.loadStep ?? 3}
             backgroundClassName={featuredTutorsSection.backgroundClassName ?? "bg-white"}
+            emptyState={featuredTutorsSection.emptyState}
           />
         ) : null}
 
