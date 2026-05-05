@@ -46,7 +46,7 @@ function Navbar() {
     activeRole === "student"
       ? [
           {
-            label: "Student Dashboard",
+            label: "Dashboard",
             to: "/student/dashboard",
             isActive: pathname.startsWith("/student"),
           },
@@ -54,7 +54,7 @@ function Navbar() {
       : activeRole === "tutor"
         ? [
             {
-              label: "Tutor Dashboard",
+              label: "Dashboard",
               to: "/tutor/dashboard",
               isActive: pathname.startsWith("/tutor"),
             },
@@ -62,7 +62,7 @@ function Navbar() {
         : activeRole === "admin"
           ? [
               {
-                label: "Admin Dashboard",
+                label: "Dashboard",
                 to: "/admin/dashboard",
                 isActive: pathname.startsWith("/admin"),
               },

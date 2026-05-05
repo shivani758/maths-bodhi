@@ -77,11 +77,11 @@ const TOPIC_SEARCH_ITEMS = [
 const DEFAULT_LOCAL_SEARCH_ITEMS = [
   "Sector 56",
   "Sector 57",
+  "Sector 54",
   "Golf Course Road",
   "Sohna Road",
   "DLF Phase 4",
   "DLF Phase 5",
-  "Sector 54",
   "Sushant Lok 1",
 ].map((sectorLabel) => ({
   label: `Maths home tutor in ${sectorLabel}`,
@@ -251,7 +251,7 @@ function buildLocalSearchItems(sectorPages, premiumSchools) {
       label: `Maths support near ${locality}`,
     }));
 
-  const mergedItems = [...sectorItems, ...localityLabels, ...DEFAULT_LOCAL_SEARCH_ITEMS];
+  const mergedItems = [...DEFAULT_LOCAL_SEARCH_ITEMS, ...sectorItems, ...localityLabels];
   const seenLabels = new Set();
 
   return mergedItems.filter((item) => {
@@ -271,8 +271,8 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
     {
       title: "Boards",
       description: "Open board pages directly where Maths Bodhi already has matching routes.",
-      badge: "Board routes",
-      marker: "01",
+      badge: "Popular",
+      icon: "📘",
       accentClassName: "from-blue-600 to-cyan-500",
       items: BOARD_SEARCH_ITEMS,
     },
@@ -280,31 +280,31 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       title: "Classes 6 to 12",
       description: "Use these quick picks to narrow the tutor list by class level.",
       badge: "Parent picks",
-      marker: "02",
+      icon: "🎓",
       accentClassName: "from-emerald-500 to-teal-500",
       items: CLASS_SEARCH_ITEMS,
     },
     {
       title: "Local Areas",
       description: "See the Gurugram sectors and school corridors families often search first.",
-      badge: "Gurugram picks",
-      marker: "03",
+      badge: "Quick picks",
+      icon: "📍",
       accentClassName: "from-amber-500 to-orange-500",
       items: buildLocalSearchItems(sectorPages, premiumSchools),
     },
     {
       title: "Service Types",
       description: "Useful phrases parents use when the support format matters as much as the board.",
-      badge: "Quick links",
-      marker: "04",
+      badge: "Quick picks",
+      icon: "🏠",
       accentClassName: "from-violet-500 to-fuchsia-500",
       items: SERVICE_SEARCH_ITEMS,
     },
     {
       title: "Topics",
       description: "Quickly spotlight tutors around the maths area that needs more attention.",
-      badge: "Focus areas",
-      marker: "05",
+      badge: "Popular",
+      icon: "📊",
       accentClassName: "from-rose-500 to-pink-500",
       items: TOPIC_SEARCH_ITEMS,
     },
@@ -909,13 +909,14 @@ function Home() {
               {popularSearchGroups.map((group) => (
                 <article
                   key={group.title}
-                  className="group flex h-full flex-col rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-lg shadow-slate-200/70 ring-1 ring-slate-100 transition duration-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/70 motion-safe:hover:-translate-y-2 sm:p-6"
+                  className="group flex h-full flex-col rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-lg shadow-slate-200/70 ring-1 ring-slate-100 transition duration-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/70 motion-safe:hover:-translate-y-1 sm:p-6"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <span
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accentClassName} text-sm font-black text-white shadow-lg shadow-slate-200 transition duration-200 motion-safe:group-hover:scale-105`}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accentClassName} text-2xl shadow-lg shadow-slate-200 transition duration-200 motion-safe:group-hover:scale-105`}
+                      aria-hidden="true"
                     >
-                      {group.marker}
+                      {group.icon}
                     </span>
                     <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
                       {group.badge}
@@ -923,7 +924,7 @@ function Home() {
                   </div>
 
                   <div className="mt-5">
-                    <h3 className="text-lg font-bold leading-7 text-slate-950">{group.title}</h3>
+                    <h3 className="text-xl font-bold leading-7 text-slate-950">{group.title}</h3>
                     <p className="mt-2 min-h-16 text-sm leading-6 text-slate-600">
                       {group.description}
                     </p>
@@ -940,7 +941,7 @@ function Home() {
                             <Link
                               key={item.label}
                               to={item.route}
-                              className={`${chipClassName} border-blue-100 bg-blue-50 text-blue-700 hover:border-blue-200 hover:bg-white`}
+                              className={`${chipClassName} border-blue-100 bg-blue-50 text-blue-700 hover:border-blue-200 hover:bg-white motion-safe:hover:scale-[1.02]`}
                             >
                               {item.label}
                             </Link>
@@ -953,7 +954,7 @@ function Home() {
                               key={item.label}
                               type="button"
                               onClick={() => applySearchChip(item)}
-                              className={`${chipClassName} border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700`}
+                              className={`${chipClassName} border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 motion-safe:hover:scale-[1.02]`}
                             >
                               {item.label}
                             </button>
