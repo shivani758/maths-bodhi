@@ -81,6 +81,8 @@ const DEFAULT_LOCAL_SEARCH_ITEMS = [
   "Sohna Road",
   "DLF Phase 4",
   "DLF Phase 5",
+  "Sector 54",
+  "Sushant Lok 1",
 ].map((sectorLabel) => ({
   label: `Maths home tutor in ${sectorLabel}`,
   sectorLabel,
@@ -269,26 +271,41 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
     {
       title: "Boards",
       description: "Open board pages directly where Maths Bodhi already has matching routes.",
+      badge: "Board routes",
+      marker: "01",
+      accentClassName: "from-blue-600 to-cyan-500",
       items: BOARD_SEARCH_ITEMS,
     },
     {
       title: "Classes 6 to 12",
       description: "Use these quick picks to narrow the tutor list by class level.",
+      badge: "Parent picks",
+      marker: "02",
+      accentClassName: "from-emerald-500 to-teal-500",
       items: CLASS_SEARCH_ITEMS,
     },
     {
       title: "Local Areas",
       description: "See the Gurugram sectors and school corridors families often search first.",
+      badge: "Gurugram picks",
+      marker: "03",
+      accentClassName: "from-amber-500 to-orange-500",
       items: buildLocalSearchItems(sectorPages, premiumSchools),
     },
     {
       title: "Service Types",
       description: "Useful phrases parents use when the support format matters as much as the board.",
+      badge: "Quick links",
+      marker: "04",
+      accentClassName: "from-violet-500 to-fuchsia-500",
       items: SERVICE_SEARCH_ITEMS,
     },
     {
       title: "Topics",
       description: "Quickly spotlight tutors around the maths area that needs more attention.",
+      badge: "Focus areas",
+      marker: "05",
+      accentClassName: "from-rose-500 to-pink-500",
       items: TOPIC_SEARCH_ITEMS,
     },
   ];
@@ -617,13 +634,36 @@ function Home() {
         imagePath="/images/hero-maths-home.svg"
         schema={schema}
       />
+      <style>{`
+        @media (prefers-reduced-motion: no-preference) {
+          .home-hero-entrance {
+            animation: homeFadeSlide 700ms ease-out both;
+          }
+
+          .home-search-entrance {
+            animation: homeFadeSlide 700ms ease-out both;
+            animation-delay: 120ms;
+          }
+
+          @keyframes homeFadeSlide {
+            from {
+              opacity: 0;
+              transform: translateY(18px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        }
+      `}</style>
 
       <div className="bg-white">
         <section className="relative overflow-hidden bg-white px-5 py-12 sm:px-6 sm:py-16">
           <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-sky-100 blur-3xl" />
           <div className="absolute right-0 top-10 h-72 w-72 rounded-full bg-cyan-100 blur-3xl" />
 
-          <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.06fr_0.94fr] lg:items-center">
+          <div className="home-hero-entrance relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.06fr_0.94fr] lg:items-center">
             <div>
               <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
                 {home.eyebrow}
@@ -666,7 +706,7 @@ function Home() {
                     key={item.label}
                     type="button"
                     onClick={item.action}
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow-sm motion-safe:hover:-translate-y-0.5"
                   >
                     {item.label}
                   </button>
@@ -676,7 +716,7 @@ function Home() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   to="/book-free-demo-class"
-                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
+                  className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] sm:w-auto"
                 >
                   Book Free Maths Demo
                 </Link>
@@ -684,13 +724,13 @@ function Home() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow-sm motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] sm:w-auto"
                 >
                   WhatsApp Maths Bodhi
                 </a>
                 <Link
                   to="/city/gurugram"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 motion-safe:hover:-translate-y-0.5 sm:w-auto"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow-sm motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] sm:w-auto"
                 >
                   Explore Gurugram Tutors
                 </Link>
@@ -708,7 +748,7 @@ function Home() {
                   <Link
                     key={to}
                     to={to}
-                    className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-white"
+                    className="rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition duration-200 hover:border-blue-200 hover:bg-white hover:shadow-sm motion-safe:hover:-translate-y-0.5"
                   >
                     {label}
                   </Link>
@@ -719,7 +759,7 @@ function Home() {
                 {home.stats.map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+                    className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:border-blue-200 hover:shadow-md motion-safe:hover:-translate-y-1"
                   >
                     <p className="text-3xl font-bold text-slate-950">{item.value}</p>
                     <p className="mt-2 text-sm leading-6 text-slate-600">{item.label}</p>
@@ -846,43 +886,61 @@ function Home() {
           </div>
         </section>
 
-        <section className="bg-slate-50 px-6 py-14">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              badge="Popular Maths Searches"
-              title="Useful maths search paths parents commonly use before choosing a tutor"
-              subtitle="Board pages open directly where a route already exists, while the other chips safely narrow the homepage tutor shortlist."
-              align="left"
-            />
+        <section className="overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 px-5 py-16 sm:px-6">
+          <div className="home-search-entrance mx-auto max-w-7xl">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <SectionTitle
+                badge="Popular Maths Searches"
+                title="Useful maths search paths parents commonly use before choosing a tutor"
+                subtitle="Board pages open directly where a route already exists, while the other chips safely narrow the homepage tutor shortlist."
+                align="left"
+              />
+              <div className="max-w-sm rounded-[24px] border border-blue-100 bg-white/80 p-5 shadow-lg shadow-blue-100/50 backdrop-blur">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+                  Parent shortcut panel
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Use these links as navigation filters, not tutor result claims.
+                </p>
+              </div>
+            </div>
 
-            <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-2 xl:grid-cols-5">
               {popularSearchGroups.map((group) => (
                 <article
                   key={group.title}
-                  className="flex h-full flex-col rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm transition motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-md"
+                  className="group flex h-full flex-col rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-lg shadow-slate-200/70 ring-1 ring-slate-100 transition duration-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/70 motion-safe:hover:-translate-y-2 sm:p-6"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <h3 className="min-h-7 text-xl font-bold leading-7 text-slate-950">{group.title}</h3>
-                    <span className="shrink-0 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-                      {group.items.length} searches
+                    <span
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accentClassName} text-sm font-black text-white shadow-lg shadow-slate-200 transition duration-200 motion-safe:group-hover:scale-105`}
+                    >
+                      {group.marker}
+                    </span>
+                    <span className="shrink-0 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
+                      {group.badge}
                     </span>
                   </div>
-                  <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
-                    {group.description}
-                  </p>
+
+                  <div className="mt-5">
+                    <h3 className="text-lg font-bold leading-7 text-slate-950">{group.title}</h3>
+                    <p className="mt-2 min-h-16 text-sm leading-6 text-slate-600">
+                      {group.description}
+                    </p>
+                  </div>
 
                   {group.items.length ? (
                     <div className="mt-5 flex flex-1 content-start flex-wrap gap-2">
                       {group.items.map((item) => {
                         const chipClassName =
-                          "rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold leading-5 transition motion-safe:hover:-translate-y-0.5";
+                          "rounded-full border px-3 py-1.5 text-xs font-semibold leading-5 shadow-sm transition duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md";
 
                         if (item.route) {
                           return (
                             <Link
                               key={item.label}
                               to={item.route}
-                              className={`${chipClassName} bg-white text-slate-700 hover:border-blue-200 hover:text-blue-700`}
+                              className={`${chipClassName} border-blue-100 bg-blue-50 text-blue-700 hover:border-blue-200 hover:bg-white`}
                             >
                               {item.label}
                             </Link>
@@ -895,7 +953,7 @@ function Home() {
                               key={item.label}
                               type="button"
                               onClick={() => applySearchChip(item)}
-                              className={`${chipClassName} bg-slate-50 text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700`}
+                              className={`${chipClassName} border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700`}
                             >
                               {item.label}
                             </button>
@@ -905,7 +963,7 @@ function Home() {
                         return (
                           <span
                             key={item.label}
-                            className={`${chipClassName} bg-slate-50 text-slate-600`}
+                            className={`${chipClassName} border-slate-200 bg-slate-50 text-slate-600`}
                           >
                             {item.label}
                           </span>
@@ -913,8 +971,8 @@ function Home() {
                       })}
                     </div>
                   ) : (
-                    <p className="mt-5 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
-                      More shortcuts will appear here as matching public pages are added.
+                    <p className="mt-5 rounded-2xl border border-dashed border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-6 text-blue-800">
+                      Quick links will appear here as public navigation paths are added.
                     </p>
                   )}
                 </article>
