@@ -23,11 +23,11 @@ const MAX_VISIBLE_TUTORS = 50;
 const GENERIC_FILTER_PARTS = new Set(["class", "math", "maths", "road", "sector", "tuition", "tutor"]);
 
 const BOARD_SEARCH_ITEMS = [
-  { label: "CBSE maths tutor", route: mathsRouteMap.cbse },
-  { label: "ICSE maths tutor", route: mathsRouteMap["icse-isc"] },
-  { label: "ISC maths tutor", route: mathsRouteMap["icse-isc"] },
-  { label: "IGCSE maths tutor", route: mathsRouteMap.igcse },
-  { label: "IB maths tutor", route: mathsRouteMap.ib },
+  { label: "CBSE maths tutor", route: "/cbse-maths-tuition" },
+  { label: "ICSE maths tutor", route: "/icse-maths-tuition" },
+  { label: "ISC maths tutor", route: "/isc-maths-tuition" },
+  { label: "IGCSE maths tutor", route: "/igcse-maths-tuition" },
+  { label: "IB maths tutor", route: "/ib-maths-tuition" },
   { label: "IB PYP maths tutor", route: mathsRouteMap["ib/pyp"] },
   { label: "IB MYP maths tutor", route: mathsRouteMap["ib/myp"] },
   { label: "IB DP maths tutor", route: mathsRouteMap["ib/dp"] },
@@ -35,44 +35,53 @@ const BOARD_SEARCH_ITEMS = [
   { label: "IB AA SL maths tutor", route: mathsRouteMap["ib/dp/aa-sl"] },
   { label: "IB AI HL maths tutor", route: mathsRouteMap["ib/dp/ai-hl"] },
   { label: "IB AI SL maths tutor", route: mathsRouteMap["ib/dp/ai-sl"] },
-  { label: "JEE Main maths tutor", route: mathsRouteMap["jee/main"] },
-  { label: "JEE Advanced maths tutor", route: mathsRouteMap["jee/advanced"] },
+  { label: "JEE Main maths tutor", route: "/jee-main-maths-coaching" },
+  { label: "JEE Advanced maths tutor", route: "/jee-advanced-maths-coaching" },
 ];
 
 const CLASS_SEARCH_ITEMS = Array.from({ length: 7 }, (_, index) => ({
   label: `Class ${index + 6} maths tutor`,
   classLevel: `Class ${index + 6}`,
+  route: `/class-${index + 6}-maths-tutor`,
 }));
 
 const SERVICE_SEARCH_ITEMS = [
-  { label: "Home maths tutor", mode: "Home Tuition" },
-  { label: "Online maths tutor", mode: "Online" },
-  { label: "One-to-one maths tutor" },
-  { label: "After-school maths support" },
-  { label: "Weekend maths tutoring" },
-  { label: "Board exam revision support" },
-  { label: "Concept strengthening sessions" },
-  { label: "Regular doubt-solving help" },
-  { label: "Maths worksheet guidance" },
-  { label: "Exam-ready practice sessions" },
-  { label: "Focused revision planning" },
-  { label: "Flexible home or online support" },
+  { label: "Home maths tutor", mode: "Home Tuition", route: "/maths-home-tutor" },
+  { label: "Online maths tutor", mode: "Online", route: "/online-maths-home-tuition" },
+  { label: "One-to-one maths tutor", route: "/one-to-one-maths-tuition" },
+  { label: "After-school maths support", route: "/after-school-maths-support" },
+  { label: "Weekend maths home tutoring", route: "/weekend-maths-home-tutoring" },
+  { label: "Board exam revision support", route: "/board-exam-revision-support" },
+  { label: "Concept strengthening sessions", route: "/concept-strengthening-sessions" },
+  { label: "Regular doubt-solving help", route: "/regular-doubt-solving-help" },
+  { label: "Maths worksheet guidance", route: "/maths-worksheet-guidance" },
+  { label: "Exam-ready practice sessions", route: "/exam-ready-practice-sessions" },
+  { label: "Focused revision planning", route: "/focused-revision-planning" },
+  { label: "Flexible home or online support", route: "/flexible-home-online-maths-support" },
 ];
 
 const TOPIC_SEARCH_ITEMS = [
-  { label: "Algebra tutor", topic: "Algebra" },
-  { label: "Geometry tutor", topic: "Geometry" },
-  { label: "Trigonometry tutor", topic: "Trigonometry" },
-  { label: "Calculus tutor", topic: "Calculus" },
-  { label: "Statistics tutor", topic: "Statistics" },
-  { label: "Probability tutor", topic: "Probability" },
-  { label: "Coordinate geometry tutor", topic: "Coordinate Geometry" },
-  { label: "Quadratic equations tutor", topic: "Quadratic Equations" },
-  { label: "Functions tutor", topic: "Functions" },
-  { label: "Number systems tutor", topic: "Number Systems" },
-  { label: "Mensuration tutor", topic: "Mensuration" },
-  { label: "Reasoning and problem-solving tutor", topic: "Problem Solving" },
+  { label: "Algebra tutor", topic: "Algebra", route: "/algebra-tutor" },
+  { label: "Geometry tutor", topic: "Geometry", route: "/geometry-tutor" },
+  { label: "Trigonometry tutor", topic: "Trigonometry", route: "/trigonometry-tutor" },
+  { label: "Calculus tutor", topic: "Calculus", route: "/calculus-tutor" },
+  { label: "Statistics tutor", topic: "Statistics", route: "/statistics-tutor" },
+  { label: "Probability tutor", topic: "Probability", route: "/probability-tutor" },
+  { label: "Coordinate geometry tutor", topic: "Coordinate Geometry", route: "/coordinate-geometry-tutor" },
+  { label: "Quadratic equations tutor", topic: "Quadratic Equations", route: "/quadratic-equations-tutor" },
+  { label: "Functions tutor", topic: "Functions", route: "/functions-tutor" },
+  { label: "Number systems tutor", topic: "Number Systems", route: "/number-systems-tutor" },
+  { label: "Mensuration tutor", topic: "Mensuration", route: "/mensuration-tutor" },
+  { label: "Reasoning and problem-solving tutor", topic: "Problem Solving", route: "/reasoning-problem-solving-tutor" },
 ];
+
+function slugifyPathSegment(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 const DEFAULT_LOCAL_SEARCH_ITEMS = [
   "Sector 56",
@@ -86,6 +95,7 @@ const DEFAULT_LOCAL_SEARCH_ITEMS = [
 ].map((sectorLabel) => ({
   label: `Maths home tutor in ${sectorLabel}`,
   sectorLabel,
+  route: `/city/gurugram/${slugifyPathSegment(sectorLabel)}`,
 }));
 
 const INTENT_SECTIONS = [
@@ -240,22 +250,18 @@ function toTutorCardData(tutor) {
   };
 }
 
-function buildLocalSearchItems(sectorPages, premiumSchools) {
+function buildLocalSearchItems(sectorPages) {
   const sectorItems = sectorPages.slice(0, 8).map((sector) => ({
     label: `Maths home tutor in ${sector.sectorLabel}`,
     sectorLabel: sector.sectorLabel,
+    route: `/city/${sector.citySlug || "gurugram"}/${sector.slug}`,
   }));
-  const localityLabels = [...new Set(premiumSchools.map((item) => item.locality).filter(Boolean))]
-    .slice(0, 4)
-    .map((locality) => ({
-      label: `Maths support near ${locality}`,
-    }));
 
-  const mergedItems = [...DEFAULT_LOCAL_SEARCH_ITEMS, ...sectorItems, ...localityLabels];
+  const mergedItems = [...DEFAULT_LOCAL_SEARCH_ITEMS, ...sectorItems];
   const seenLabels = new Set();
 
   return mergedItems.filter((item) => {
-    const key = item.sectorLabel ?? item.label;
+    const key = item.route ?? item.sectorLabel ?? item.label;
 
     if (seenLabels.has(key)) {
       return false;
@@ -266,7 +272,7 @@ function buildLocalSearchItems(sectorPages, premiumSchools) {
   });
 }
 
-function buildPopularSearchGroups(sectorPages, premiumSchools) {
+function buildPopularSearchGroups(sectorPages) {
   return [
     {
       title: "Boards",
@@ -274,6 +280,7 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       badge: "Popular",
       icon: "📘",
       accentClassName: "from-blue-600 to-cyan-500",
+      layoutClassName: "xl:col-span-3",
       items: BOARD_SEARCH_ITEMS,
     },
     {
@@ -282,6 +289,7 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       badge: "Parent picks",
       icon: "🎓",
       accentClassName: "from-emerald-500 to-teal-500",
+      layoutClassName: "xl:col-span-3",
       items: CLASS_SEARCH_ITEMS,
     },
     {
@@ -290,7 +298,8 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       badge: "Quick picks",
       icon: "📍",
       accentClassName: "from-amber-500 to-orange-500",
-      items: buildLocalSearchItems(sectorPages, premiumSchools),
+      layoutClassName: "xl:col-span-2",
+      items: buildLocalSearchItems(sectorPages),
     },
     {
       title: "Service Types",
@@ -298,6 +307,7 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       badge: "Quick picks",
       icon: "🏠",
       accentClassName: "from-violet-500 to-fuchsia-500",
+      layoutClassName: "xl:col-span-2",
       items: SERVICE_SEARCH_ITEMS,
     },
     {
@@ -306,6 +316,7 @@ function buildPopularSearchGroups(sectorPages, premiumSchools) {
       badge: "Popular",
       icon: "📊",
       accentClassName: "from-rose-500 to-pink-500",
+      layoutClassName: "xl:col-span-2",
       items: TOPIC_SEARCH_ITEMS,
     },
   ];
@@ -478,8 +489,8 @@ function Home() {
   }, [reviews]);
 
   const popularSearchGroups = useMemo(
-    () => buildPopularSearchGroups(sectorPages, premiumSchools),
-    [premiumSchools, sectorPages],
+    () => buildPopularSearchGroups(sectorPages),
+    [sectorPages],
   );
   const localContextCards = useMemo(
     () => buildLocalContextCards(premiumSchools, sectorPages, tutors),
@@ -905,15 +916,15 @@ function Home() {
               </div>
             </div>
 
-            <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-2 xl:grid-cols-5">
+            <div className="mt-8 grid auto-rows-fr gap-4 lg:grid-cols-2 xl:grid-cols-6">
               {popularSearchGroups.map((group) => (
                 <article
                   key={group.title}
-                  className="group flex h-full flex-col rounded-[28px] border border-white/80 bg-white/95 p-5 shadow-lg shadow-slate-200/70 ring-1 ring-slate-100 transition duration-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/70 motion-safe:hover:-translate-y-1 sm:p-6"
+                  className={`group flex h-full flex-col rounded-[24px] border border-white/80 bg-white/95 p-4 shadow-lg shadow-slate-200/70 ring-1 ring-slate-100 transition duration-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/70 motion-safe:hover:-translate-y-1 sm:p-5 ${group.layoutClassName ?? ""}`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <span
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accentClassName} text-2xl shadow-lg shadow-slate-200 transition duration-200 motion-safe:group-hover:scale-105`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${group.accentClassName} text-xl shadow-lg shadow-slate-200 transition duration-200 motion-safe:group-hover:scale-105`}
                       aria-hidden="true"
                     >
                       {group.icon}
@@ -924,17 +935,17 @@ function Home() {
                   </div>
 
                   <div className="mt-5">
-                    <h3 className="text-xl font-bold leading-7 text-slate-950">{group.title}</h3>
-                    <p className="mt-2 min-h-16 text-sm leading-6 text-slate-600">
+                    <h3 className="text-lg font-bold leading-7 text-slate-950">{group.title}</h3>
+                    <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600">
                       {group.description}
                     </p>
                   </div>
 
                   {group.items.length ? (
-                    <div className="mt-5 flex flex-1 content-start flex-wrap gap-2">
+                    <div className="mt-4 flex flex-1 content-start flex-wrap gap-2">
                       {group.items.map((item) => {
                         const chipClassName =
-                          "rounded-full border px-3 py-1.5 text-xs font-semibold leading-5 shadow-sm transition duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md";
+                          "rounded-full border px-2.5 py-1.5 text-[11px] font-semibold leading-5 shadow-sm transition duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-md";
 
                         if (item.route) {
                           return (

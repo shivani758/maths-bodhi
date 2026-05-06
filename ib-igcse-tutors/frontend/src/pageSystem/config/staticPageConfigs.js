@@ -2431,6 +2431,201 @@ function createPublishedGurugramEntryConfig(config) {
   };
 }
 
+const WHATSAPP_NUMBER = "919896825986";
+
+function createLocalityWhatsAppHref(label) {
+  const message = `Hello Maths Bodhi, I want to check maths home tuition options in ${label}, Gurugram. Please guide me on tutor fit and a demo class.`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function createLocalityRouteCards(label, nearbyRoutes = []) {
+  return [
+    routeCard({
+      eyebrow: "Parent hub",
+      title: "Gurugram Maths Tutor Hub",
+      description: "Compare this locality with the wider Gurugram route before choosing home tuition or online support.",
+      tags: ["Gurugram", "Locality hub"],
+      to: "/city/gurugram",
+    }),
+    routeCard({
+      eyebrow: "Core service",
+      title: "Maths Home Tutor",
+      description: "Open the main home-tuition page for board, class, and tutor-fit context.",
+      tags: ["Home tuition", "Tutor fit"],
+      to: "/maths-home-tutor",
+    }),
+    routeCard({
+      eyebrow: "Board route",
+      title: "CBSE Maths Tuition",
+      description: "Useful when the student's school route needs board-wise pace, worksheets, and revision structure.",
+      tags: ["CBSE", "Board support"],
+      to: "/cbse-maths-tuition",
+    }),
+    ...nearbyRoutes.map((item) =>
+      routeCard({
+        eyebrow: "Nearby locality",
+        title: item.label,
+        description: `Compare ${label} with ${item.label} if travel convenience or school corridor fit matters.`,
+        tags: ["Nearby", "Gurugram"],
+        to: `/city/gurugram/${item.slug}`,
+      }),
+    ),
+    routeCard({
+      eyebrow: "Demo CTA",
+      title: "Book Free Demo Class",
+      description: "Share the student's class, board, topic pressure, and preferred timing before shortlisting.",
+      tags: ["Demo", "WhatsApp handoff"],
+      to: "/book-free-demo-class",
+    }),
+  ].slice(0, 8);
+}
+
+function createCityGurugramLocalityFallbackConfig({
+  slug,
+  label,
+  context,
+  chips,
+  nearbyRoutes = [],
+  tokens = [],
+}) {
+  return createPublishedGurugramEntryConfig({
+    id: `city-gurugram-${slug}-service`,
+    slug,
+    routePath: `/city/gurugram/${slug}`,
+    pageType: "sector",
+    title: `${label} maths home tuition`,
+    h1: `Maths home tutor in ${label}, Gurugram for board-wise support and regular practice`,
+    intro: `Use this ${label} page when the family wants locality-specific maths home tuition context before choosing a tutor, board route, or demo conversation.`,
+    relatedTutorQuery: {
+      kind: "sector",
+      citySlug: "gurugram",
+      cityLabel: "Gurugram",
+      sectorSlug: slug,
+      sectorLabel: label,
+      limit: 6,
+    },
+    relatedBlogQuery: {
+      kind: "tokens",
+      tokens: [label, "Gurugram", "Board Prep", "Revision", ...tokens],
+      limit: 3,
+    },
+    relatedResultQuery: {
+      kind: "sector",
+      citySlug: "gurugram",
+      sectorSlug: slug,
+      sectorLabel: label,
+      tokens,
+      limit: 3,
+    },
+    seoTitle: `Maths Home Tutor in ${label} Gurugram | Maths Bodhi`,
+    seoDescription: `Explore maths home tuition in ${label}, Gurugram with locality context, board-wise next pages, published tutor matches where available, and a free demo CTA.`,
+    canonicalUrl: `/city/gurugram/${slug}`,
+    breadcrumbItems: [
+      { label: "Home", to: "/" },
+      { label: "Gurugram", to: "/city/gurugram" },
+      { label },
+    ],
+    sectorSlug: slug,
+    sections: {
+      hero: {
+        badge: `${label} maths support`,
+        chips,
+        stats: [
+          { value: "Local", label: "Gurugram route" },
+          { value: "1:1", label: "Home or online fit" },
+          { value: "Demo", label: "Next-step CTA" },
+        ],
+        supportPanel: {
+          title: `${label} works best when locality fit is paired with the right board and class route`,
+          text: context,
+          bullets: [
+            "Check published tutor matches without adding fake profiles",
+            "Compare nearby Gurugram pages before booking a demo",
+            "Use WhatsApp to share class, board, timing, and topic pressure",
+          ],
+        },
+      },
+      supportPoints: {
+        badge: "Local Fit",
+        title: `What families usually compare before choosing maths tuition in ${label}`,
+        subtitle:
+          "This page keeps the locality search useful by connecting travel convenience, board needs, and the student's weekly practice rhythm.",
+        points: [
+          supportPoint(
+            "Locality convenience should support regularity",
+            `Families in ${label} often need a maths routine that can continue every week without making travel or timing the bigger problem.`,
+          ),
+          supportPoint(
+            "Board and class still decide the teaching plan",
+            "The next useful page is usually the student's board or class route, because locality alone does not explain the worksheets, paper style, or revision load.",
+          ),
+          supportPoint(
+            "Only published tutor matches appear",
+            "If no published profile matches this exact locality yet, the page shows an empty state and sends the family into a demo conversation instead of inventing tutor claims.",
+          ),
+        ],
+      },
+      routeGroups: [
+        {
+          id: `${slug}-locality-next-pages`,
+          badge: "Useful Next Pages",
+          title: `Pages families often open next from ${label}`,
+          subtitle:
+            "These links keep the locality journey connected to the Gurugram hub, core home-tuition route, nearby areas, and demo flow.",
+          cards: createLocalityRouteCards(label, nearbyRoutes),
+        },
+      ],
+      featuredTutors: {
+        badge: "Featured Tutors",
+        title: `Published maths tutors relevant to ${label}, Gurugram`,
+        subtitle:
+          "Tutor cards appear only when there is a real published match for this locality or related tutor data.",
+        emptyState: {
+          title: `No published tutor profile is shown for ${label} yet`,
+          description:
+            "Maths Bodhi can still check current tutor availability after the family shares class, board, timing, and preferred learning mode.",
+          primaryAction: {
+            label: "Book a free maths demo class",
+            to: "/book-free-demo-class",
+          },
+          secondaryAction: {
+            label: "Back to Gurugram hub",
+            to: "/city/gurugram",
+          },
+        },
+      },
+      faqs: [
+        faqItem(
+          `Is this ${label} page only for home tuition?`,
+          "It is written for maths home tuition first, but families can still discuss online or hybrid support when that is more practical.",
+        ),
+        faqItem(
+          `What should parents share for ${label}?`,
+          "Share the student's class, board, school area, weak chapters, preferred timing, and whether the family wants home tuition, online support, or both.",
+        ),
+        faqItem(
+          "Does this page guarantee a tutor match?",
+          "No. It shows published matches where available and uses the demo conversation to check current fit and availability.",
+        ),
+      ],
+      cta: {
+        title: `Book a free maths demo for ${label}`,
+        description:
+          "Share the board, class, locality, and the maths concern that needs attention. Maths Bodhi can guide the next step on WhatsApp.",
+        primaryAction: {
+          label: "Book free demo class",
+          to: "/book-free-demo-class",
+        },
+        secondaryAction: {
+          label: "WhatsApp Maths Bodhi",
+          href: createLocalityWhatsAppHref(label),
+          external: true,
+        },
+      },
+    },
+  });
+}
+
 export const batchTwoGurugramEntryConfigs = [
   createPublishedGurugramEntryConfig({
     id: "gurugram-sector-57-service",
@@ -3777,9 +3972,156 @@ export const batchTwoGurugramEntryConfigs = [
   }),
 ];
 
+const cityGurugramLocalityFallbackConfigs = [
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-43",
+    label: "Sector 43",
+    context:
+      "Sector 43 is useful for families comparing central Gurugram access, Golf Course Road proximity, and a steadier weekly maths routine.",
+    chips: ["Central Gurugram", "Golf Course Road access", "Board support", "Home tuition"],
+    nearbyRoutes: [
+      { slug: "dlf-phase-4", label: "DLF Phase 4" },
+      { slug: "sector-54", label: "Sector 54" },
+      { slug: "golf-course-road", label: "Golf Course Road" },
+    ],
+    tokens: ["Sector 43", "DLF Phase 4", "Golf Course Road"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-46",
+    label: "Sector 46",
+    context:
+      "Sector 46 is a practical school-support pocket for families who want regular chapter follow-through, board readiness, and manageable weekday timing.",
+    chips: ["School support", "Board readiness", "Weekday routine", "Home tuition"],
+    nearbyRoutes: [
+      { slug: "sector-50", label: "Sector 50" },
+      { slug: "sohna-road", label: "Sohna Road" },
+      { slug: "sector-57", label: "Sector 57" },
+    ],
+    tokens: ["Sector 46", "CBSE", "Board Prep"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-50",
+    label: "Sector 50",
+    context:
+      "Sector 50 works well for families comparing school pace, Sohna Road access, and maths support that can stay consistent across busy weeks.",
+    chips: ["Sohna Road access", "School tests", "Board support", "Flexible timing"],
+    nearbyRoutes: [
+      { slug: "sector-46", label: "Sector 46" },
+      { slug: "sohna-road", label: "Sohna Road" },
+      { slug: "sector-57", label: "Sector 57" },
+    ],
+    tokens: ["Sector 50", "Sohna Road", "CBSE"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-54",
+    label: "Sector 54",
+    context:
+      "Sector 54 is useful for premium-school and Golf Course Road families who need board-aware maths support with locality convenience.",
+    chips: ["Golf Course Road", "Premium schools", "IB", "IGCSE"],
+    nearbyRoutes: [
+      { slug: "golf-course-road", label: "Golf Course Road" },
+      { slug: "sector-56", label: "Sector 56" },
+      { slug: "dlf-phase-5", label: "DLF Phase 5" },
+    ],
+    tokens: ["Sector 54", "IB", "IGCSE"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-56",
+    label: "Sector 56",
+    context:
+      "Sector 56 is a high-intent Gurugram locality for families comparing IB, IGCSE, CBSE, and senior-school maths support.",
+    chips: ["Mixed board demand", "Premium locality", "Senior classes", "Home tuition"],
+    nearbyRoutes: [
+      { slug: "sector-57", label: "Sector 57" },
+      { slug: "sector-54", label: "Sector 54" },
+      { slug: "golf-course-road", label: "Golf Course Road" },
+    ],
+    tokens: ["Sector 56", "IB", "IGCSE", "CBSE"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sector-57",
+    label: "Sector 57",
+    context:
+      "Sector 57 is useful for families who want school maths support, board follow-through, and calmer revision without stretching travel time.",
+    chips: ["School support", "Board follow-through", "Revision", "Local access"],
+    nearbyRoutes: [
+      { slug: "sector-56", label: "Sector 56" },
+      { slug: "sector-50", label: "Sector 50" },
+      { slug: "sohna-road", label: "Sohna Road" },
+    ],
+    tokens: ["Sector 57", "CBSE", "Revision"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "golf-course-road",
+    label: "Golf Course Road",
+    context:
+      "Golf Course Road is useful when families want a corridor-level view before narrowing to one sector, school route, or tutor fit.",
+    chips: ["Premium corridor", "Sector 54", "Sector 56", "IB and IGCSE"],
+    nearbyRoutes: [
+      { slug: "sector-54", label: "Sector 54" },
+      { slug: "sector-56", label: "Sector 56" },
+      { slug: "dlf-phase-5", label: "DLF Phase 5" },
+    ],
+    tokens: ["Golf Course Road", "IB", "IGCSE", "Premium"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sohna-road",
+    label: "Sohna Road",
+    context:
+      "Sohna Road helps families compare senior-class pressure, school support, and practical home-tuition logistics across the corridor.",
+    chips: ["Sohna Road", "Senior classes", "Board support", "Flexible timing"],
+    nearbyRoutes: [
+      { slug: "sector-50", label: "Sector 50" },
+      { slug: "sector-46", label: "Sector 46" },
+      { slug: "sector-57", label: "Sector 57" },
+    ],
+    tokens: ["Sohna Road", "Class 10", "Class 12", "JEE"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "dlf-phase-4",
+    label: "DLF Phase 4",
+    context:
+      "DLF Phase 4 is useful for central premium-corridor families who want locality convenience with board-specific maths support.",
+    chips: ["Central Gurugram", "Premium corridor", "Board support", "Home tuition"],
+    nearbyRoutes: [
+      { slug: "sector-43", label: "Sector 43" },
+      { slug: "sushant-lok-1", label: "Sushant Lok 1" },
+      { slug: "golf-course-road", label: "Golf Course Road" },
+    ],
+    tokens: ["DLF Phase 4", "Sector 43", "Premium"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "dlf-phase-5",
+    label: "DLF Phase 5",
+    context:
+      "DLF Phase 5 is useful for premium-corridor families who want maths support close to Golf Course Road and nearby school clusters.",
+    chips: ["Premium corridor", "Golf Course Road", "IB", "IGCSE"],
+    nearbyRoutes: [
+      { slug: "sector-54", label: "Sector 54" },
+      { slug: "golf-course-road", label: "Golf Course Road" },
+      { slug: "sector-56", label: "Sector 56" },
+    ],
+    tokens: ["DLF Phase 5", "Golf Course Road", "IB", "IGCSE"],
+  }),
+  createCityGurugramLocalityFallbackConfig({
+    slug: "sushant-lok-1",
+    label: "Sushant Lok 1",
+    context:
+      "Sushant Lok 1 is useful for central Gurugram families who need locality convenience, class-wise support, and a steady weekly maths routine.",
+    chips: ["Central Gurugram", "Class-wise support", "School tests", "Home tuition"],
+    nearbyRoutes: [
+      { slug: "dlf-phase-4", label: "DLF Phase 4" },
+      { slug: "sector-43", label: "Sector 43" },
+      { slug: "golf-course-road", label: "Golf Course Road" },
+    ],
+    tokens: ["Sushant Lok 1", "Class 10", "CBSE"],
+  }),
+];
+
 export const gurugramPublicEntryConfigs = [
   ...batchOneGurugramEntryConfigs,
   ...batchTwoGurugramEntryConfigs,
+  ...cityGurugramLocalityFallbackConfigs,
 ];
 
 export const PAGE_ROUTE_SUPPORT = [

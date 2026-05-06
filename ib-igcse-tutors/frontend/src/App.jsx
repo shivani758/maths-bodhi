@@ -83,6 +83,7 @@ function App() {
           <Route path="/maths/class/:classSlug" element={<ConfigDrivenPageRoute routeType="class" />} />
           <Route path="/maths/exam/:examSlug" element={<ConfigDrivenPageRoute routeType="exam" />} />
           <Route path="/city/gurugram" element={<ConfigDrivenPageRoute routeType="gurugram-hub" />} />
+          <Route path="/city/gurugram/:entrySlug" element={<ConfigDrivenPageRoute routeType="gurugram-entry-or-sector" />} />
           <Route path="/city/:city" element={<CityPage />} />
           <Route path="/city/:city/:sector" element={<SectorPage />} />
           <Route path="/gurugram" element={<ConfigDrivenPageRoute routeType="gurugram-hub" />} />

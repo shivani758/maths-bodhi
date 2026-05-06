@@ -51,6 +51,8 @@ function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlu
         return resolveGurugramHubConfig(siteData);
       case "gurugram-entry":
         return resolveGurugramEntryConfig(siteData, entrySlug);
+      case "gurugram-entry-or-sector":
+        return resolveGurugramEntryConfig(siteData, entrySlug) ?? resolveSectorPageConfig(siteData, "gurugram", entrySlug);
       case "p1-seo":
         return resolveP1SeoPageConfig(seoSlug);
       case "city":
