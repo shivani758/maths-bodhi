@@ -146,7 +146,440 @@ const EXAM_SUPPORT_META = [
   },
 ];
 
+const BATCH_A_LOCALITY_META = [
+  {
+    slug: "sector-14",
+    label: "Sector 14",
+    nearby: ["sector-15", "sector-41", "south-city-1"],
+    corridor: "central Gurugram school-support pocket",
+    schoolSignals: ["DAV Public School Sector 14"],
+    note:
+      "useful for families who want school-test follow-through, homework structure, and practical central Gurugram home tuition",
+  },
+  {
+    slug: "sector-15",
+    label: "Sector 15",
+    nearby: ["sector-14", "sector-31", "south-city-1"],
+    corridor: "central Gurugram weekday-support pocket",
+    schoolSignals: ["central Gurugram schools"],
+    note:
+      "suited to students who need regular chapter repair, better school rhythm, and flexible after-school scheduling",
+  },
+  {
+    slug: "sector-31",
+    label: "Sector 31",
+    nearby: ["sector-40", "sector-41", "south-city-1"],
+    corridor: "central school and board-support pocket",
+    schoolSignals: ["South City access"],
+    note:
+      "practical for families comparing school support, board build-up, and manageable home tuition travel",
+  },
+  {
+    slug: "sector-40",
+    label: "Sector 40",
+    nearby: ["sector-31", "sector-41", "sector-45"],
+    corridor: "central class-support pocket",
+    schoolSignals: ["Sector 40 and Sector 41 school access"],
+    note:
+      "helpful when the family wants class-wise maths support without losing locality convenience",
+  },
+  {
+    slug: "sector-41",
+    label: "Sector 41",
+    nearby: ["sector-40", "sector-45", "south-city-1"],
+    corridor: "school corridor near South City",
+    schoolSignals: ["K.R. Mangalam World School Sector 41"],
+    note:
+      "relevant for families who want school-aware maths support with steady worksheet and test correction",
+  },
+  {
+    slug: "sector-42",
+    label: "Sector 42",
+    nearby: ["sector-43", "dlf-phase-1", "golf-course-road"],
+    corridor: "Golf Course Road access pocket",
+    schoolSignals: ["Golf Course Road school access"],
+    note:
+      "works well when families want premium-corridor access but still need a practical one-to-one maths routine",
+  },
+  {
+    slug: "sector-43",
+    label: "Sector 43",
+    nearby: ["sector-42", "dlf-phase-4", "sushant-lok-1"],
+    corridor: "central premium-school access pocket",
+    schoolSignals: ["Amity International School Gurugram"],
+    note:
+      "strong for board-aware and premium-school families who want central Gurugram home tuition convenience",
+  },
+  {
+    slug: "sector-45",
+    label: "Sector 45",
+    nearby: ["sector-41", "sector-46", "south-city-1"],
+    corridor: "school and board-support pocket",
+    schoolSignals: ["Delhi Public School Sector 45 Gurugram"],
+    note:
+      "useful when families want school tests, board readiness, and chapter-by-chapter maths support close to home",
+  },
+  {
+    slug: "sector-46",
+    label: "Sector 46",
+    nearby: ["sector-45", "sector-49", "south-city-2"],
+    corridor: "school-support and Sohna Road access pocket",
+    schoolSignals: ["Manav Rachna International School Sector 46"],
+    note:
+      "suited to families comparing school homework, board prep, and practical home tuition around the Sohna Road belt",
+  },
+  {
+    slug: "sector-49",
+    label: "Sector 49",
+    nearby: ["sector-46", "sector-50", "sohna-road"],
+    corridor: "Sohna Road school corridor",
+    schoolSignals: ["St. Xavier's High School Sector 49"],
+    note:
+      "helpful for students who need stronger school-test structure, written method, and steadier revision support",
+  },
+  {
+    slug: "sector-50",
+    label: "Sector 50",
+    nearby: ["sector-49", "sector-51", "south-city-2"],
+    corridor: "school corridor near Nirvana Country and Sohna Road",
+    schoolSignals: ["Lotus Valley International School Sector 50"],
+    note:
+      "useful for families comparing school pace, board pressure, and consistent home tuition around Sector 50",
+  },
+  {
+    slug: "sector-52",
+    label: "Sector 52",
+    nearby: ["sector-53", "sector-54", "golf-course-road"],
+    corridor: "Golf Course Road access pocket",
+    schoolSignals: ["premium-school access"],
+    note:
+      "relevant when families want a cleaner route into IB, IGCSE, CBSE, or class-specific maths support",
+  },
+  {
+    slug: "sector-53",
+    label: "Sector 53",
+    nearby: ["sector-52", "sector-54", "golf-course-road"],
+    corridor: "Golf Course Road school corridor",
+    schoolSignals: ["Lancers International School Sector 53"],
+    note:
+      "strong for premium-school families who need tutor fit, topic clarity, and a practical after-school rhythm",
+  },
+  {
+    slug: "sector-54",
+    label: "Sector 54",
+    nearby: ["sector-53", "sector-55", "golf-course-road"],
+    corridor: "premium-school corridor on Golf Course Road",
+    schoolSignals: ["Suncity School Sector 54"],
+    note:
+      "high-intent for IB, IGCSE, CBSE, and senior-school families comparing board fit and locality convenience",
+  },
+  {
+    slug: "sector-55",
+    label: "Sector 55",
+    nearby: ["sector-54", "sector-56", "golf-course-road"],
+    corridor: "Golf Course Road and Rapid Metro access pocket",
+    schoolSignals: ["Golf Course Road school access"],
+    note:
+      "practical for families who want flexible scheduling near premium corridors without losing board specificity",
+  },
+  {
+    slug: "sector-56",
+    label: "Sector 56",
+    nearby: ["sector-55", "sector-57", "golf-course-road"],
+    corridor: "mixed board and premium-school pocket",
+    schoolSignals: ["IB and IGCSE school access"],
+    note:
+      "useful for families comparing CBSE, IB, IGCSE, and senior-school maths support in one locality",
+  },
+  {
+    slug: "sector-57",
+    label: "Sector 57",
+    nearby: ["sector-56", "sector-62", "sohna-road"],
+    corridor: "school-support pocket near Golf Course Extension",
+    schoolSignals: ["Scottish High International School access"],
+    note:
+      "helpful when the student needs school support, board follow-through, and calmer weekly revision structure",
+  },
+  {
+    slug: "sector-62",
+    label: "Sector 62",
+    nearby: ["sector-57", "sector-65", "golf-course-extension-road"],
+    corridor: "Golf Course Extension premium-school corridor",
+    schoolSignals: ["Heritage Xperiential Learning School access"],
+    note:
+      "relevant for international-curriculum and premium-school families comparing tutor fit and commute practicality",
+  },
+  {
+    slug: "sector-65",
+    label: "Sector 65",
+    nearby: ["sector-62", "sector-67", "golf-course-extension-road"],
+    corridor: "Golf Course Extension and school-support pocket",
+    schoolSignals: ["extension-road school access"],
+    note:
+      "suited to students who need senior-class maths structure, test correction, and a dependable weekly plan",
+  },
+  {
+    slug: "sector-67",
+    label: "Sector 67",
+    nearby: ["sector-65", "sector-70", "sohna-road"],
+    corridor: "Sohna Road and Golf Course Extension access pocket",
+    schoolSignals: ["extension-road school access"],
+    note:
+      "useful when families want home tuition that balances locality convenience with board and class pressure",
+  },
+  {
+    slug: "sector-70",
+    label: "Sector 70",
+    nearby: ["sector-67", "sector-72", "sohna-road"],
+    corridor: "Sohna Road extension school-support pocket",
+    schoolSignals: ["Sohna Road school access"],
+    note:
+      "practical for families looking for regular maths support around homework, chapter tests, and board-year planning",
+  },
+  {
+    slug: "sector-72",
+    label: "Sector 72",
+    nearby: ["sector-70", "sohna-road", "south-city-2"],
+    corridor: "Sohna Road and SPR access pocket",
+    schoolSignals: ["SPR and Sohna Road school access"],
+    note:
+      "useful for students who need consistent practice while families compare school corridor and travel fit",
+  },
+  {
+    slug: "dlf-phase-1",
+    label: "DLF Phase 1",
+    nearby: ["sector-42", "dlf-phase-2", "golf-course-road"],
+    corridor: "DLF and Golf Course Road premium corridor",
+    schoolSignals: ["premium-school access"],
+    note:
+      "works for families who want central premium-corridor access with clearer board, class, and topic shortlisting",
+  },
+  {
+    slug: "dlf-phase-2",
+    label: "DLF Phase 2",
+    nearby: ["dlf-phase-1", "dlf-phase-3", "sushant-lok-1"],
+    corridor: "DLF Cyber City access pocket",
+    schoolSignals: ["central DLF school access"],
+    note:
+      "useful when after-school timing, parent commute, and regular maths support all need to fit together",
+  },
+  {
+    slug: "dlf-phase-3",
+    label: "DLF Phase 3",
+    nearby: ["dlf-phase-2", "dlf-phase-4", "sushant-lok-1"],
+    corridor: "DLF and MG Road access pocket",
+    schoolSignals: ["DLF school access"],
+    note:
+      "practical for families comparing home tuition, online continuity, and board-specific support around busy schedules",
+  },
+  {
+    slug: "dlf-phase-4",
+    label: "DLF Phase 4",
+    nearby: ["sector-43", "sushant-lok-1", "golf-course-road"],
+    corridor: "central premium-school corridor",
+    schoolSignals: ["The Shri Ram School Aravali access"],
+    note:
+      "strong for families who want premium-school awareness, calm scheduling, and board-specific maths support",
+  },
+  {
+    slug: "dlf-phase-5",
+    label: "DLF Phase 5",
+    nearby: ["sector-54", "golf-course-road", "dlf-phase-4"],
+    corridor: "premium Golf Course Road corridor",
+    schoolSignals: ["IB and IGCSE school access"],
+    note:
+      "useful when families want premium-corridor convenience, international-curriculum fit, and steady tutor shortlisting",
+  },
+  {
+    slug: "golf-course-road",
+    label: "Golf Course Road",
+    nearby: ["sector-54", "sector-56", "dlf-phase-5"],
+    corridor: "premium school corridor",
+    schoolSignals: ["Sector 53, Sector 54, and DLF school access"],
+    note:
+      "a corridor-level route for families comparing premium-school context before narrowing to a sector, board, or tutor",
+  },
+  {
+    slug: "golf-course-extension-road",
+    label: "Golf Course Extension Road",
+    nearby: ["sector-62", "sector-65", "sector-67"],
+    corridor: "extension-road premium school corridor",
+    schoolSignals: ["Heritage and extension-road school access"],
+    note:
+      "useful for families comparing IB, IGCSE, CBSE, and senior-class support across the extension-road belt",
+  },
+  {
+    slug: "sohna-road",
+    label: "Sohna Road",
+    nearby: ["sector-49", "sector-67", "sector-70"],
+    corridor: "Sohna Road school and board-support corridor",
+    schoolSignals: ["Sohna Road school access"],
+    note:
+      "practical for families balancing school pace, board pressure, and regular home tuition logistics",
+  },
+  {
+    slug: "south-city-1",
+    label: "South City 1",
+    nearby: ["sector-31", "sector-41", "sector-45"],
+    corridor: "central school-support locality",
+    schoolSignals: ["DPS International Edge and central school access"],
+    note:
+      "helpful when families want homework follow-through, school-test discipline, and a steadier Class 10 to 12 rhythm",
+  },
+  {
+    slug: "south-city-2",
+    label: "South City 2",
+    nearby: ["sector-49", "sector-50", "sohna-road"],
+    corridor: "Sohna Road school-support locality",
+    schoolSignals: ["South City and Sohna Road school access"],
+    note:
+      "useful for families who need class-wise support, board readiness, and manageable weekday scheduling",
+  },
+  {
+    slug: "sushant-lok-1",
+    label: "Sushant Lok 1",
+    nearby: ["sector-43", "dlf-phase-4", "golf-course-road"],
+    corridor: "central Gurugram and premium-school access locality",
+    schoolSignals: ["DPS Sushant Lok and central school access"],
+    note:
+      "practical for families who want flexible lesson planning, school support, and clearer class-wise decisions",
+  },
+  {
+    slug: "sushant-lok-2",
+    label: "Sushant Lok 2",
+    nearby: ["sector-56", "sector-57", "sector-55"],
+    corridor: "Golf Course Road extension access locality",
+    schoolSignals: ["Golf Course Road school access"],
+    note:
+      "useful for families comparing locality fit, class pressure, and regular maths support around busy school weeks",
+  },
+];
+
+const BATCH_A_SCHOOL_META = [
+  {
+    schoolName: "The Shri Ram School Aravali",
+    slug: "best-maths-home-tutor-for-the-shri-ram-school-aravali-gurugram",
+    title: "Maths Home Tutor for The Shri Ram School Aravali Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "dlf-phase-4",
+    curriculumSignals: ["IB", "ICSE", "school-led maths"],
+  },
+  {
+    schoolName: "Heritage Xperiential Learning School",
+    slug: "top-maths-home-tutor-for-heritage-xperiential-learning-school-gurugram",
+    title: "Maths Home Tutor for Heritage Xperiential Learning School Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-62",
+    curriculumSignals: ["IB", "IGCSE", "school-led maths"],
+  },
+  {
+    schoolName: "Pathways World School Gurgaon",
+    slug: "best-maths-home-tutor-for-pathways-world-school-gurugram",
+    title: "Maths Home Tutor for Pathways World School Gurgaon Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sohna-road",
+    curriculumSignals: ["IB", "international curriculum", "senior-school maths"],
+  },
+  {
+    schoolName: "Shiv Nadar School Gurugram",
+    slug: "top-maths-home-tutor-for-shiv-nadar-school-gurugram",
+    title: "Maths Home Tutor for Shiv Nadar School Gurugram Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "dlf-phase-1",
+    curriculumSignals: ["CBSE", "school-led maths", "senior classes"],
+  },
+  {
+    schoolName: "Delhi Public School Sector 45 Gurugram",
+    slug: "best-maths-home-tutor-for-delhi-public-school-sector-45-gurugram",
+    title: "Maths Home Tutor for Delhi Public School Sector 45 Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sector-45",
+    curriculumSignals: ["CBSE", "board exams", "school tests"],
+  },
+  {
+    schoolName: "Scottish High International School",
+    slug: "top-maths-home-tutor-for-scottish-high-international-school-gurugram",
+    title: "Maths Home Tutor for Scottish High International School Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-57",
+    curriculumSignals: ["IB", "IGCSE", "school-led maths"],
+  },
+  {
+    schoolName: "Lotus Valley International School Sector 50 Gurugram",
+    slug: "best-maths-home-tutor-for-lotus-valley-international-school-gurugram",
+    title: "Maths Home Tutor for Lotus Valley International School Sector 50 Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sector-50",
+    curriculumSignals: ["CBSE", "school tests", "board preparation"],
+  },
+  {
+    schoolName: "Lancers International School Sector 53 Gurugram",
+    slug: "top-maths-home-tutor-for-lancers-international-school-gurugram",
+    title: "Maths Home Tutor for Lancers International School Sector 53 Gurugram Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-53",
+    curriculumSignals: ["IB", "IGCSE", "international curriculum"],
+  },
+  {
+    schoolName: "Suncity School Sector 54 Gurugram",
+    slug: "best-maths-home-tutor-for-suncity-school-gurugram",
+    title: "Maths Home Tutor for Suncity School Sector 54 Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sector-54",
+    curriculumSignals: ["CBSE", "IGCSE", "school-led maths"],
+  },
+  {
+    schoolName: "Manav Rachna International School Sector 46 Gurugram",
+    slug: "top-maths-home-tutor-for-manav-rachna-international-school-gurugram",
+    title: "Maths Home Tutor for Manav Rachna International School Sector 46 Gurugram Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-46",
+    curriculumSignals: ["CBSE", "school tests", "board preparation"],
+  },
+  {
+    schoolName: "St. Xavier's High School Sector 49 Gurugram",
+    slug: "best-maths-home-tutor-for-st-xaviers-high-school-gurugram",
+    title: "Maths Home Tutor for St. Xavier's High School Sector 49 Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sector-49",
+    curriculumSignals: ["CBSE", "school tests", "board preparation"],
+  },
+  {
+    schoolName: "Amity International School Gurugram",
+    slug: "top-maths-home-tutor-for-amity-international-school-gurugram",
+    title: "Maths Home Tutor for Amity International School Gurugram Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-43",
+    curriculumSignals: ["CBSE", "school-led maths", "board support"],
+  },
+  {
+    schoolName: "DAV Public School Sector 14 Gurugram",
+    slug: "best-maths-home-tutor-for-dav-public-school-sector-14-gurugram",
+    title: "Maths Home Tutor for DAV Public School Sector 14 Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sector-14",
+    curriculumSignals: ["CBSE", "school tests", "board preparation"],
+  },
+  {
+    schoolName: "K.R. Mangalam World School Sector 41 Gurugram",
+    slug: "top-maths-home-tutor-for-kr-mangalam-world-school-gurugram",
+    title: "Maths Home Tutor for K.R. Mangalam World School Sector 41 Gurugram Students in Gurugram",
+    intentType: "Top",
+    localitySlug: "sector-41",
+    curriculumSignals: ["CBSE", "school tests", "board preparation"],
+  },
+  {
+    schoolName: "G.D. Goenka Public School Gurugram",
+    slug: "best-maths-home-tutor-for-gd-goenka-public-school-gurugram",
+    title: "Maths Home Tutor for G.D. Goenka Public School Gurugram Students in Gurugram",
+    intentType: "Best",
+    localitySlug: "sohna-road",
+    curriculumSignals: ["CBSE", "school-led maths", "senior classes"],
+  },
+];
+
 const localityBySlug = new Map(LOCALITY_META.map((item) => [item.slug, item]));
+const batchALocalityBySlug = new Map(BATCH_A_LOCALITY_META.map((item) => [item.slug, item]));
 
 function titleCaseSlug(slug) {
   return slug
@@ -311,6 +744,62 @@ export const recoveryExamSupportPages = EXAM_SUPPORT_META.map((item) => ({
   focus: item.focus,
 }));
 
+export const batchALocalityPages = BATCH_A_LOCALITY_META.map((item) => ({
+  id: `batch-a-locality-${item.slug}`,
+  group: "batch-a-locality",
+  slug: `${item.slug}-maths-home-tutor`,
+  path: `/gurugram/${item.slug}-maths-home-tutor`,
+  title: `Maths Home Tutor in ${item.label}, Gurugram`,
+  h1: `Maths home tutor in ${item.label}, Gurugram`,
+  localitySlug: item.slug,
+  localityLabel: item.label,
+  nearbyLocalitySlugs: item.nearby,
+  corridor: item.corridor,
+  schoolSignals: item.schoolSignals,
+  localityNote: item.note,
+  parentHubPath: "/maths-home-tutor-in-gurgaon",
+  primaryKeyword: `maths home tutor in ${item.label.toLowerCase()} gurugram`,
+  audience: "Gurugram parents and school students",
+}));
+
+export const batchAHubPage = {
+  id: "batch-a-gurgaon-hub",
+  group: "batch-a-hub",
+  slug: "maths-home-tutor-in-gurgaon",
+  path: "/maths-home-tutor-in-gurgaon",
+  title: "Maths Home Tutor in Gurgaon",
+  h1: "Maths home tutor in Gurgaon for school, board, and premium-corridor support",
+  parentHubPath: "/maths-home-tutor",
+  primaryKeyword: "maths home tutor in gurgaon",
+  audience: "Gurugram parents and students",
+  cluster: "Gurugram Local SEO",
+};
+
+export const batchASchoolPages = BATCH_A_SCHOOL_META.map((item) => {
+  const locality = batchALocalityBySlug.get(item.localitySlug);
+
+  return {
+    id: `batch-a-school-${item.slug}`,
+    group: "batch-a-school",
+    slug: item.slug,
+    path: `/${item.slug}`,
+    title: item.title,
+    h1: item.title,
+    schoolName: item.schoolName,
+    intentType: item.intentType,
+    localitySlug: item.localitySlug,
+    localityLabel: locality?.label ?? "Gurugram",
+    localityPath: locality ? `/gurugram/${locality.slug}-maths-home-tutor` : "/city/gurugram",
+    curriculumSignals: item.curriculumSignals,
+    parentHubPath: batchAHubPage.path,
+    primaryKeyword: `${item.intentType.toLowerCase()} maths home tutor for ${item.schoolName.toLowerCase()} gurugram`,
+    audience: "Premium school students and parents",
+    cluster: "Gurugram School Intent",
+  };
+});
+
+export const batchARootSeoPages = [batchAHubPage, ...batchASchoolPages];
+
 export const recoveryRootSeoPages = [
   ...recoveryClassBoardPages,
   ...recoveryTopicBoardPages,
@@ -320,16 +809,20 @@ export const recoveryRootSeoPages = [
 export const recoverySeoClusterPaths = [
   ...recoveryLocalityBoardPages.map((page) => page.path),
   ...recoveryRootSeoPages.map((page) => page.path),
+  ...batchALocalityPages.map((page) => page.path),
+  ...batchARootSeoPages.map((page) => page.path),
 ];
 
 export const recoveryRouteCatalogRows = [
   ...recoveryLocalityBoardPages,
   ...recoveryRootSeoPages,
+  ...batchALocalityPages,
+  ...batchARootSeoPages,
 ].map((page) => ({
   path: page.path,
   title: page.title,
   segment:
-    page.group === "locality-board"
+    page.group === "locality-board" || page.group === "batch-a-locality" || page.group === "batch-a-school"
       ? "Location"
       : page.group === "class-board"
         ? "Curriculum / Class"
@@ -338,8 +831,10 @@ export const recoveryRouteCatalogRows = [
           : "Exam Support",
   cluster: page.cluster ?? page.boardLabel ?? titleCaseSlug(page.slug),
   pageType:
-    page.group === "locality-board"
+    page.group === "locality-board" || page.group === "batch-a-locality"
       ? "Location Service"
+      : page.group === "batch-a-school"
+        ? "School-Specific Service"
       : page.group === "class-board"
         ? "Class Service"
         : page.group === "topic-board"
@@ -354,6 +849,14 @@ export function getRecoveryBoardMeta(boardSlug) {
 
 export function getRecoveryLocalityMeta(localitySlug) {
   return localityBySlug.get(localitySlug);
+}
+
+export function getBatchALocalityMeta(localitySlug) {
+  return batchALocalityBySlug.get(localitySlug);
+}
+
+export function getBatchALocalityPaths(limit = BATCH_A_LOCALITY_META.length) {
+  return batchALocalityPages.slice(0, limit).map((page) => page.path);
 }
 
 export function getRecoveryClassPaths(boardSlug) {

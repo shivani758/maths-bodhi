@@ -1,4 +1,6 @@
 import {
+  batchALocalityPages,
+  batchARootSeoPages,
   getRecoveryClassPaths,
   getRecoveryLocalityBoardPaths,
   getRecoveryTopicPaths,
@@ -134,6 +136,7 @@ const routeCatalog = new Map([
 export const p1SeoPagePaths = [
   ...p1SeoUrlRows.map((item) => item.path),
   ...recoveryRootSeoPages.map((item) => item.path),
+  ...batchARootSeoPages.map((item) => item.path),
 ];
 
 function slugFromPath(path) {
@@ -807,11 +810,383 @@ function createRecoveryRootSeoConfig(page) {
   };
 }
 
+function getBatchACurrentRow(page) {
+  return {
+    id: page.id,
+    segment: "Location",
+    pageType: page.group === "batch-a-school" ? "School-Specific Service" : "Location Service",
+    audience: page.audience,
+    cluster: page.cluster ?? "Gurugram Local SEO",
+    title: page.title,
+    path: page.path,
+    parent: page.parentHubPath,
+    keyword: page.primaryKeyword,
+    links: "",
+  };
+}
+
+function createBatchAWhatsAppHref(page, purpose = "Gurugram maths home tuition") {
+  const message = `Hello Maths Bodhi, I want help with ${page.title}. Please guide me on ${purpose}, tutor fit, and a demo class.`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function getBatchALocalityPaths(page) {
+  if (page.group === "batch-a-school" && page.localityPath) {
+    return [
+      page.localityPath,
+      "/gurugram/golf-course-road-maths-home-tutor",
+      "/gurugram/golf-course-extension-road-maths-home-tutor",
+      "/gurugram/sohna-road-maths-home-tutor",
+      "/gurugram/south-city-1-maths-home-tutor",
+      "/gurugram/sushant-lok-1-maths-home-tutor",
+    ];
+  }
+
+  return batchALocalityPages.slice(0, 8).map((item) => item.path);
+}
+
+function getBatchABoardPaths(page) {
+  const signals = (page.curriculumSignals ?? []).join(" ").toLowerCase();
+  const paths = [
+    "/premium-school-maths-home-tutor",
+    "/gurugram/cbse-maths-home-tutor",
+    "/gurugram/igcse-maths-home-tutor",
+    "/gurugram/ib-maths-home-tutor",
+    "/maths-home-tutor",
+  ];
+
+  if (signals.includes("ib")) {
+    paths.unshift("/ib-maths-tuition");
+  }
+
+  if (signals.includes("igcse") || signals.includes("international")) {
+    paths.unshift("/igcse-maths-tuition");
+  }
+
+  if (signals.includes("cbse")) {
+    paths.unshift("/cbse-maths-tuition");
+  }
+
+  return paths;
+}
+
+function getBatchAClassPaths(page) {
+  if ((page.curriculumSignals ?? []).some((item) => item.includes("IB"))) {
+    return [
+      "/class-10-ib-maths-home-tutor",
+      "/class-12-ib-maths-home-tutor",
+      "/class-10-igcse-maths-home-tutor",
+      "/class-12-cbse-maths-home-tutor",
+    ];
+  }
+
+  if ((page.curriculumSignals ?? []).some((item) => item.includes("IGCSE"))) {
+    return [
+      "/class-9-igcse-maths-home-tutor",
+      "/class-10-igcse-maths-home-tutor",
+      "/class-10-cbse-maths-home-tutor",
+      "/class-12-ib-maths-home-tutor",
+    ];
+  }
+
+  return [
+    "/class-10-cbse-maths-home-tutor",
+    "/class-12-cbse-maths-home-tutor",
+    "/class-10-igcse-maths-home-tutor",
+    "/class-12-ib-maths-home-tutor",
+  ];
+}
+
+function getBatchATopicPaths() {
+  return [
+    "/cbse-algebra-tutor",
+    "/igcse-trigonometry-tutor",
+    "/ib-calculus-tutor",
+    "/board-exam-maths-revision",
+    "/maths-last-minute-revision",
+  ];
+}
+
+function buildBatchASupportPoints(page) {
+  if (page.group === "batch-a-school") {
+    return [
+      {
+        title: `${page.schoolName} searches need careful tutor-fit language`,
+        description:
+          "This page uses the school name as parent search context only. It does not claim official affiliation, ranking, guaranteed admission, or guaranteed results.",
+      },
+      {
+        title: "The first shortlist should connect school, board, and class",
+        description: `Families can discuss ${page.curriculumSignals.join(", ")} along with class level, recent test pattern, weak chapters, and whether home tuition or online continuity is practical.`,
+      },
+      {
+        title: "The page links back into the local Gurugram cluster",
+        description:
+          "School-intent pages should never stand alone. They connect to the Gurgaon hub, nearby locality pages, board pages, class pages, topic pages, WhatsApp, and demo routes.",
+      },
+    ];
+  }
+
+  return [
+    {
+      title: "A city hub should guide families into the exact next route",
+      description:
+        "This page connects Gurugram searches to sectors, DLF phases, Golf Course Road, Sohna Road, South City, Sushant Lok, school-intent pages, boards, classes, topics, and demo flow.",
+    },
+    {
+      title: "Locality pages should avoid generic city swapping",
+      description:
+        "The Batch A locality pages use corridor context, school timing, board pressure, and class need to keep each route useful without fake tutor counts or unsupported claims.",
+    },
+    {
+      title: "School-intent pages need affiliation-safe copy",
+      description:
+        "School names are used only for parent search context. Maths Bodhi should check tutor fit through class, board, weak chapters, schedule, and preferred learning mode.",
+    },
+  ];
+}
+
+function buildBatchAFaqs(page) {
+  if (page.group === "batch-a-school") {
+    return [
+      {
+        question: `Is this page officially affiliated with ${page.schoolName}?`,
+        answer:
+          "No. The school name is used only to describe parent search intent and local planning context. Maths Bodhi does not claim an official school partnership on this page.",
+      },
+      {
+        question: `Who should use the ${page.schoolName} maths tutor page?`,
+        answer: `It is for families comparing maths support for a ${page.schoolName} student and wanting a clearer way to discuss class, board, weak chapters, locality, schedule, and demo fit.`,
+      },
+      {
+        question: "What should parents share before booking?",
+        answer:
+          "Share the student's class, board or curriculum, current chapters, recent test pattern, preferred mode, school area, and whether the family wants home tuition, online support, or both.",
+      },
+    ];
+  }
+
+  return [
+    {
+      question: "How should families use this Gurgaon maths tutor hub?",
+      answer:
+        "Use it to choose the right sector, corridor, school-intent, board, class, topic, or revision route before booking a demo or WhatsApp conversation.",
+    },
+    {
+      question: "Does Maths Bodhi show fake tutor counts on these pages?",
+      answer:
+        "No. The pages only show real published tutor profiles when the available data matches the page signals. Empty states keep the enquiry route honest.",
+    },
+    {
+      question: "What information helps the first mentor conversation?",
+      answer:
+        "Share class, board, school area, weak chapters, recent marks or test pattern, preferred locality, and whether home tuition or online support is preferred.",
+    },
+  ];
+}
+
+function createBatchARootSeoConfig(page) {
+  const currentRow = getBatchACurrentRow(page);
+  const isSchoolPage = page.group === "batch-a-school";
+  const tokens = unique([
+    page.primaryKeyword,
+    page.title,
+    page.schoolName,
+    page.localityLabel,
+    ...(page.curriculumSignals ?? []),
+    "Gurugram",
+    "Gurgaon",
+    "home tuition",
+  ]);
+
+  return {
+    id: page.id,
+    slug: page.slug,
+    routePath: page.path,
+    pageType: currentRow.pageType,
+    template: "GenericPageTemplate",
+    title: page.title,
+    h1: page.h1,
+    intro: isSchoolPage
+      ? `${page.title} is a school-intent page for parents who want an affiliation-safe way to discuss maths home tuition, class pressure, curriculum fit, and demo next steps for a ${page.schoolName} student.`
+      : "Use this Gurgaon maths home tutor hub to move from broad local search into the right sector, school corridor, board, class, topic, or demo route.",
+    sectionDefinitions: [
+      { id: "hero", template: "hero", enabled: true },
+      { id: "support-points", template: "support-points", enabled: true },
+      { id: "route-groups", template: "route-groups", enabled: true },
+      { id: "featured-tutors", template: "featured-tutors", enabled: true },
+      { id: "faqs", template: "faqs", enabled: true },
+      { id: "cta", template: "cta", enabled: true },
+    ],
+    relatedTutorQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      cityLabel: "Gurugram",
+      localityLabels: [page.localityLabel, page.localitySlug].filter(Boolean),
+      tokens,
+      limit: 6,
+    },
+    relatedBlogQuery: {
+      kind: "tokens",
+      tokens: unique([page.schoolName, page.localityLabel, "home tuition", "school support", "revision"]),
+      limit: 3,
+    },
+    relatedResultQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      localityLabels: [page.localityLabel, page.localitySlug].filter(Boolean),
+      tokens,
+      limit: 3,
+    },
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: isSchoolPage
+      ? `Explore maths home tuition for ${page.schoolName} search intent with affiliation-safe copy, related locality, board, class, topic, WhatsApp, and demo links.`
+      : "Explore Gurgaon maths home tutor routes by locality, school corridor, board, class, topic, WhatsApp, and free demo next steps.",
+    canonicalUrl: page.path,
+    breadcrumbItems: [
+      { label: "Home", to: "/" },
+      ...(page.parentHubPath && page.parentHubPath !== page.path
+        ? [{ label: getPageLabel(page.parentHubPath), to: page.parentHubPath }]
+        : []),
+      { label: page.title },
+    ],
+    schemaType: "Service",
+    publishStatus: "published",
+    entity: page,
+    sections: {
+      hero: {
+        badge: isSchoolPage ? "School Intent" : "Gurugram Local SEO",
+        chips: unique([
+          page.schoolName,
+          page.localityLabel,
+          ...(page.curriculumSignals ?? []),
+          "Home tuition",
+          "Gurugram",
+        ]).slice(0, 5),
+        stats: [
+          { value: isSchoolPage ? "School" : "46", label: isSchoolPage ? "Intent route" : "Batch A routes" },
+          { value: "4", label: "Related link groups" },
+          { value: "Demo", label: "Next-step CTA" },
+        ],
+        supportPanel: {
+          title: isSchoolPage
+            ? `${page.schoolName} context should lead into a practical tutor-fit check`
+            : "Start broad, then narrow to the exact Gurugram route",
+          text: isSchoolPage
+            ? "The page is written for parent search intent, not as an official school listing. The useful next step is to discuss class, board, chapters, schedule, and availability."
+            : "The hub connects locality, school corridor, board, class, topic, and revision pages so families do not have to guess which route fits first.",
+          bullets: isSchoolPage
+            ? [
+                `Nearby locality route: ${page.localityLabel}`,
+                `Curriculum signals: ${(page.curriculumSignals ?? []).join(", ")}`,
+                "No official affiliation, fake counts, or guaranteed-result claims",
+              ]
+            : [
+                "Sectors, DLF phases, Golf Course Road, Sohna Road, South City, and Sushant Lok are connected",
+                "School-intent pages link back to this hub and the demo route",
+                "Tutor cards use real published data only",
+              ],
+        },
+        heroImage: "/images/hero-maths-home.svg",
+        heroImageAlt: `${page.title} from Maths Bodhi`,
+      },
+      supportPoints: {
+        badge: isSchoolPage ? "School Search Fit" : "Local SEO Hub",
+        title: isSchoolPage
+          ? `How to use the ${page.schoolName} maths tutor route`
+          : "How to choose the right Gurgaon maths tutor route",
+        subtitle:
+          "The content keeps local search connected to board, class, topic, and demo decisions so the page is useful rather than a thin doorway.",
+        points: buildBatchASupportPoints(page),
+      },
+      routeGroups: [
+        {
+          id: `${page.slug}-localities`,
+          badge: "Related Localities",
+          title: "Related Gurugram locality pages",
+          subtitle:
+            "Use these routes when school corridor, travel fit, or nearby sector access changes the shortlist.",
+          cards: buildRecoveryCards(getBatchALocalityPaths(page), currentRow),
+        },
+        {
+          id: `${page.slug}-boards`,
+          badge: "Related Boards",
+          title: "Related board and school-support pages",
+          subtitle:
+            "These pages keep curriculum fit visible before the family books a demo or WhatsApp conversation.",
+          cards: buildRecoveryCards(getBatchABoardPaths(page), currentRow),
+          backgroundClassName: "bg-slate-50",
+        },
+        {
+          id: `${page.slug}-classes`,
+          badge: "Related Classes",
+          title: "Related class pages",
+          subtitle:
+            "Use class pages when grade-level pressure or exam calendar is the strongest signal.",
+          cards: buildRecoveryCards(getBatchAClassPaths(page), currentRow),
+        },
+        {
+          id: `${page.slug}-topics`,
+          badge: "Related Topics",
+          title: "Related topic and revision pages",
+          subtitle:
+            "These topic pages help families move from local or school intent into the chapters causing the most friction.",
+          cards: buildRecoveryCards(getBatchATopicPaths(page), currentRow),
+          backgroundClassName: "bg-slate-50",
+        },
+      ],
+      featuredTutors: {
+        badge: "Tutor Profiles",
+        title: isSchoolPage
+          ? `Published tutor profiles related to ${page.schoolName} search intent`
+          : "Published tutor profiles related to Gurgaon maths home tuition",
+        subtitle:
+          "Only real published Maths Bodhi tutor profiles are shown here. If no matching profile exists, the page keeps the enquiry route open without placeholder tutors.",
+        emptyState: {
+          title: "No exact published tutor profile is shown for this route yet",
+          description:
+            "Maths Bodhi can still check current fit after the family shares class, board, locality, weak chapters, school area, and preferred learning mode.",
+          primaryAction: {
+            label: "Book a free maths demo class",
+            to: DEMO_PATH,
+          },
+          secondaryAction: {
+            label: "Browse Gurugram tutor context",
+            to: "/city/gurugram",
+          },
+        },
+      },
+      faqs: buildBatchAFaqs(page),
+      cta: {
+        title: "Book a free maths demo class",
+        description: isSchoolPage
+          ? `Share the student's class, board, school area, current chapters, and schedule. Maths Bodhi can check whether ${page.schoolName} search intent is best handled through home tuition, online support, or mentor guidance.`
+          : "Share the student's class, board, locality, school corridor, and current maths concern. Maths Bodhi can guide the next step on WhatsApp.",
+        primaryAction: {
+          label: "Book a free maths demo class",
+          to: DEMO_PATH,
+        },
+        secondaryAction: {
+          label: "WhatsApp Maths Bodhi",
+          href: createBatchAWhatsAppHref(page),
+          external: true,
+        },
+        tertiaryAction: {
+          label: "Talk to a mentor",
+          href: createBatchAWhatsAppHref(page, "mentor guidance"),
+          external: true,
+        },
+      },
+    },
+  };
+}
+
 export const p1SeoPageConfigs = [
   ...p1SeoUrlRows
     .filter((item) => item.path !== "/" && item.path !== DEMO_PATH)
     .map((item) => createSeoConfig(item)),
   ...recoveryRootSeoPages.map((item) => createRecoveryRootSeoConfig(item)),
+  ...batchARootSeoPages.map((item) => createBatchARootSeoConfig(item)),
 ];
 
 export function getP1SeoPageConfig(slug) {
