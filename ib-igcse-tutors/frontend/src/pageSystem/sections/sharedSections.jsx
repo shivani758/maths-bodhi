@@ -39,22 +39,22 @@ export function PageHeroSection({
       <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-cyan-100/70 blur-3xl" />
       <div className="absolute right-0 top-10 h-80 w-80 rounded-full bg-blue-100/80 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-7xl min-w-0">
         <Breadcrumbs items={breadcrumbs} />
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
-          <div>
+        <div className="mt-8 grid min-w-0 gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
+          <div className="min-w-0">
             {badge ? (
               <span className="inline-flex rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
                 {badge}
               </span>
             ) : null}
 
-            <h1 className="mt-6 max-w-4xl text-4xl font-bold tracking-tight text-neutral-950 md:text-5xl">
+            <h1 className="mt-6 max-w-4xl break-words text-3xl font-bold tracking-tight text-neutral-950 md:text-5xl">
               {h1}
             </h1>
 
-            {intro ? <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">{intro}</p> : null}
+            {intro ? <p className="mt-5 max-w-3xl break-words text-lg leading-8 text-slate-600">{intro}</p> : null}
 
             {chips.length ? (
               <div className="mt-6 flex flex-wrap gap-2">
@@ -114,7 +114,7 @@ export function PageHeroSection({
             ) : null}
           </div>
 
-          <div className="grid gap-5">
+          <div className="grid min-w-0 gap-5">
             {heroImage ? (
               <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 p-4 shadow-lg shadow-sky-100/60">
                 <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white">
@@ -401,6 +401,7 @@ export function PageCtaSection({
   description,
   primaryAction,
   secondaryAction,
+  tertiaryAction,
 }) {
   if (!title && !description) {
     return null;
@@ -445,6 +446,24 @@ export function PageCtaSection({
                     className="rounded-2xl border border-white/15 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
                   >
                     {secondaryAction.label}
+                  </a>
+                ) : null}
+                {tertiaryAction?.to ? (
+                  <Link
+                    to={tertiaryAction.to}
+                    className="rounded-2xl border border-white/15 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    {tertiaryAction.label}
+                  </Link>
+                ) : null}
+                {tertiaryAction?.href ? (
+                  <a
+                    href={tertiaryAction.href}
+                    target={tertiaryAction.external ? "_blank" : undefined}
+                    rel={tertiaryAction.external ? "noreferrer" : undefined}
+                    className="rounded-2xl border border-white/15 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    {tertiaryAction.label}
                   </a>
                 ) : null}
               </div>

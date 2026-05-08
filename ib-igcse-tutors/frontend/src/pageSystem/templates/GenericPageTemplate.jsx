@@ -21,7 +21,11 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
   const resolvedHeroActions =
     heroActions.length
       ? heroActions
-      : [config.sections?.cta?.primaryAction, config.sections?.cta?.secondaryAction].filter(Boolean);
+      : [
+          config.sections?.cta?.primaryAction,
+          config.sections?.cta?.secondaryAction,
+          config.sections?.cta?.tertiaryAction,
+        ].filter(Boolean);
   const faqItems = config.sections?.faqs ?? config.entity?.faqItems ?? [];
   const routeGroups = config.sections?.routeGroups ?? [];
   const featuredTutorsSection = config.sections?.featuredTutors ?? {};
@@ -128,6 +132,7 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
             description={config.sections?.cta?.description}
             primaryAction={config.sections?.cta?.primaryAction}
             secondaryAction={config.sections?.cta?.secondaryAction}
+            tertiaryAction={config.sections?.cta?.tertiaryAction}
           />
         ) : null}
       </div>

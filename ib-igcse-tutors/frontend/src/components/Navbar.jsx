@@ -150,14 +150,14 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-100">
+      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-3 px-5 py-4 sm:px-6">
+        <Link to="/" className="flex min-w-0 flex-1 items-center gap-3 xl:flex-none">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-100 sm:h-12 sm:w-12">
             MB
           </div>
 
-          <div>
-            <p className="text-xl font-bold tracking-tight text-slate-950">
+          <div className="min-w-0">
+            <p className="truncate text-lg font-bold tracking-tight text-slate-950 sm:text-xl">
               {siteData.brandName}
             </p>
             <p className="text-xs font-medium text-cyan-600">
@@ -174,13 +174,13 @@ function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <div className="hidden items-center gap-2 md:flex">{renderAccountActions()}</div>
           <a
             href={`https://wa.me/${siteData.contact.whatsappNumber}`}
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.02] sm:px-5"
+            className="rounded-xl bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.02] sm:px-5"
           >
             WhatsApp
           </a>

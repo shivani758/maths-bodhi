@@ -1,3 +1,8 @@
+import {
+  getRecoveryLocalityMeta,
+  recoveryLocalityBoardPages,
+} from "./seoRecoveryCluster";
+
 function routeCard({ eyebrow, title, description, tags = [], to }) {
   return { eyebrow, title, description, tags, to };
 }
@@ -2626,6 +2631,301 @@ function createCityGurugramLocalityFallbackConfig({
   });
 }
 
+function createRecoveryWhatsAppHref(page, purpose = "home tuition") {
+  const message = `Hello Maths Bodhi, I want help with ${page.title}. Please guide me on ${purpose}, tutor fit, and a demo class.`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function recoveryRouteCard(path, title, eyebrow, description, tags = []) {
+  return routeCard({
+    eyebrow,
+    title,
+    description,
+    tags,
+    to: path,
+  });
+}
+
+function createRecoveryLocalityCards(page) {
+  const currentLocality = recoveryRouteCard(
+    `/gurugram/${page.localitySlug}`,
+    `${page.localityLabel} maths home tuition`,
+    "Parent locality",
+    `Open the main ${page.localityLabel} locality route before narrowing by ${page.boardLabel}.`,
+    [page.localityLabel, "Gurugram"],
+  );
+
+  const nearbyCards = (page.nearbyLocalitySlugs ?? [])
+    .map((slug) => getRecoveryLocalityMeta(slug))
+    .filter(Boolean)
+    .map((locality) =>
+      recoveryRouteCard(
+        `/gurugram/${locality.slug}-${page.boardSlug}-maths-home-tutor`,
+        `${page.boardLabel} tutor in ${locality.label}`,
+        "Nearby board-locality",
+        `Compare ${page.localityLabel} with ${locality.label} for ${page.boardLabel} maths home tuition and travel fit.`,
+        [page.boardLabel, locality.label],
+      ),
+    );
+
+  return [currentLocality, ...nearbyCards].slice(0, 5);
+}
+
+function createRecoveryBoardCards(page) {
+  return [
+    recoveryRouteCard(
+      page.gurugramBoardPath,
+      `${page.boardLabel} Maths Home Tutor in Gurugram`,
+      "Gurugram board route",
+      `Use the city-level ${page.boardLabel} page for broader board fit, tutor matching, and locality comparison.`,
+      [page.boardLabel, "Gurugram"],
+    ),
+    recoveryRouteCard(
+      page.boardHubPath,
+      `${page.boardLabel} Maths Tuition`,
+      "Board hub",
+      `Open the workbook-aligned ${page.boardLabel} hub before choosing class, topic, or locality support.`,
+      [page.boardLabel, "Hub"],
+    ),
+    recoveryRouteCard(
+      "/maths-home-tutor",
+      "Maths Home Tutor",
+      "Main service hub",
+      "Compare the main home tuition route before choosing the exact board or locality page.",
+      ["Home tuition", "Main hub"],
+    ),
+    recoveryRouteCard(
+      "/city/gurugram",
+      "Gurugram City Page",
+      "City hub",
+      "Browse Gurugram sectors, board routes, and tutor context from the city page.",
+      ["Gurugram", "Local SEO"],
+    ),
+  ];
+}
+
+function createRecoveryClassCards(page) {
+  return [
+    ...page.relatedClassPaths.map((path) => {
+      const classLabel = path.match(/class-(\d+)/)?.[1] ?? "";
+      return recoveryRouteCard(
+        path,
+        `Class ${classLabel} ${page.boardLabel} maths home tutor`,
+        "Class route",
+        `Use this class route when the ${page.boardLabel} student's grade-level pressure is clearer than the locality need.`,
+        [page.boardLabel, `Class ${classLabel}`],
+      );
+    }),
+    recoveryRouteCard(
+      "/class-10-maths-tutor",
+      "Class 10 Maths Tutor",
+      "Class hub",
+      "Compare the broader Class 10 route for board-year revision and chapter clarity.",
+      ["Class 10", "Board year"],
+    ),
+  ].slice(0, 6);
+}
+
+function createRecoveryTopicCards(page) {
+  return page.relatedTopicPaths.slice(0, 5).map((path) => {
+    const label = path
+      .replace(/^\//, "")
+      .replace(`${page.boardSlug}-`, "")
+      .replace("-tutor", "")
+      .split("-")
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+
+    return recoveryRouteCard(
+      path,
+      path.startsWith(`/${page.boardSlug}-`)
+        ? `${page.boardLabel} ${label} Tutor`
+        : `${label} Tutor`,
+      "Topic route",
+      `Open this topic page if the student's current ${page.boardLabel} concern is chapter-specific.`,
+      [page.boardLabel, label],
+    );
+  });
+}
+
+function createRecoveryLocalityBoardConfig(page) {
+  return createPublishedGurugramEntryConfig({
+    id: page.id,
+    slug: page.slug,
+    routePath: page.path,
+    pageType: "service",
+    title: page.title,
+    h1: page.h1,
+    intro: `${page.title} is a focused Gurugram home tuition page for families who already know both the locality and the board. It connects ${page.localityLabel} tutor fit with ${page.boardLabel} class, topic, and demo next steps.`,
+    relatedTutorQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      cityLabel: "Gurugram",
+      localityLabels: [page.localityLabel, page.localitySlug],
+      tokens: [
+        page.boardLabel,
+        page.localityLabel,
+        page.primaryKeyword,
+        "home tuition",
+        "maths tutor",
+      ],
+      limit: 6,
+    },
+    relatedBlogQuery: {
+      kind: "tokens",
+      tokens: [page.boardLabel, page.localityLabel, "home tuition", "revision"],
+      limit: 3,
+    },
+    relatedResultQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      localityLabels: [page.localitySlug, page.localityLabel],
+      tokens: [page.boardLabel, page.localityLabel],
+      limit: 3,
+    },
+    seoTitle: `${page.boardLabel} Maths Home Tutor in ${page.localityLabel} Gurugram | Maths Bodhi`,
+    seoDescription: `Explore ${page.primaryKeyword} with related locality, board, class, topic, WhatsApp, mentor, and free demo links.`,
+    canonicalUrl: page.path,
+    breadcrumbItems: [
+      { label: "Home", to: "/" },
+      { label: "Gurugram", to: "/gurugram" },
+      { label: page.boardLabel, to: page.gurugramBoardPath },
+      { label: page.localityLabel },
+    ],
+    schemaType: "Service",
+    sections: {
+      hero: {
+        badge: `${page.boardLabel} maths in ${page.localityLabel}`,
+        chips: [page.localityLabel, page.boardLabel, "Home tuition", "Gurugram", "Tutor fit"],
+        stats: [
+          { value: "Local", label: "Board-locality route" },
+          { value: "1:1", label: "Home tuition focus" },
+          { value: "Demo", label: "Next-step CTA" },
+        ],
+        supportPanel: {
+          title: `${page.localityLabel} works best when the tutor shortlist starts with board fit`,
+          text: `${page.localityNote}. For ${page.boardLabel}, the teaching plan should also reflect ${page.topicContext}.`,
+          bullets: [
+            `Parent board hub: ${page.boardHubPath}`,
+            "Related locality, board, class, and topic links are grouped below",
+            "No fake tutor profiles, reviews, or guaranteed-result claims are used",
+          ],
+        },
+        heroImage: "/images/hero-maths-home.svg",
+        heroImageAlt: `${page.title} support from Maths Bodhi`,
+      },
+      supportPoints: {
+        badge: "Local Board Fit",
+        title: `How ${page.boardLabel} maths home tuition should work in ${page.localityLabel}`,
+        subtitle:
+          "This page keeps locality convenience connected to the board, class, topic, and mentor conversation that should shape the actual shortlist.",
+        points: [
+          supportPoint(
+            "Locality fit should make weekly learning easier",
+            `${page.localityLabel} is useful when home tuition needs to fit school timing, travel feasibility, and a consistent weekly maths routine.`,
+          ),
+          supportPoint(
+            `${page.boardLabel} method should guide practice`,
+            `The first plan should reflect ${page.topicContext}, not a generic maths worksheet flow.`,
+          ),
+          supportPoint(
+            "Published tutor filtering stays honest",
+            "Tutor cards are filtered from real published profiles. If no exact profile matches, the page keeps the enquiry route open without placeholder tutors.",
+          ),
+        ],
+      },
+      routeGroups: [
+        {
+          id: `${page.slug}-related-localities`,
+          badge: "Related Localities",
+          title: "Related Gurugram locality pages",
+          subtitle:
+            "Compare nearby sectors and corridors when travel convenience or school access affects home tuition.",
+          cards: createRecoveryLocalityCards(page),
+        },
+        {
+          id: `${page.slug}-related-boards`,
+          badge: "Related Boards",
+          title: "Related board and hub pages",
+          subtitle:
+            "Move back to the board-level route when curriculum fit matters more than one exact locality.",
+          cards: createRecoveryBoardCards(page),
+          backgroundClassName: "bg-slate-50",
+        },
+        {
+          id: `${page.slug}-related-classes`,
+          badge: "Related Classes",
+          title: "Related class pages",
+          subtitle:
+            "Use class pages when the student's grade, test calendar, or board year is the strongest decision signal.",
+          cards: createRecoveryClassCards(page),
+        },
+        {
+          id: `${page.slug}-related-topics`,
+          badge: "Related Topics",
+          title: "Related topic pages",
+          subtitle:
+            "Topic pages help families move from a locality search into the exact chapters causing the most friction.",
+          cards: createRecoveryTopicCards(page),
+          backgroundClassName: "bg-slate-50",
+        },
+      ],
+      featuredTutors: {
+        badge: "Tutor Profiles",
+        title: `Published ${page.boardLabel} maths tutors relevant to ${page.localityLabel}`,
+        subtitle:
+          "Tutor cards appear only when real published profiles match the board, locality, or topic signals on this page.",
+        emptyState: {
+          title: `No exact published tutor profile is shown for ${page.boardLabel} in ${page.localityLabel} yet`,
+          description:
+            "Maths Bodhi can still check current availability after the family shares class, board, school area, weak chapters, and preferred timing.",
+          primaryAction: {
+            label: "Book a free maths demo class",
+            to: "/book-free-demo-class",
+          },
+          secondaryAction: {
+            label: "Back to Gurugram hub",
+            to: "/gurugram",
+          },
+        },
+      },
+      faqs: [
+        faqItem(
+          `Who is this ${page.boardLabel} tutor page for in ${page.localityLabel}?`,
+          `It is for families who want ${page.primaryKeyword} and need the first shortlist to consider both locality convenience and board-specific maths expectations.`,
+        ),
+        faqItem(
+          "Can this page support home tuition and online options?",
+          "Yes. It is written for home tuition first, but families can discuss online or hybrid support if schedule, tutor fit, or availability makes that more practical.",
+        ),
+        faqItem(
+          "What should parents share before booking a demo?",
+          "Share the student's class, school, board, weak chapters, recent tests, preferred timing, and whether the family wants home tuition, online support, or both.",
+        ),
+      ],
+      cta: {
+        title: `Book a free maths demo for ${page.boardLabel} in ${page.localityLabel}`,
+        description:
+          "Share the class, board, locality, school area, and the current maths concern. Maths Bodhi can check tutor fit and guide the next step on WhatsApp.",
+        primaryAction: {
+          label: "Book a free maths demo class",
+          to: "/book-free-demo-class",
+        },
+        secondaryAction: {
+          label: "WhatsApp Maths Bodhi",
+          href: createRecoveryWhatsAppHref(page),
+          external: true,
+        },
+        tertiaryAction: {
+          label: "Talk to a mentor",
+          href: createRecoveryWhatsAppHref(page, "mentor guidance"),
+          external: true,
+        },
+      },
+    },
+  });
+}
+
 export const batchTwoGurugramEntryConfigs = [
   createPublishedGurugramEntryConfig({
     id: "gurugram-sector-57-service",
@@ -4118,9 +4418,14 @@ const cityGurugramLocalityFallbackConfigs = [
   }),
 ];
 
+const seoRecoveryLocalityBoardConfigs = recoveryLocalityBoardPages.map((page) =>
+  createRecoveryLocalityBoardConfig(page),
+);
+
 export const gurugramPublicEntryConfigs = [
   ...batchOneGurugramEntryConfigs,
   ...batchTwoGurugramEntryConfigs,
+  ...seoRecoveryLocalityBoardConfigs,
   ...cityGurugramLocalityFallbackConfigs,
 ];
 

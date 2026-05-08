@@ -39,11 +39,16 @@ const BOARD_SEARCH_ITEMS = [
   { label: "JEE Advanced maths tutor", route: "/jee-advanced-maths-coaching" },
 ];
 
-const CLASS_SEARCH_ITEMS = Array.from({ length: 7 }, (_, index) => ({
-  label: `Class ${index + 6} maths tutor`,
-  classLevel: `Class ${index + 6}`,
-  route: `/class-${index + 6}-maths-tutor`,
-}));
+const CLASS_SEARCH_ITEMS = [
+  ...Array.from({ length: 7 }, (_, index) => ({
+    label: `Class ${index + 6} maths tutor`,
+    classLevel: `Class ${index + 6}`,
+    route: `/class-${index + 6}-maths-tutor`,
+  })),
+  { label: "Class 10 CBSE maths home tutor", classLevel: "Class 10", route: "/class-10-cbse-maths-home-tutor" },
+  { label: "Class 12 IB maths home tutor", classLevel: "Class 12", route: "/class-12-ib-maths-home-tutor" },
+  { label: "Class 10 IGCSE maths home tutor", classLevel: "Class 10", route: "/class-10-igcse-maths-home-tutor" },
+];
 
 const SERVICE_SEARCH_ITEMS = [
   { label: "Home maths tutor", mode: "Home Tuition", route: "/maths-home-tutor" },
@@ -52,6 +57,9 @@ const SERVICE_SEARCH_ITEMS = [
   { label: "After-school maths support", route: "/after-school-maths-support" },
   { label: "Weekend maths home tutoring", route: "/weekend-maths-home-tutoring" },
   { label: "Board exam revision support", route: "/board-exam-revision-support" },
+  { label: "Board exam maths revision", route: "/board-exam-maths-revision" },
+  { label: "JEE maths problem solving", route: "/jee-maths-problem-solving" },
+  { label: "Last-minute maths revision", route: "/maths-last-minute-revision" },
   { label: "Concept strengthening sessions", route: "/concept-strengthening-sessions" },
   { label: "Regular doubt-solving help", route: "/regular-doubt-solving-help" },
   { label: "Maths worksheet guidance", route: "/maths-worksheet-guidance" },
@@ -62,9 +70,12 @@ const SERVICE_SEARCH_ITEMS = [
 
 const TOPIC_SEARCH_ITEMS = [
   { label: "Algebra tutor", topic: "Algebra", route: "/algebra-tutor" },
+  { label: "CBSE algebra tutor", topic: "Algebra", route: "/cbse-algebra-tutor" },
   { label: "Geometry tutor", topic: "Geometry", route: "/geometry-tutor" },
   { label: "Trigonometry tutor", topic: "Trigonometry", route: "/trigonometry-tutor" },
+  { label: "IGCSE trigonometry tutor", topic: "Trigonometry", route: "/igcse-trigonometry-tutor" },
   { label: "Calculus tutor", topic: "Calculus", route: "/calculus-tutor" },
+  { label: "IB calculus tutor", topic: "Calculus", route: "/ib-calculus-tutor" },
   { label: "Statistics tutor", topic: "Statistics", route: "/statistics-tutor" },
   { label: "Probability tutor", topic: "Probability", route: "/probability-tutor" },
   { label: "Coordinate geometry tutor", topic: "Coordinate Geometry", route: "/coordinate-geometry-tutor" },
