@@ -1,6 +1,7 @@
 import {
   batchALocalityPages,
   batchARootSeoPages,
+  batchBRootSeoPages,
   getRecoveryClassPaths,
   getRecoveryLocalityBoardPaths,
   getRecoveryTopicPaths,
@@ -137,6 +138,7 @@ export const p1SeoPagePaths = [
   ...p1SeoUrlRows.map((item) => item.path),
   ...recoveryRootSeoPages.map((item) => item.path),
   ...batchARootSeoPages.map((item) => item.path),
+  ...batchBRootSeoPages.map((item) => item.path),
 ];
 
 function slugFromPath(path) {
@@ -1181,12 +1183,432 @@ function createBatchARootSeoConfig(page) {
   };
 }
 
+function getBatchBCurrentRow(page) {
+  const isExamIntent =
+    page.intent?.includes("exam") ||
+    page.intent?.includes("revision") ||
+    page.intent?.includes("doubt") ||
+    page.intent?.includes("worksheet");
+
+  return {
+    id: page.id,
+    segment: isExamIntent ? "Exam Support" : "Curriculum / Class",
+    pageType: page.intent?.includes("online")
+      ? "Online Tuition Page"
+      : page.intent?.includes("doubt")
+        ? "Doubt Solving Page"
+        : page.intent?.includes("revision")
+          ? "Revision Page"
+          : page.intent?.includes("worksheet")
+            ? "Worksheet Support Page"
+            : "Exam Intent Page",
+    audience: page.audience,
+    cluster: page.cluster ?? page.boardLabel ?? "Board and Exam Support",
+    title: page.title,
+    path: page.path,
+    parent: page.parentHubPath,
+    keyword: page.primaryKeyword,
+    links: "",
+  };
+}
+
+function createBatchBWhatsAppHref(page, purpose = "board, class, and exam support") {
+  const message = `Hello Maths Bodhi, I want help with ${page.title}. Please guide me on ${purpose}, tutor fit, and a demo class.`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function getBatchBIntro(page) {
+  if (page.intent?.includes("online")) {
+    return `${page.title} helps families compare online maths support with the same class, board, chapter, and tutor-fit checks used for home tuition.`;
+  }
+
+  if (page.intent?.includes("doubt")) {
+    return `${page.title} is for students who need regular maths doubt solving tied to their board, class level, weak chapters, and exam calendar.`;
+  }
+
+  if (page.intent?.includes("worksheet")) {
+    return `${page.title} connects worksheet practice with guided correction, chapter clarity, and the next best board or class route.`;
+  }
+
+  if (page.intent?.includes("revision")) {
+    return `${page.title} gives families a clean revision-intent page for planning paper practice, weak-topic repair, and the right demo conversation.`;
+  }
+
+  return `${page.title} is a board and exam intent page for families comparing maths preparation, home tuition fit, online continuity, and mentor guidance before booking a demo.`;
+}
+
+function getBatchBLocalityPaths(page) {
+  const boardLocalityPaths = page.boardSlug ? getRecoveryLocalityBoardPaths(page.boardSlug, 3) : [];
+
+  return unique([
+    "/city/gurugram",
+    "/maths-home-tutor-in-gurgaon",
+    ...boardLocalityPaths,
+    ...batchALocalityPages.slice(0, 6).map((item) => item.path),
+  ]);
+}
+
+function getBatchBBoardPaths(page) {
+  const boardHubs = {
+    cbse: ["/cbse-maths-tuition", "/cbse-maths-home-tutor", "/gurugram/cbse-maths-home-tutor"],
+    icse: ["/icse-maths-tuition", "/icse-maths-home-tutor", "/gurugram/icse-isc-maths-home-tutor"],
+    isc: ["/isc-maths-tuition", "/isc-maths-home-tutor", "/gurugram/icse-isc-maths-home-tutor"],
+    igcse: ["/igcse-maths-tuition", "/igcse-maths-home-tutor", "/gurugram/igcse-maths-home-tutor"],
+    ib: ["/ib-maths-tuition", "/ib-maths-home-tutor", "/gurugram/ib-maths-home-tutor"],
+    jee: ["/jee-maths-coaching", "/jee-main-maths-coaching", "/jee-advanced-maths-coaching"],
+  };
+
+  return unique([
+    page.parentHubPath,
+    ...(boardHubs[page.boardSlug] ?? []),
+    "/board-maths-syllabus-wise-tuition",
+    "/maths-home-tutor",
+    "/online-maths-home-tuition",
+    "/premium-school-maths-home-tutor",
+  ]);
+}
+
+function getBatchBClassPaths(page) {
+  const classLevel = page.classLevel ? String(page.classLevel) : "";
+  const sameBoardPaths = page.boardSlug && page.boardSlug !== "jee" ? getRecoveryClassPaths(page.boardSlug) : [];
+  const classIntentPaths = {
+    "9": [
+      "/class-9-cbse-maths-exam-preparation",
+      "/class-9-icse-maths-exam-preparation",
+      "/class-9-igcse-maths-exam-preparation",
+      "/class-9-maths-tutor",
+    ],
+    "10": [
+      "/class-10-cbse-maths-home-tutor",
+      "/class-10-igcse-maths-home-tutor",
+      "/class-10-cbse-board-maths-preparation",
+      "/class-10-icse-board-maths-preparation",
+      "/class-10-igcse-board-maths-preparation",
+      "/class-10-maths-tutor",
+    ],
+    "11": [
+      "/class-11-cbse-maths-exam-preparation",
+      "/class-11-isc-maths-exam-preparation",
+      "/class-11-ib-maths-exam-preparation",
+      "/class-11-maths-tutor",
+    ],
+    "12": [
+      "/class-12-cbse-maths-home-tutor",
+      "/class-12-ib-maths-home-tutor",
+      "/class-12-cbse-board-maths-preparation",
+      "/class-12-isc-board-maths-preparation",
+      "/class-12-ib-dp-maths-exam-preparation",
+      "/class-12-maths-tutor",
+    ],
+  };
+
+  return unique([
+    ...(classIntentPaths[classLevel] ?? []),
+    ...sameBoardPaths,
+    "/maths-homework-help-for-class-10",
+    "/maths-homework-help-for-class-12",
+    "/board-maths-exam-preparation",
+  ]);
+}
+
+function getBatchBTopicPaths(page) {
+  const boardTopicPaths = page.boardSlug && page.boardSlug !== "jee" ? getRecoveryTopicPaths(page.boardSlug) : [];
+
+  return unique([
+    ...boardTopicPaths,
+    "/cbse-algebra-tutor",
+    "/igcse-trigonometry-tutor",
+    "/ib-calculus-tutor",
+    "/algebra-tutor",
+    "/trigonometry-tutor",
+    "/calculus-tutor",
+    "/board-exam-maths-revision",
+    "/maths-last-minute-revision",
+    "/jee-maths-problem-solving",
+  ]);
+}
+
+function buildBatchBSupportPoints(page) {
+  if (page.intent?.includes("online")) {
+    return [
+      {
+        title: "Online support still needs a board-wise plan",
+        description:
+          "The page connects online tuition with class level, board pattern, chapter pressure, and the same demo-fit questions used for home tuition.",
+      },
+      {
+        title: "Students can move between online and home tuition context",
+        description:
+          "Internal links keep Gurugram locality pages, class pages, and board hubs close when the family wants a home-tuition shortlist instead.",
+      },
+      {
+        title: "Tutor matches stay based on published data",
+        description:
+          "Profiles appear only when real tutor data matches the page signals. Empty states guide families to the demo route without fake counts.",
+      },
+    ];
+  }
+
+  if (page.intent?.includes("doubt")) {
+    return [
+      {
+        title: "Doubt solving should be regular, not last-minute",
+        description:
+          "The page frames doubt solving around weekly correction, weak-topic tracking, board style, and the next demo conversation.",
+      },
+      {
+        title: "The route links doubt solving to classes and topics",
+        description:
+          "Students can move from this intent page into class, topic, exam, and locality routes instead of staying on a generic doubt-help page.",
+      },
+      {
+        title: "No unsupported tutor or result claims",
+        description:
+          "Maths Bodhi checks availability, fit, schedule, and academic need before recommending a tutor for recurring doubt support.",
+      },
+    ];
+  }
+
+  if (page.intent?.includes("worksheet")) {
+    return [
+      {
+        title: "Worksheet practice needs guided correction",
+        description:
+          "The page connects worksheets with method review, error patterns, and whether the student needs home tuition, online support, or revision planning.",
+      },
+      {
+        title: "Practice links back to board and class context",
+        description:
+          "Related routes help families choose the right class, board, and topic page when worksheet mistakes point to a deeper concept gap.",
+      },
+      {
+        title: "Empty states stay honest",
+        description:
+          "If no exact published tutor profile matches this route, the page asks families to share class, board, chapters, and schedule first.",
+      },
+    ];
+  }
+
+  return [
+    {
+      title: "Exam preparation starts with the student's current gap",
+      description: page.focus,
+    },
+    {
+      title: "Revision, class, topic, and locality routes stay connected",
+      description:
+        "The page links families into relevant Gurugram localities, board hubs, class pages, topic pages, and exam-support routes.",
+    },
+    {
+      title: "The next step is a fit check, not a guarantee",
+      description:
+        "Maths Bodhi uses the demo conversation to understand class, board, weak chapters, timeline, and tutor availability before suggesting support.",
+    },
+  ];
+}
+
+function buildBatchBFaqs(page) {
+  return [
+    {
+      question: `Who should use the ${page.title} page?`,
+      answer: `It is for ${page.audience} comparing ${page.primaryKeyword} and wanting a practical route into class, board, topic, locality, and demo next steps.`,
+    },
+    {
+      question: "Can Maths Bodhi support this through home tuition or online tuition?",
+      answer:
+        "Families can discuss both options. The useful fit depends on class, board, locality, schedule, weak chapters, and current tutor availability.",
+    },
+    {
+      question: "Does this page promise a specific tutor, result, or score?",
+      answer:
+        "No. It only uses published tutor data where available and routes families to a demo or WhatsApp check when fit needs to be confirmed.",
+    },
+  ];
+}
+
+function createBatchBRootSeoConfig(page) {
+  const currentRow = getBatchBCurrentRow(page);
+  const tokens = unique([
+    page.primaryKeyword,
+    page.title,
+    page.boardLabel,
+    page.classLevel ? `Class ${page.classLevel}` : "",
+    page.intent,
+    page.cluster,
+    "Gurugram",
+    "home tuition",
+    "online maths tuition",
+    "revision",
+  ]);
+
+  return {
+    id: page.id,
+    slug: page.slug,
+    routePath: page.path,
+    pageType: currentRow.pageType,
+    template: "GenericPageTemplate",
+    title: page.title,
+    h1: page.h1,
+    intro: getBatchBIntro(page),
+    sectionDefinitions: [
+      { id: "hero", template: "hero", enabled: true },
+      { id: "support-points", template: "support-points", enabled: true },
+      { id: "route-groups", template: "route-groups", enabled: true },
+      { id: "featured-tutors", template: "featured-tutors", enabled: true },
+      { id: "faqs", template: "faqs", enabled: true },
+      { id: "cta", template: "cta", enabled: true },
+    ],
+    relatedTutorQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      cityLabel: "Gurugram",
+      tokens,
+      limit: 6,
+    },
+    relatedBlogQuery: {
+      kind: "tokens",
+      tokens,
+      limit: 3,
+    },
+    relatedResultQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      tokens,
+      limit: 3,
+    },
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare board, class, topic, locality, home tuition, online support, WhatsApp, and free demo next steps.`,
+    canonicalUrl: page.path,
+    breadcrumbItems: [
+      { label: "Home", to: "/" },
+      ...(page.parentHubPath && page.parentHubPath !== page.path
+        ? [{ label: getPageLabel(page.parentHubPath), to: page.parentHubPath }]
+        : []),
+      { label: page.title },
+    ],
+    schemaType: "Service",
+    publishStatus: "published",
+    entity: page,
+    sections: {
+      hero: {
+        badge: "Board + Exam Intent",
+        chips: unique([
+          page.boardLabel,
+          page.classLevel ? `Class ${page.classLevel}` : "",
+          page.intent,
+          page.intent?.includes("online") ? "Online support" : "Home tuition",
+          "Gurugram",
+        ]).slice(0, 5),
+        stats: [
+          { value: "Batch B", label: "SEO intent cluster" },
+          { value: "4", label: "Related link groups" },
+          { value: "Demo", label: "WhatsApp-led next step" },
+        ],
+        supportPanel: {
+          title: `${page.primaryKeyword} should lead into a clear tutor-fit check`,
+          text:
+            "This page keeps board, class, topic, locality, and exam planning connected so families can move from search intent to a useful first conversation.",
+          bullets: [
+            `Parent hub: ${getPageLabel(page.parentHubPath)}`,
+            `Audience: ${page.audience}`,
+            "No fake tutor counts, fake reviews, or guaranteed-result claims",
+          ],
+        },
+        heroImage: "/images/hero-maths-home.svg",
+        heroImageAlt: `${page.title} from Maths Bodhi`,
+      },
+      supportPoints: {
+        badge: "Page Focus",
+        title: `What families should know about ${page.title}`,
+        subtitle:
+          "The page is built for commercial-intent searches while staying connected to useful board, class, topic, locality, and demo routes.",
+        points: buildBatchBSupportPoints(page),
+      },
+      routeGroups: [
+        {
+          id: `${page.slug}-localities`,
+          badge: "Related Localities",
+          title: "Related Gurugram locality pages",
+          subtitle:
+            "Use locality routes when home tuition fit, school travel rhythm, or nearby sector access matters.",
+          cards: buildRecoveryCards(getBatchBLocalityPaths(page), currentRow),
+        },
+        {
+          id: `${page.slug}-boards`,
+          badge: "Related Boards",
+          title: "Related board and service pages",
+          subtitle:
+            "These pages keep curriculum, home tuition, online tuition, and parent hub context visible.",
+          cards: buildRecoveryCards(getBatchBBoardPaths(page), currentRow),
+          backgroundClassName: "bg-slate-50",
+        },
+        {
+          id: `${page.slug}-classes`,
+          badge: "Related Classes",
+          title: "Related class pages",
+          subtitle:
+            "Use these routes when the class level, board-exam calendar, or homework load is the strongest signal.",
+          cards: buildRecoveryCards(getBatchBClassPaths(page), currentRow),
+        },
+        {
+          id: `${page.slug}-topics`,
+          badge: "Related Topics",
+          title: "Related topic and exam pages",
+          subtitle:
+            "These topic and revision routes help students move from broad exam intent into the chapters causing difficulty.",
+          cards: buildRecoveryCards(getBatchBTopicPaths(page), currentRow),
+          backgroundClassName: "bg-slate-50",
+        },
+      ],
+      featuredTutors: {
+        badge: "Tutor Profiles",
+        title: `Published tutor profiles related to ${page.title}`,
+        subtitle:
+          "Only real published Maths Bodhi tutor profiles are shown here. If matching data is limited, the page keeps the enquiry route honest through demo and WhatsApp checks.",
+        emptyState: {
+          title: "No exact published tutor profile is shown for this route yet",
+          description:
+            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, weak chapters, timeline, and schedule.",
+          primaryAction: {
+            label: "Book a free maths demo class",
+            to: DEMO_PATH,
+          },
+          secondaryAction: {
+            label: "Browse Gurugram tutor context",
+            to: "/city/gurugram",
+          },
+        },
+      },
+      faqs: buildBatchBFaqs(page),
+      cta: {
+        title: "Book a free maths demo class",
+        description: `Share the student's class, board, current chapters, target exam, and whether ${page.primaryKeyword} should be handled through home tuition, online support, or mentor guidance.`,
+        primaryAction: {
+          label: "Book a free maths demo class",
+          to: DEMO_PATH,
+        },
+        secondaryAction: {
+          label: "WhatsApp Maths Bodhi",
+          href: createBatchBWhatsAppHref(page),
+          external: true,
+        },
+        tertiaryAction: {
+          label: "Talk to a mentor",
+          href: createBatchBWhatsAppHref(page, "mentor guidance"),
+          external: true,
+        },
+      },
+    },
+  };
+}
+
 export const p1SeoPageConfigs = [
   ...p1SeoUrlRows
     .filter((item) => item.path !== "/" && item.path !== DEMO_PATH)
     .map((item) => createSeoConfig(item)),
   ...recoveryRootSeoPages.map((item) => createRecoveryRootSeoConfig(item)),
   ...batchARootSeoPages.map((item) => createBatchARootSeoConfig(item)),
+  ...batchBRootSeoPages.map((item) => createBatchBRootSeoConfig(item)),
 ];
 
 export function getP1SeoPageConfig(slug) {

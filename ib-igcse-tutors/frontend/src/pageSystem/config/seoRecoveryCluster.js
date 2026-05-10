@@ -578,6 +578,373 @@ const BATCH_A_SCHOOL_META = [
   },
 ];
 
+function batchBParentHub(boardSlug, fallback = "/maths-home-tutor") {
+  const board = BOARD_META[boardSlug];
+
+  if (board?.hubPath) {
+    return board.hubPath;
+  }
+
+  if (boardSlug === "jee") {
+    return "/jee-maths-coaching";
+  }
+
+  return fallback;
+}
+
+function batchBPage({
+  slug,
+  title,
+  boardSlug = "",
+  boardLabel = "",
+  classLevel = "",
+  intent,
+  cluster,
+  audience = "School students and parents",
+  parentHubPath,
+  focus,
+}) {
+  const resolvedBoardLabel = boardLabel || BOARD_META[boardSlug]?.label || "";
+
+  return {
+    slug,
+    title,
+    h1: title,
+    boardSlug,
+    boardLabel: resolvedBoardLabel,
+    classLevel,
+    intent,
+    cluster,
+    audience,
+    parentHubPath: parentHubPath || batchBParentHub(boardSlug),
+    primaryKeyword: title.toLowerCase(),
+    focus,
+  };
+}
+
+const BATCH_B_INTENT_META = [
+  batchBPage({
+    slug: "class-9-cbse-maths-exam-preparation",
+    title: "Class 9 CBSE Maths Exam Preparation",
+    boardSlug: "cbse",
+    classLevel: "9",
+    intent: "exam preparation",
+    cluster: "CBSE Class 9",
+    focus: "school tests, NCERT chapter clarity, worksheet correction, and stronger pre-board foundations",
+  }),
+  batchBPage({
+    slug: "class-10-cbse-board-maths-preparation",
+    title: "Class 10 CBSE Board Maths Preparation",
+    boardSlug: "cbse",
+    classLevel: "10",
+    intent: "board preparation",
+    cluster: "CBSE Class 10",
+    focus: "board-style written method, sample-paper correction, formula recall, and chapter-by-chapter revision",
+  }),
+  batchBPage({
+    slug: "class-11-cbse-maths-exam-preparation",
+    title: "Class 11 CBSE Maths Exam Preparation",
+    boardSlug: "cbse",
+    classLevel: "11",
+    intent: "exam preparation",
+    cluster: "CBSE Class 11",
+    focus: "senior-school transition, algebra and functions depth, trigonometry, and steady test practice",
+  }),
+  batchBPage({
+    slug: "class-12-cbse-board-maths-preparation",
+    title: "Class 12 CBSE Board Maths Preparation",
+    boardSlug: "cbse",
+    classLevel: "12",
+    intent: "board preparation",
+    cluster: "CBSE Class 12",
+    focus: "calculus, vectors, probability, board presentation, sample papers, and weekly revision discipline",
+  }),
+  batchBPage({
+    slug: "class-9-icse-maths-exam-preparation",
+    title: "Class 9 ICSE Maths Exam Preparation",
+    boardSlug: "icse",
+    classLevel: "9",
+    intent: "exam preparation",
+    cluster: "ICSE Class 9",
+    focus: "written method, proof steps, algebra, geometry, and school-test correction",
+  }),
+  batchBPage({
+    slug: "class-10-icse-board-maths-preparation",
+    title: "Class 10 ICSE Board Maths Preparation",
+    boardSlug: "icse",
+    classLevel: "10",
+    intent: "board preparation",
+    cluster: "ICSE Class 10",
+    focus: "board-style answer writing, geometry proof practice, algebra, mensuration, and regular paper review",
+  }),
+  batchBPage({
+    slug: "class-11-isc-maths-exam-preparation",
+    title: "Class 11 ISC Maths Exam Preparation",
+    boardSlug: "isc",
+    classLevel: "11",
+    intent: "exam preparation",
+    cluster: "ISC Class 11",
+    focus: "senior-school depth, functions, trigonometry, calculus foundations, and more organised written solutions",
+  }),
+  batchBPage({
+    slug: "class-12-isc-board-maths-preparation",
+    title: "Class 12 ISC Board Maths Preparation",
+    boardSlug: "isc",
+    classLevel: "12",
+    intent: "board preparation",
+    cluster: "ISC Class 12",
+    focus: "calculus, vectors, probability, board-level problem solving, and disciplined paper correction",
+  }),
+  batchBPage({
+    slug: "class-9-igcse-maths-exam-preparation",
+    title: "Class 9 IGCSE Maths Exam Preparation",
+    boardSlug: "igcse",
+    classLevel: "9",
+    intent: "exam preparation",
+    cluster: "IGCSE Class 9",
+    focus: "Core or Extended foundations, graph sense, algebra, geometry, and written method confidence",
+  }),
+  batchBPage({
+    slug: "class-10-igcse-board-maths-preparation",
+    title: "Class 10 IGCSE Board Maths Preparation",
+    boardSlug: "igcse",
+    classLevel: "10",
+    intent: "board preparation",
+    cluster: "IGCSE Class 10",
+    focus: "Core or Extended paper technique, topic repair, past-paper correction, and exam pacing",
+  }),
+  batchBPage({
+    slug: "class-11-ib-maths-exam-preparation",
+    title: "Class 11 IB Maths Exam Preparation",
+    boardSlug: "ib",
+    classLevel: "11",
+    intent: "exam preparation",
+    cluster: "IB Class 11",
+    focus: "MYP to DP transition, AA or AI pathway fit, reflection, and steady problem practice",
+  }),
+  batchBPage({
+    slug: "class-12-ib-dp-maths-exam-preparation",
+    title: "Class 12 IB DP Maths Exam Preparation",
+    boardSlug: "ib",
+    classLevel: "12",
+    intent: "exam preparation",
+    cluster: "IB DP",
+    focus: "AA or AI revision, calculus, functions, statistics, internal assessment pressure, and exam-style mixed problems",
+  }),
+  ...[
+    ["cbse", "CBSE", "CBSE Maths Doubt Solving", "cbse-maths-doubt-solving"],
+    ["icse", "ICSE", "ICSE Maths Doubt Solving", "icse-maths-doubt-solving"],
+    ["isc", "ISC", "ISC Maths Doubt Solving", "isc-maths-doubt-solving"],
+    ["igcse", "IGCSE", "IGCSE Maths Doubt Solving", "igcse-maths-doubt-solving"],
+    ["ib", "IB", "IB Maths Doubt Solving", "ib-maths-doubt-solving"],
+  ].map(([boardSlug, boardLabel, title, slug]) =>
+    batchBPage({
+      slug,
+      title,
+      boardSlug,
+      boardLabel,
+      intent: "doubt solving",
+      cluster: `${boardLabel} Doubt Solving`,
+      focus: "regular doubt clearing, error correction, class-test readiness, and cleaner practice habits",
+    }),
+  ),
+  batchBPage({
+    slug: "jee-maths-doubt-solving",
+    title: "JEE Maths Doubt Solving",
+    boardSlug: "jee",
+    boardLabel: "JEE",
+    intent: "doubt solving",
+    cluster: "JEE Doubt Solving",
+    audience: "JEE aspirants",
+    focus: "concept doubts, problem selection, timed attempts, error logs, and mixed-topic reasoning",
+  }),
+  ...[
+    ["cbse", "CBSE", "Online CBSE Maths Tutor", "online-cbse-maths-tutor"],
+    ["icse", "ICSE", "Online ICSE Maths Tutor", "online-icse-maths-tutor"],
+    ["isc", "ISC", "Online ISC Maths Tutor", "online-isc-maths-tutor"],
+    ["igcse", "IGCSE", "Online IGCSE Maths Tutor", "online-igcse-maths-tutor"],
+    ["jee", "JEE", "Online JEE Maths Tutor", "online-jee-maths-tutor"],
+  ].map(([boardSlug, boardLabel, title, slug]) =>
+    batchBPage({
+      slug,
+      title,
+      boardSlug,
+      boardLabel,
+      intent: "online tutoring",
+      cluster: `${boardLabel} Online Maths`,
+      parentHubPath: "/online-maths-home-tuition",
+      focus: "flexible scheduling, continuity during busy school weeks, regular doubt clearing, and structured online revision",
+    }),
+  ),
+  batchBPage({
+    slug: "online-ib-maths-home-tuition",
+    title: "Online IB Maths Home Tuition",
+    boardSlug: "ib",
+    intent: "online home tuition",
+    cluster: "IB Online Maths",
+    parentHubPath: "/online-maths-home-tuition",
+    focus: "online MYP or DP support, AA or AI pathway fit, revision continuity, and regular problem reflection",
+  }),
+  ...["9", "10", "11", "12"].map((classLevel) =>
+    batchBPage({
+      slug: `maths-homework-help-for-class-${classLevel}`,
+      title: `Maths Homework Help for Class ${classLevel}`,
+      classLevel,
+      intent: "homework help",
+      cluster: `Class ${classLevel} Homework Help`,
+      parentHubPath: classLevel === "10" ? "/class-10-maths-tutor" : classLevel === "12" ? "/class-12-maths-tutor" : "/maths-home-tutor",
+      focus: "homework follow-through, chapter clarity, school worksheets, and a practical routine before tests build up",
+    }),
+  ),
+  ...[
+    ["cbse", "CBSE", "CBSE Maths Worksheet Help", "cbse-maths-worksheet-help"],
+    ["icse", "ICSE", "ICSE Maths Worksheet Help", "icse-maths-worksheet-help"],
+    ["igcse", "IGCSE", "IGCSE Maths Worksheet Help", "igcse-maths-worksheet-help"],
+    ["ib", "IB", "IB Maths Worksheet Help", "ib-maths-worksheet-help"],
+  ].map(([boardSlug, boardLabel, title, slug]) =>
+    batchBPage({
+      slug,
+      title,
+      boardSlug,
+      boardLabel,
+      intent: "worksheet help",
+      cluster: `${boardLabel} Worksheet Help`,
+      parentHubPath: "/maths-worksheet-guidance",
+      focus: "worksheet correction, written method, topic repair, school follow-through, and revision checkpoints",
+    }),
+  ),
+  ...[
+    ["cbse", "CBSE Board Maths Revision", "cbse-board-maths-revision"],
+    ["icse", "ICSE Board Maths Revision", "icse-board-maths-revision"],
+    ["isc", "ISC Board Maths Revision", "isc-board-maths-revision"],
+  ].map(([boardSlug, title, slug]) =>
+    batchBPage({
+      slug,
+      title,
+      boardSlug,
+      intent: "board revision",
+      cluster: `${BOARD_META[boardSlug]?.label} Board Revision`,
+      parentHubPath: "/maths-revision-program",
+      focus: "formula recall, weak-chapter repair, sample-paper correction, and calmer board revision planning",
+    }),
+  ),
+  batchBPage({
+    slug: "igcse-board-maths-preparation",
+    title: "IGCSE Board Maths Preparation",
+    boardSlug: "igcse",
+    intent: "board preparation",
+    cluster: "IGCSE Board Preparation",
+    parentHubPath: "/igcse-maths-tuition",
+    focus: "Core or Extended exam planning, past-paper correction, topic repair, and written method confidence",
+  }),
+  batchBPage({
+    slug: "igcse-exam-maths-support",
+    title: "IGCSE Exam Maths Support",
+    boardSlug: "igcse",
+    intent: "exam support",
+    cluster: "IGCSE Exam Support",
+    parentHubPath: "/igcse-maths-tuition",
+    focus: "paper technique, timed practice, topic repair, and exam-friendly written solutions",
+  }),
+  batchBPage({
+    slug: "ib-exam-maths-support",
+    title: "IB Exam Maths Support",
+    boardSlug: "ib",
+    intent: "exam support",
+    cluster: "IB Exam Support",
+    parentHubPath: "/ib-maths-tuition",
+    focus: "AA or AI pathway revision, mixed-problem practice, reflection, and exam-style correction",
+  }),
+  batchBPage({
+    slug: "ib-dp-maths-revision",
+    title: "IB DP Maths Revision",
+    boardSlug: "ib",
+    intent: "revision",
+    cluster: "IB DP Revision",
+    parentHubPath: "/ib-maths-tuition",
+    focus: "DP topic repair, AA or AI revision maps, timed practice, and clearer exam structure",
+  }),
+  batchBPage({
+    slug: "jee-maths-revision-plan",
+    title: "JEE Maths Revision Plan",
+    boardSlug: "jee",
+    boardLabel: "JEE",
+    intent: "revision plan",
+    cluster: "JEE Revision",
+    audience: "JEE aspirants",
+    parentHubPath: "/jee-maths-coaching",
+    focus: "topic prioritisation, mixed problem sets, timed attempts, error logs, and weekly revision cycles",
+  }),
+  batchBPage({
+    slug: "class-10-maths-last-minute-revision",
+    title: "Class 10 Maths Last Minute Revision",
+    classLevel: "10",
+    intent: "last-minute revision",
+    cluster: "Class 10 Revision",
+    parentHubPath: "/maths-revision-program",
+    focus: "high-yield chapters, formula confidence, sample-paper correction, and calm final-week planning",
+  }),
+  batchBPage({
+    slug: "class-12-maths-last-minute-revision",
+    title: "Class 12 Maths Last Minute Revision",
+    classLevel: "12",
+    intent: "last-minute revision",
+    cluster: "Class 12 Revision",
+    parentHubPath: "/maths-revision-program",
+    focus: "senior-school formula recall, calculus repair, sample papers, and realistic final-week planning",
+  }),
+  batchBPage({
+    slug: "board-maths-doubt-solving",
+    title: "Board Maths Doubt Solving",
+    intent: "doubt solving",
+    cluster: "Board Doubt Solving",
+    parentHubPath: "/board-maths-syllabus-wise-tuition",
+    focus: "board-style doubts, school worksheet correction, answer presentation, and weak-chapter repair",
+  }),
+  batchBPage({
+    slug: "board-maths-exam-preparation",
+    title: "Board Maths Exam Preparation",
+    intent: "exam preparation",
+    cluster: "Board Exam Preparation",
+    parentHubPath: "/board-maths-syllabus-wise-tuition",
+    focus: "board syllabus planning, sample-paper correction, weak chapters, and revision discipline",
+  }),
+  batchBPage({
+    slug: "maths-worksheet-practice-for-board-exams",
+    title: "Maths Worksheet Practice for Board Exams",
+    intent: "worksheet practice",
+    cluster: "Board Worksheet Practice",
+    parentHubPath: "/maths-worksheet-guidance",
+    focus: "worksheet practice, board-style written method, timed correction, and formula confidence",
+  }),
+  batchBPage({
+    slug: "maths-test-series-for-class-10",
+    title: "Maths Test Series for Class 10",
+    classLevel: "10",
+    intent: "test series",
+    cluster: "Class 10 Test Series",
+    parentHubPath: "/maths-test-series",
+    focus: "chapter tests, board-style mocks, error review, and weekly score visibility without fake outcome claims",
+  }),
+  batchBPage({
+    slug: "maths-test-series-for-class-12",
+    title: "Maths Test Series for Class 12",
+    classLevel: "12",
+    intent: "test series",
+    cluster: "Class 12 Test Series",
+    parentHubPath: "/maths-test-series",
+    focus: "senior-school chapter tests, mixed papers, calculus practice, and honest error tracking",
+  }),
+  batchBPage({
+    slug: "maths-exam-practice-sessions",
+    title: "Maths Exam Practice Sessions",
+    intent: "exam practice",
+    cluster: "Exam Practice",
+    parentHubPath: "/exam-ready-practice-sessions",
+    focus: "timed practice, answer correction, topic prioritisation, and a calmer plan before school or board exams",
+  }),
+];
+
 const localityBySlug = new Map(LOCALITY_META.map((item) => [item.slug, item]));
 const batchALocalityBySlug = new Map(BATCH_A_LOCALITY_META.map((item) => [item.slug, item]));
 
@@ -800,6 +1167,24 @@ export const batchASchoolPages = BATCH_A_SCHOOL_META.map((item) => {
 
 export const batchARootSeoPages = [batchAHubPage, ...batchASchoolPages];
 
+export const batchBRootSeoPages = BATCH_B_INTENT_META.map((item) => ({
+  id: `batch-b-${item.slug}`,
+  group: "batch-b-intent",
+  slug: item.slug,
+  path: `/${item.slug}`,
+  title: item.title,
+  h1: item.h1,
+  boardSlug: item.boardSlug,
+  boardLabel: item.boardLabel,
+  classLevel: item.classLevel,
+  intent: item.intent,
+  parentHubPath: item.parentHubPath,
+  primaryKeyword: item.primaryKeyword,
+  audience: item.audience,
+  cluster: item.cluster,
+  focus: item.focus,
+}));
+
 export const recoveryRootSeoPages = [
   ...recoveryClassBoardPages,
   ...recoveryTopicBoardPages,
@@ -811,6 +1196,7 @@ export const recoverySeoClusterPaths = [
   ...recoveryRootSeoPages.map((page) => page.path),
   ...batchALocalityPages.map((page) => page.path),
   ...batchARootSeoPages.map((page) => page.path),
+  ...batchBRootSeoPages.map((page) => page.path),
 ];
 
 export const recoveryRouteCatalogRows = [
@@ -818,12 +1204,15 @@ export const recoveryRouteCatalogRows = [
   ...recoveryRootSeoPages,
   ...batchALocalityPages,
   ...batchARootSeoPages,
+  ...batchBRootSeoPages,
 ].map((page) => ({
   path: page.path,
   title: page.title,
   segment:
     page.group === "locality-board" || page.group === "batch-a-locality" || page.group === "batch-a-school"
       ? "Location"
+      : page.group === "batch-b-intent"
+        ? "Curriculum / Class"
       : page.group === "class-board"
         ? "Curriculum / Class"
         : page.group === "topic-board"
@@ -835,6 +1224,14 @@ export const recoveryRouteCatalogRows = [
       ? "Location Service"
       : page.group === "batch-a-school"
         ? "School-Specific Service"
+      : page.group === "batch-b-intent"
+        ? page.intent?.includes("doubt")
+          ? "Doubt Solving Page"
+          : page.intent?.includes("revision")
+            ? "Revision Page"
+            : page.intent?.includes("online")
+              ? "Online Tuition Page"
+              : "Exam Intent Page"
       : page.group === "class-board"
         ? "Class Service"
         : page.group === "topic-board"
