@@ -945,6 +945,229 @@ const BATCH_B_INTENT_META = [
   }),
 ];
 
+const BATCH_C_TOPIC_META = [
+  {
+    slug: "probability",
+    label: "Probability",
+    genericPath: "/probability-tutor",
+    focus:
+      "probability models, conditional reasoning, tree diagrams, distributions, and exam-friendly working",
+  },
+  {
+    slug: "statistics",
+    label: "Statistics",
+    genericPath: "/statistics-tutor",
+    focus:
+      "data handling, measures of spread, interpretation, regression-style thinking, and paper-wise correction",
+  },
+  {
+    slug: "geometry",
+    label: "Geometry",
+    genericPath: "/geometry-tutor",
+    focus:
+      "proof steps, construction logic, coordinate links, mensuration connections, and clearer written method",
+  },
+  {
+    slug: "functions",
+    label: "Functions",
+    genericPath: "/functions-tutor",
+    focus:
+      "domain, range, graphs, transformations, composition, inverse functions, and senior-school problem fluency",
+  },
+];
+
+function batchCPage({
+  slug,
+  title,
+  h1 = title,
+  kind = "topic-mastery",
+  boardSlug,
+  boardLabel,
+  topicSlug,
+  topicLabel,
+  classLevel,
+  intent,
+  cluster,
+  audience,
+  parentHubPath,
+  primaryKeyword,
+  focus,
+}) {
+  const resolvedBoardLabel = boardLabel || BOARD_META[boardSlug]?.label || "";
+
+  return {
+    slug,
+    title,
+    h1,
+    kind,
+    boardSlug,
+    boardLabel: resolvedBoardLabel,
+    topicSlug,
+    topicLabel,
+    classLevel,
+    intent,
+    cluster,
+    audience: audience || BOARD_META[boardSlug]?.audience || "School students and parents",
+    parentHubPath: parentHubPath || batchBParentHub(boardSlug),
+    primaryKeyword: primaryKeyword || title.toLowerCase(),
+    focus,
+  };
+}
+
+const BATCH_C_INTENT_META = [
+  ...["cbse", "icse", "isc", "igcse", "ib"].flatMap((boardSlug) => {
+    const board = BOARD_META[boardSlug];
+
+    return BATCH_C_TOPIC_META.map((topic) =>
+      batchCPage({
+        slug: `${boardSlug}-${topic.slug}-tutor`,
+        title: `${board.label} ${topic.label} Tutor`,
+        h1: `${board.label} ${topic.label.toLowerCase()} tutor`,
+        boardSlug,
+        topicSlug: topic.slug,
+        topicLabel: topic.label,
+        intent: "topic mastery",
+        cluster: `${board.label} ${topic.label}`,
+        parentHubPath: board.hubPath,
+        primaryKeyword: `${board.label.toLowerCase()} ${topic.label.toLowerCase()} tutor`,
+        focus: `${topic.focus} in the context of ${board.topicContext}`,
+      }),
+    );
+  }),
+  ...[
+    ["algebra", "Algebra", "jee-algebra-problem-solving", "JEE Algebra Problem Solving"],
+    ["calculus", "Calculus", "jee-calculus-problem-solving", "JEE Calculus Problem Solving"],
+    ["trigonometry", "Trigonometry", "jee-trigonometry-problem-solving", "JEE Trigonometry Problem Solving"],
+    ["coordinate-geometry", "Coordinate Geometry", "jee-coordinate-geometry-problem-solving", "JEE Coordinate Geometry Problem Solving"],
+    ["probability-statistics", "Probability and Statistics", "jee-probability-statistics-problem-solving", "JEE Probability and Statistics Problem Solving"],
+  ].map(([topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "exam-support",
+      boardSlug: "jee",
+      boardLabel: "JEE",
+      topicSlug,
+      topicLabel,
+      intent: "jee topic problem solving",
+      cluster: `JEE ${topicLabel}`,
+      audience: "JEE Main and Advanced aspirants",
+      parentHubPath: "/jee-maths-coaching",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "concept repair, problem selection, timed attempts, error logs, and mixed-topic reasoning without promising a score jump",
+    }),
+  ),
+  ...[
+    ["10", "algebra", "Algebra", "cbse-class-10-algebra-revision", "CBSE Class 10 Algebra Revision"],
+    ["10", "trigonometry", "Trigonometry", "cbse-class-10-trigonometry-revision", "CBSE Class 10 Trigonometry Revision"],
+    ["10", "geometry", "Geometry", "cbse-class-10-geometry-revision", "CBSE Class 10 Geometry Revision"],
+    ["12", "calculus", "Calculus", "cbse-class-12-calculus-revision", "CBSE Class 12 Calculus Revision"],
+    ["12", "probability", "Probability", "cbse-class-12-probability-revision", "CBSE Class 12 Probability Revision"],
+  ].map(([classLevel, topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "exam-support",
+      boardSlug: "cbse",
+      topicSlug,
+      topicLabel,
+      classLevel,
+      intent: "topic revision",
+      cluster: `CBSE Class ${classLevel} ${topicLabel}`,
+      audience: `CBSE Class ${classLevel} students`,
+      parentHubPath: "/cbse-board-maths-revision",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "chapter repair, NCERT method, school worksheet correction, sample-paper practice, and calmer board revision planning",
+    }),
+  ),
+  ...[
+    ["algebra", "Algebra", "igcse-algebra-exam-preparation", "IGCSE Algebra Exam Preparation"],
+    ["geometry", "Geometry", "igcse-geometry-exam-preparation", "IGCSE Geometry Exam Preparation"],
+    ["probability-statistics", "Statistics and Probability", "igcse-statistics-probability-exam-preparation", "IGCSE Statistics and Probability Exam Preparation"],
+  ].map(([topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "exam-support",
+      boardSlug: "igcse",
+      topicSlug,
+      topicLabel,
+      intent: "exam preparation",
+      cluster: `IGCSE ${topicLabel}`,
+      parentHubPath: "/igcse-exam-maths-support",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "Core or Extended topic repair, past-paper correction, written method, and paper timing without unsupported result claims",
+    }),
+  ),
+  ...[
+    ["calculus", "Calculus", "ib-calculus-exam-preparation", "IB Calculus Exam Preparation"],
+    ["functions", "Functions", "ib-functions-exam-preparation", "IB Functions Exam Preparation"],
+    ["probability-statistics", "Statistics and Probability", "ib-statistics-probability-exam-preparation", "IB Statistics and Probability Exam Preparation"],
+  ].map(([topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "exam-support",
+      boardSlug: "ib",
+      topicSlug,
+      topicLabel,
+      intent: "exam preparation",
+      cluster: `IB ${topicLabel}`,
+      parentHubPath: "/ib-exam-maths-support",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "AA or AI pathway fit, topic repair, reflection, mixed-problem practice, and exam-style correction",
+    }),
+  ),
+  ...[
+    ["algebra", "Algebra", "algebra-doubt-solving", "Algebra Doubt Solving"],
+    ["calculus", "Calculus", "calculus-doubt-solving", "Calculus Doubt Solving"],
+    ["trigonometry", "Trigonometry", "trigonometry-doubt-solving", "Trigonometry Doubt Solving"],
+    ["geometry", "Geometry", "geometry-doubt-solving", "Geometry Doubt Solving"],
+    ["probability-statistics", "Probability and Statistics", "probability-statistics-doubt-solving", "Probability and Statistics Doubt Solving"],
+    ["functions", "Functions", "functions-doubt-solving", "Functions Doubt Solving"],
+  ].map(([topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "doubt-support",
+      topicSlug,
+      topicLabel,
+      intent: "doubt solving",
+      cluster: `${topicLabel} Doubt Solving`,
+      parentHubPath: "/regular-doubt-solving-help",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "recurring doubt clearing, error correction, worked examples, and a cleaner routine before tests or board practice",
+    }),
+  ),
+  ...[
+    ["algebra", "Algebra", "algebra-homework-help", "Algebra Homework Help"],
+    ["calculus", "Calculus", "calculus-homework-help", "Calculus Homework Help"],
+    ["trigonometry", "Trigonometry", "trigonometry-homework-help", "Trigonometry Homework Help"],
+    ["geometry", "Geometry", "geometry-homework-help", "Geometry Homework Help"],
+    ["probability-statistics", "Probability and Statistics", "probability-statistics-homework-help", "Probability and Statistics Homework Help"],
+    ["functions", "Functions", "functions-homework-help", "Functions Homework Help"],
+  ].map(([topicSlug, topicLabel, slug, title]) =>
+    batchCPage({
+      slug,
+      title,
+      kind: "homework-support",
+      topicSlug,
+      topicLabel,
+      intent: "homework help",
+      cluster: `${topicLabel} Homework Help`,
+      parentHubPath: "/maths-home-tutor",
+      primaryKeyword: title.toLowerCase(),
+      focus:
+        "school homework follow-through, method correction, worksheet review, and concept repair without doing the work for the student",
+    }),
+  ),
+];
+
 const localityBySlug = new Map(LOCALITY_META.map((item) => [item.slug, item]));
 const batchALocalityBySlug = new Map(BATCH_A_LOCALITY_META.map((item) => [item.slug, item]));
 
@@ -1185,6 +1408,27 @@ export const batchBRootSeoPages = BATCH_B_INTENT_META.map((item) => ({
   focus: item.focus,
 }));
 
+export const batchCRootSeoPages = BATCH_C_INTENT_META.map((item) => ({
+  id: `batch-c-${item.slug}`,
+  group: "batch-c-intent",
+  slug: item.slug,
+  path: `/${item.slug}`,
+  title: item.title,
+  h1: item.h1,
+  kind: item.kind,
+  boardSlug: item.boardSlug,
+  boardLabel: item.boardLabel,
+  topicSlug: item.topicSlug,
+  topicLabel: item.topicLabel,
+  classLevel: item.classLevel,
+  intent: item.intent,
+  parentHubPath: item.parentHubPath,
+  primaryKeyword: item.primaryKeyword,
+  audience: item.audience,
+  cluster: item.cluster,
+  focus: item.focus,
+}));
+
 export const recoveryRootSeoPages = [
   ...recoveryClassBoardPages,
   ...recoveryTopicBoardPages,
@@ -1197,6 +1441,7 @@ export const recoverySeoClusterPaths = [
   ...batchALocalityPages.map((page) => page.path),
   ...batchARootSeoPages.map((page) => page.path),
   ...batchBRootSeoPages.map((page) => page.path),
+  ...batchCRootSeoPages.map((page) => page.path),
 ];
 
 export const recoveryRouteCatalogRows = [
@@ -1205,6 +1450,7 @@ export const recoveryRouteCatalogRows = [
   ...batchALocalityPages,
   ...batchARootSeoPages,
   ...batchBRootSeoPages,
+  ...batchCRootSeoPages,
 ].map((page) => ({
   path: page.path,
   title: page.title,
@@ -1213,6 +1459,10 @@ export const recoveryRouteCatalogRows = [
       ? "Location"
       : page.group === "batch-b-intent"
         ? "Curriculum / Class"
+      : page.group === "batch-c-intent"
+        ? page.kind === "topic-mastery"
+          ? "Topic Support"
+          : "Exam Support"
       : page.group === "class-board"
         ? "Curriculum / Class"
         : page.group === "topic-board"
@@ -1232,6 +1482,14 @@ export const recoveryRouteCatalogRows = [
             : page.intent?.includes("online")
               ? "Online Tuition Page"
               : "Exam Intent Page"
+      : page.group === "batch-c-intent"
+        ? page.kind === "topic-mastery"
+          ? "Topic Page"
+          : page.kind === "doubt-support"
+            ? "Doubt Solving Page"
+            : page.kind === "homework-support"
+              ? "Homework Help Page"
+              : "Exam Support Page"
       : page.group === "class-board"
         ? "Class Service"
         : page.group === "topic-board"
