@@ -1168,6 +1168,212 @@ const BATCH_C_INTENT_META = [
   ),
 ];
 
+function batchDPage({
+  slug,
+  title,
+  h1 = title,
+  kind = "commercial-support",
+  boardSlug,
+  boardLabel,
+  classLevel,
+  topicSlug,
+  topicLabel,
+  schoolName,
+  intent,
+  cluster,
+  audience,
+  parentHubPath,
+  primaryKeyword,
+  focus,
+}) {
+  const resolvedBoardLabel = boardLabel || BOARD_META[boardSlug]?.label || "";
+
+  return {
+    slug,
+    title,
+    h1,
+    kind,
+    boardSlug,
+    boardLabel: resolvedBoardLabel,
+    classLevel,
+    topicSlug,
+    topicLabel,
+    schoolName,
+    intent,
+    cluster,
+    audience: audience || BOARD_META[boardSlug]?.audience || "Parents and school students",
+    parentHubPath: parentHubPath || batchBParentHub(boardSlug),
+    primaryKeyword: primaryKeyword || title.toLowerCase(),
+    focus,
+  };
+}
+
+const BATCH_D_INTENT_META = [
+  ...[
+    ["online-maths-tutor-vs-home-maths-tutor", "Online Maths Tutor vs Home Maths Tutor"],
+    ["maths-home-tuition-vs-coaching-centre", "Maths Home Tuition vs Coaching Centre"],
+    ["one-to-one-maths-tuition-vs-group-tuition", "One to One Maths Tuition vs Group Tuition"],
+    ["online-igcse-maths-tutor-vs-home-tuition", "Online IGCSE Maths Tutor vs Home Tuition", "igcse"],
+    ["online-ib-maths-tutor-vs-home-tuition", "Online IB Maths Tutor vs Home Tuition", "ib"],
+    ["cbse-online-maths-tutor-vs-home-tutor", "CBSE Online Maths Tutor vs Home Tutor", "cbse"],
+    ["igcse-online-maths-tutor-vs-home-tutor", "IGCSE Online Maths Tutor vs Home Tutor", "igcse"],
+    ["ib-online-maths-tutor-vs-home-tutor", "IB Online Maths Tutor vs Home Tutor", "ib"],
+    ["jee-online-maths-coaching-vs-home-tutor", "JEE Online Maths Coaching vs Home Tutor", "jee"],
+    ["weekend-maths-tuition-vs-weekday-tuition", "Weekend Maths Tuition vs Weekday Tuition"],
+  ].map(([slug, title, boardSlug]) =>
+    batchDPage({
+      slug,
+      title,
+      kind: "comparison",
+      boardSlug,
+      boardLabel: boardSlug === "jee" ? "JEE" : undefined,
+      intent: "tuition comparison",
+      cluster: "Tuition Comparison",
+      parentHubPath: "/online-maths-home-tuition",
+      focus:
+        "compare learning mode, schedule, travel time, attention level, practice follow-through, and tutor-fit questions before booking a demo",
+    }),
+  ),
+  ...[
+    [
+      "the-shri-ram-school-maths-tutor-vs-coaching-centre",
+      "The Shri Ram School Maths Tutor vs Coaching Centre",
+      "The Shri Ram School Aravali",
+      "/best-maths-home-tutor-for-the-shri-ram-school-aravali-gurugram",
+    ],
+    [
+      "heritage-xperiential-maths-tutor-vs-coaching-centre",
+      "Heritage Xperiential Maths Tutor vs Coaching Centre",
+      "Heritage Xperiential Learning School",
+      "/top-maths-home-tutor-for-heritage-xperiential-learning-school-gurugram",
+    ],
+    [
+      "pathways-world-school-maths-tutor-vs-online-tuition",
+      "Pathways World School Maths Tutor vs Online Tuition",
+      "Pathways World School",
+      "/best-maths-home-tutor-for-pathways-world-school-gurugram",
+    ],
+    [
+      "shiv-nadar-school-maths-tutor-vs-online-tuition",
+      "Shiv Nadar School Maths Tutor vs Online Tuition",
+      "Shiv Nadar School",
+      "/top-maths-home-tutor-for-shiv-nadar-school-gurugram",
+    ],
+    [
+      "dps-sector-45-maths-tutor-vs-coaching-centre",
+      "DPS Sector 45 Maths Tutor vs Coaching Centre",
+      "Delhi Public School Sector 45",
+      "/best-maths-home-tutor-for-delhi-public-school-sector-45-gurugram",
+    ],
+    [
+      "scottish-high-maths-tutor-vs-online-tuition",
+      "Scottish High Maths Tutor vs Online Tuition",
+      "Scottish High International School",
+      "/top-maths-home-tutor-for-scottish-high-international-school-gurugram",
+    ],
+    [
+      "lotus-valley-maths-tutor-vs-home-tuition",
+      "Lotus Valley Maths Tutor vs Home Tuition",
+      "Lotus Valley International School",
+      "/best-maths-home-tutor-for-lotus-valley-international-school-gurugram",
+    ],
+    [
+      "lancers-international-maths-tutor-vs-online-tuition",
+      "Lancers International Maths Tutor vs Online Tuition",
+      "Lancers International School",
+      "/top-maths-home-tutor-for-lancers-international-school-gurugram",
+    ],
+  ].map(([slug, title, schoolName, parentHubPath]) =>
+    batchDPage({
+      slug,
+      title,
+      kind: "school-comparison",
+      schoolName,
+      intent: "school support comparison",
+      cluster: "School Comparison",
+      audience: "Premium school parents and students",
+      parentHubPath,
+      focus:
+        "compare school timetable, board or curriculum pressure, travel fit, home tuition, online continuity, and coaching-centre tradeoffs without claiming school affiliation",
+    }),
+  ),
+  ...[
+    ["class-10-maths-revision-plan", "Class 10 Maths Revision Plan", "10", "/class-10-maths-last-minute-revision"],
+    ["class-10-cbse-maths-revision-guide", "Class 10 CBSE Maths Revision Guide", "10", "/cbse-board-maths-revision", "cbse"],
+    ["class-10-icse-maths-revision-guide", "Class 10 ICSE Maths Revision Guide", "10", "/icse-board-maths-revision", "icse"],
+    ["class-12-maths-revision-plan", "Class 12 Maths Revision Plan", "12", "/class-12-maths-last-minute-revision"],
+    ["class-12-cbse-maths-revision-guide", "Class 12 CBSE Maths Revision Guide", "12", "/cbse-board-maths-revision", "cbse"],
+    ["class-12-ib-maths-revision-guide", "Class 12 IB Maths Revision Guide", "12", "/ib-dp-maths-revision", "ib"],
+    ["board-exam-maths-preparation-guide", "Board Exam Maths Preparation Guide", "", "/board-maths-exam-preparation"],
+    ["pre-board-maths-preparation-guide", "Pre Board Maths Preparation Guide", "", "/pre-board-maths-revision"],
+    ["jee-maths-problem-solving-guide", "JEE Maths Problem Solving Guide", "", "/jee-maths-problem-solving", "jee"],
+    ["jee-main-maths-practice-plan", "JEE Main Maths Practice Plan", "", "/jee-main-maths-coaching", "jee"],
+  ].map(([slug, title, classLevel, parentHubPath, boardSlug]) =>
+    batchDPage({
+      slug,
+      title,
+      kind: "exam-guide",
+      boardSlug,
+      boardLabel: boardSlug === "jee" ? "JEE" : undefined,
+      classLevel,
+      intent: "exam preparation guide",
+      cluster: "Exam Preparation Guide",
+      parentHubPath,
+      focus:
+        "plan revision blocks, practice papers, weak-topic repair, formula confidence, doubt clearing, and demo-fit questions without promising outcomes",
+    }),
+  ),
+  ...[
+    ["maths-worksheets-and-practice-papers", "Maths Worksheets and Practice Papers"],
+    ["class-10-maths-worksheets-and-practice-papers", "Class 10 Maths Worksheets and Practice Papers", "10"],
+    ["class-12-maths-worksheets-and-practice-papers", "Class 12 Maths Worksheets and Practice Papers", "12"],
+    ["cbse-maths-worksheets-and-practice-papers", "CBSE Maths Worksheets and Practice Papers", "", "cbse"],
+    ["igcse-maths-worksheets-and-practice-papers", "IGCSE Maths Worksheets and Practice Papers", "", "igcse"],
+    ["ib-maths-worksheets-and-practice-papers", "IB Maths Worksheets and Practice Papers", "", "ib"],
+    ["maths-study-support-for-school-tests", "Maths Study Support for School Tests"],
+    ["maths-study-plan-for-board-exams", "Maths Study Plan for Board Exams"],
+    ["maths-homework-and-worksheet-support", "Maths Homework and Worksheet Support"],
+    ["maths-doubt-solving-and-practice-support", "Maths Doubt Solving and Practice Support"],
+  ].map(([slug, title, classLevel, boardSlug]) =>
+    batchDPage({
+      slug,
+      title,
+      kind: "study-support",
+      boardSlug,
+      classLevel,
+      intent: "worksheets and study support",
+      cluster: "Worksheets and Study Support",
+      parentHubPath: "/maths-worksheet-guidance",
+      focus:
+        "turn worksheets, homework, test practice, and doubt logs into a clearer study routine with home tuition or online support when needed",
+    }),
+  ),
+  ...[
+    ["one-to-one-maths-support", "One to One Maths Support", "/one-to-one-maths-tuition"],
+    ["weekend-maths-home-tutor", "Weekend Maths Home Tutor", "/weekend-maths-home-tutoring"],
+    ["weekend-cbse-maths-home-tutor", "Weekend CBSE Maths Home Tutor", "/weekend-maths-home-tutoring", "cbse"],
+    ["weekend-igcse-maths-home-tutor", "Weekend IGCSE Maths Home Tutor", "/weekend-maths-home-tutoring", "igcse"],
+    ["weekend-ib-maths-home-tutor", "Weekend IB Maths Home Tutor", "/weekend-maths-home-tutoring", "ib"],
+    ["after-school-maths-home-tutor", "After School Maths Home Tutor", "/after-school-maths-support"],
+    ["home-maths-tutor-for-board-exams", "Home Maths Tutor for Board Exams", "/board-maths-exam-preparation"],
+    ["maths-tutor-for-weak-students", "Maths Tutor for Weak Students", "/concept-strengthening-sessions"],
+    ["maths-mentor-for-exam-preparation", "Maths Mentor for Exam Preparation", "/maths-revision-program"],
+    ["personalised-maths-tuition-plan", "Personalised Maths Tuition Plan", "/one-to-one-maths-tuition"],
+  ].map(([slug, title, parentHubPath, boardSlug]) =>
+    batchDPage({
+      slug,
+      title,
+      kind: "commercial-support",
+      boardSlug,
+      intent: "commercial support",
+      cluster: "Commercial Support",
+      parentHubPath,
+      focus:
+        "compare schedule, one-to-one attention, chapter gaps, homework follow-through, parent updates, and tutor-fit questions before choosing support",
+    }),
+  ),
+];
+
 const localityBySlug = new Map(LOCALITY_META.map((item) => [item.slug, item]));
 const batchALocalityBySlug = new Map(BATCH_A_LOCALITY_META.map((item) => [item.slug, item]));
 
@@ -1429,6 +1635,28 @@ export const batchCRootSeoPages = BATCH_C_INTENT_META.map((item) => ({
   focus: item.focus,
 }));
 
+export const batchDRootSeoPages = BATCH_D_INTENT_META.map((item) => ({
+  id: `batch-d-${item.slug}`,
+  group: "batch-d-intent",
+  slug: item.slug,
+  path: `/${item.slug}`,
+  title: item.title,
+  h1: item.h1,
+  kind: item.kind,
+  boardSlug: item.boardSlug,
+  boardLabel: item.boardLabel,
+  classLevel: item.classLevel,
+  topicSlug: item.topicSlug,
+  topicLabel: item.topicLabel,
+  schoolName: item.schoolName,
+  intent: item.intent,
+  parentHubPath: item.parentHubPath,
+  primaryKeyword: item.primaryKeyword,
+  audience: item.audience,
+  cluster: item.cluster,
+  focus: item.focus,
+}));
+
 export const recoveryRootSeoPages = [
   ...recoveryClassBoardPages,
   ...recoveryTopicBoardPages,
@@ -1442,6 +1670,7 @@ export const recoverySeoClusterPaths = [
   ...batchARootSeoPages.map((page) => page.path),
   ...batchBRootSeoPages.map((page) => page.path),
   ...batchCRootSeoPages.map((page) => page.path),
+  ...batchDRootSeoPages.map((page) => page.path),
 ];
 
 export const recoveryRouteCatalogRows = [
@@ -1451,6 +1680,7 @@ export const recoveryRouteCatalogRows = [
   ...batchARootSeoPages,
   ...batchBRootSeoPages,
   ...batchCRootSeoPages,
+  ...batchDRootSeoPages,
 ].map((page) => ({
   path: page.path,
   title: page.title,
@@ -1463,6 +1693,12 @@ export const recoveryRouteCatalogRows = [
         ? page.kind === "topic-mastery"
           ? "Topic Support"
           : "Exam Support"
+      : page.group === "batch-d-intent"
+        ? page.kind?.includes("comparison")
+          ? "Comparison"
+          : page.kind?.includes("resource")
+            ? "Resource"
+            : "Commercial Support"
       : page.group === "class-board"
         ? "Curriculum / Class"
         : page.group === "topic-board"
@@ -1490,6 +1726,16 @@ export const recoveryRouteCatalogRows = [
             : page.kind === "homework-support"
               ? "Homework Help Page"
               : "Exam Support Page"
+      : page.group === "batch-d-intent"
+        ? page.kind?.includes("comparison")
+          ? "Comparison Page"
+          : page.kind === "exam-guide"
+            ? "Exam Guide Page"
+            : page.kind === "study-support"
+              ? "Study Support Page"
+              : page.kind === "resource-support"
+                ? "Resource Page"
+                : "Commercial Support Page"
       : page.group === "class-board"
         ? "Class Service"
         : page.group === "topic-board"
