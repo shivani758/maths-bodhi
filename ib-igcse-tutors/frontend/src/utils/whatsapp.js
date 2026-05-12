@@ -4,8 +4,14 @@ export function formatWhatsAppNumber(value) {
 
 export function buildWhatsAppUrl(number, message) {
   const sanitizedNumber = formatWhatsAppNumber(number);
-  const text = encodeURIComponent(message ?? "");
-  return `https://wa.me/${sanitizedNumber}?text=${text}`;
+  const baseUrl = `https://wa.me/${sanitizedNumber}`;
+
+  if (!message) {
+    return baseUrl;
+  }
+
+  const text = encodeURIComponent(message);
+  return `${baseUrl}?text=${text}`;
 }
 
 export function buildStudentMessage(contact, payload) {
