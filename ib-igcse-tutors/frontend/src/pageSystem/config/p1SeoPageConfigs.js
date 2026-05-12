@@ -10,10 +10,9 @@ import {
   recoveryRouteCatalogRows,
   recoveryRootSeoPages,
 } from "./seoRecoveryCluster";
-import { MATHS_BODHI_WHATSAPP_NUMBER } from "../../constants/contact";
 
 const DEMO_PATH = "/book-free-demo-class";
-const WHATSAPP_NUMBER = MATHS_BODHI_WHATSAPP_NUMBER;
+const WHATSAPP_NUMBER = "919896825986";
 
 function row({
   id,

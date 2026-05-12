@@ -5,7 +5,6 @@ import {
   getRecoveryLocalityMeta,
   recoveryLocalityBoardPages,
 } from "./seoRecoveryCluster";
-import { MATHS_BODHI_WHATSAPP_NUMBER } from "../../constants/contact";
 
 function routeCard({ eyebrow, title, description, tags = [], to }) {
   return { eyebrow, title, description, tags, to };
@@ -2534,7 +2533,7 @@ function createPublishedGurugramEntryConfig(config) {
   };
 }
 
-const WHATSAPP_NUMBER = MATHS_BODHI_WHATSAPP_NUMBER;
+const WHATSAPP_NUMBER = "919896825986";
 
 function createLocalityWhatsAppHref(label) {
   const message = `Hello Maths Bodhi, I want to check maths home tuition options in ${label}, Gurugram. Please guide me on tutor fit and a demo class.`;
