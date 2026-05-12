@@ -32,7 +32,7 @@ function Navbar() {
     {
       label: "Gurugram Sectors",
       to: "/city/gurugram",
-      isActive: pathname === "/city/gurugram" || pathname.startsWith("/gurugram"),
+      isActive: pathname.startsWith("/city/gurugram") || pathname.startsWith("/gurugram"),
     },
   ];
   const activeRole =
