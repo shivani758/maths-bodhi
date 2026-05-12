@@ -1,5 +1,6 @@
 import {
   batchALocalityPages,
+  batchERootSeoPages,
   getBatchALocalityMeta,
   getRecoveryLocalityMeta,
   recoveryLocalityBoardPages,
@@ -3238,6 +3239,377 @@ function createBatchALocalityConfig(page) {
   });
 }
 
+function createBatchEWhatsAppHref(page, purpose = "premium society or sector maths home tuition") {
+  const message = `Hello Maths Bodhi, I want help with ${page.title}. Please guide me on ${purpose}, tutor fit, and a demo class.`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function createBatchEAreaCards(page) {
+  const currentGroup = page.group;
+  const societyCards = batchERootSeoPages
+    .filter((item) => item.group === "batch-e-society" && item.path !== page.path)
+    .slice(0, currentGroup === "batch-e-society" ? 4 : 3)
+    .map((item) =>
+      recoveryRouteCard(
+        item.path,
+        item.title,
+        "Related society",
+        `Compare ${item.societyLabel} when the family wants maths home tuition near a premium society or nearby corridor.`,
+        [item.societyLabel, item.localityLabel, "Society"],
+      ),
+    );
+
+  const sectorCards = batchERootSeoPages
+    .filter((item) => item.group === "batch-e-sector" && item.path !== page.path)
+    .slice(0, currentGroup === "batch-e-sector" ? 4 : 3)
+    .map((item) =>
+      recoveryRouteCard(
+        item.path,
+        item.title,
+        "Related sector",
+        `Compare ${item.localityLabel} when sector access, school timing, or weekday travel changes the tutor shortlist.`,
+        [item.localityLabel, "Sector", "Gurugram"],
+      ),
+    );
+
+  const parentCard =
+    page.group === "batch-e-society"
+      ? recoveryRouteCard(
+          page.localityPath,
+          `Maths home tutor in ${page.localityLabel}`,
+          "Parent locality",
+          `Open the nearby ${page.localityLabel} route before choosing support near ${page.societyLabel}.`,
+          [page.localityLabel, "Locality"],
+        )
+      : recoveryRouteCard(
+          "/maths-home-tutor-in-gurgaon",
+          "Maths Home Tutor in Gurgaon",
+          "Gurgaon hub",
+          "Use the Gurgaon hub to compare sectors, societies, boards, classes, and topic routes together.",
+          ["Gurgaon", "Hub"],
+        );
+
+  return [parentCard, ...societyCards, ...sectorCards].slice(0, 6);
+}
+
+function createBatchEBoardCards() {
+  return [
+    recoveryRouteCard(
+      "/gurugram/cbse-maths-home-tutor",
+      "CBSE Maths Home Tutor in Gurugram",
+      "Board route",
+      "Use this route when NCERT pace, school worksheets, and board-year preparation shape the plan.",
+      ["CBSE", "Gurugram"],
+    ),
+    recoveryRouteCard(
+      "/gurugram/igcse-maths-home-tutor",
+      "IGCSE Maths Home Tutor in Gurugram",
+      "Board route",
+      "Use this route for Core, Extended, past-paper correction, and international-school maths support.",
+      ["IGCSE", "Premium schools"],
+    ),
+    recoveryRouteCard(
+      "/gurugram/ib-maths-home-tutor",
+      "IB Maths Home Tutor in Gurugram",
+      "Board route",
+      "Use this route when MYP or DP pathway fit, reflection, and mixed-problem practice matter.",
+      ["IB", "MYP and DP"],
+    ),
+    recoveryRouteCard(
+      "/premium-school-maths-home-tutor",
+      "Premium School Maths Home Tutor",
+      "School support",
+      "Compare premium-school support before narrowing to the student's exact board, class, or locality.",
+      ["Premium schools", "Tutor fit"],
+    ),
+  ];
+}
+
+function createBatchEClassCards() {
+  return [
+    recoveryRouteCard(
+      "/class-10-cbse-maths-home-tutor",
+      "Class 10 CBSE Maths Home Tutor",
+      "Class route",
+      "Use this when board-year revision, written method, and school-test pressure are central.",
+      ["Class 10", "CBSE"],
+    ),
+    recoveryRouteCard(
+      "/class-12-cbse-maths-home-tutor",
+      "Class 12 CBSE Maths Home Tutor",
+      "Class route",
+      "Use this when senior-school maths needs stronger weekly planning and board-style practice.",
+      ["Class 12", "CBSE"],
+    ),
+    recoveryRouteCard(
+      "/class-10-igcse-maths-home-tutor",
+      "Class 10 IGCSE Maths Home Tutor",
+      "Class route",
+      "Use this when IGCSE paper technique and topic-by-topic correction are the main pressure.",
+      ["Class 10", "IGCSE"],
+    ),
+    recoveryRouteCard(
+      "/class-12-ib-maths-home-tutor",
+      "Class 12 IB Maths Home Tutor",
+      "Class route",
+      "Use this when DP maths, AA or AI fit, and regular problem reflection need to be clearer.",
+      ["Class 12", "IB"],
+    ),
+  ];
+}
+
+function createBatchETopicCards() {
+  return [
+    recoveryRouteCard(
+      "/cbse-algebra-tutor",
+      "CBSE Algebra Tutor",
+      "Topic route",
+      "Open this when equations, expressions, functions, or graph sense are the student friction points.",
+      ["Algebra", "CBSE"],
+    ),
+    recoveryRouteCard(
+      "/igcse-trigonometry-tutor",
+      "IGCSE Trigonometry Tutor",
+      "Topic route",
+      "Use this for identity work, ratios, graph interpretation, and paper-style method writing.",
+      ["Trigonometry", "IGCSE"],
+    ),
+    recoveryRouteCard(
+      "/ib-calculus-tutor",
+      "IB Calculus Tutor",
+      "Topic route",
+      "Use this when calculus needs to connect to DP pathway, applications, and mixed problem practice.",
+      ["Calculus", "IB"],
+    ),
+    recoveryRouteCard(
+      "/board-exam-maths-revision",
+      "Board Exam Maths Revision",
+      "Revision route",
+      "Use this when exam timing, weak chapters, and sample-paper correction are already urgent.",
+      ["Revision", "Boards"],
+    ),
+  ];
+}
+
+function buildBatchESupportPoints(page) {
+  if (page.group === "batch-e-society") {
+    return [
+      supportPoint(
+        `${page.societyLabel} searches should still start with academic fit`,
+        `This page uses ${page.societyLabel} as local search context, then connects the family back to class, board, topic, and demo decisions.`,
+      ),
+      supportPoint(
+        "Premium society convenience should protect consistency",
+        "Nearby home tuition is useful when the tutor can fit school timing, homework follow-through, revision rhythm, and parent coordination.",
+      ),
+      supportPoint(
+        "No unsupported society claims",
+        "Maths Bodhi does not claim official society affiliation, guaranteed tutor availability, fake reviews, or guaranteed academic outcomes.",
+      ),
+    ];
+  }
+
+  return [
+    supportPoint(
+      `${page.localityLabel} should be connected to school rhythm`,
+      `${page.localityLabel} is useful when home tuition needs to fit ${page.localityNote}.`,
+    ),
+    supportPoint(
+      "Sector pages should lead into the right board and class",
+      "The page keeps CBSE, IB, IGCSE, class, topic, and revision links visible so the family does not stay on a generic locality page.",
+    ),
+    supportPoint(
+      "Tutor filtering remains grounded in published data",
+      "Tutor cards appear only when real profiles match the locality, board, class, or topic signals; empty states keep the enquiry route honest.",
+    ),
+  ];
+}
+
+function buildBatchEFaqs(page) {
+  const areaLabel = page.societyLabel ?? page.localityLabel;
+
+  return [
+    faqItem(
+      `Who is this ${areaLabel} maths tutor page for?`,
+      `It is for families who want ${page.primaryKeyword} and need the first shortlist to consider locality convenience, board fit, class pressure, and topic gaps together.`,
+    ),
+    faqItem(
+      page.group === "batch-e-society"
+        ? `Is Maths Bodhi officially affiliated with ${page.societyLabel}?`
+        : "Does this sector page guarantee tutor availability?",
+      page.group === "batch-e-society"
+        ? "No. The society name is used only for local search and planning context. Maths Bodhi does not claim any official society partnership."
+        : "No. The page helps families explain local need clearly; actual tutor availability is checked after class, board, chapters, and schedule are shared.",
+    ),
+    faqItem(
+      "What should parents share before booking a demo?",
+      "Share the student's class, board, school area, weak chapters, recent test pattern, preferred timing, and whether home tuition or online support is preferred.",
+    ),
+  ];
+}
+
+function createBatchEConfig(page) {
+  const areaLabel = page.societyLabel ?? page.localityLabel;
+  const isSocietyPage = page.group === "batch-e-society";
+
+  return createPublishedGurugramEntryConfig({
+    id: page.id,
+    slug: page.slug,
+    routePath: page.path,
+    pageType: isSocietyPage ? "society" : "sector",
+    title: page.title,
+    h1: page.h1,
+    intro: isSocietyPage
+      ? `${page.title} is for families searching near ${page.societyLabel} who want locality convenience without losing sight of board, class, topic, and demo fit.`
+      : `${page.title} is a focused Gurugram sector page for families who want home tuition around ${page.localityLabel} with school rhythm, board fit, and chapter support connected.`,
+    relatedTutorQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      cityLabel: "Gurugram",
+      localityLabels: [page.localityLabel, page.localitySlug, page.societyLabel, page.societySlug].filter(Boolean),
+      tokens: [
+        page.primaryKeyword,
+        page.localityLabel,
+        page.localitySlug,
+        page.societyLabel,
+        "maths home tuition",
+        "Gurugram",
+        "premium society",
+        "board support",
+      ].filter(Boolean),
+      limit: 6,
+    },
+    relatedBlogQuery: {
+      kind: "tokens",
+      tokens: [areaLabel, "home tuition", "school support", "revision"],
+      limit: 3,
+    },
+    relatedResultQuery: {
+      kind: "tokens",
+      citySlug: "gurugram",
+      localityLabels: [page.localityLabel, page.localitySlug, page.societyLabel].filter(Boolean),
+      tokens: [areaLabel, "school support", "board preparation"],
+      limit: 3,
+    },
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: `Explore ${page.primaryKeyword} with related society, sector, locality, board, class, topic, WhatsApp, mentor, and demo links.`,
+    canonicalUrl: page.path,
+    breadcrumbItems: [
+      { label: "Home", to: "/" },
+      { label: "Gurugram", to: "/gurugram" },
+      ...(isSocietyPage ? [{ label: page.localityLabel, to: page.localityPath }] : []),
+      { label: areaLabel },
+    ],
+    schemaType: "Service",
+    sections: {
+      hero: {
+        badge: isSocietyPage ? `Near ${page.societyLabel}` : `${page.localityLabel} maths home tuition`,
+        chips: [areaLabel, page.localityLabel, "Gurugram", "Home tuition", "Board fit"].filter(Boolean),
+        stats: [
+          { value: isSocietyPage ? "Society" : "Sector", label: "Local search route" },
+          { value: "4", label: "Related link groups" },
+          { value: "Demo", label: "Next step" },
+        ],
+        supportPanel: {
+          title: `${areaLabel} searches work best when local convenience and academic fit stay together`,
+          text: isSocietyPage
+            ? `Families near ${page.societyLabel} can use this route to discuss class, board, weak chapters, schedule, and whether home tuition or online continuity is practical.`
+            : `${page.localityLabel} context helps the family explain school timing, travel feasibility, and the weekly maths rhythm they need.`,
+          bullets: [
+            "Related society, sector, locality, board, class, and topic links are grouped below",
+            "Tutor cards use real published profile data only",
+            "No fake tutor counts, fake reviews, or guaranteed-result claims are used",
+          ],
+        },
+        heroImage: "/images/hero-maths-home.svg",
+        heroImageAlt: `${page.title} from Maths Bodhi`,
+      },
+      supportPoints: {
+        badge: isSocietyPage ? "Premium Society Fit" : "Sector Fit",
+        title: `How maths home tuition should work around ${areaLabel}`,
+        subtitle:
+          "The page keeps local convenience connected to board, class, topic, and demo decisions so it stays useful rather than a thin locality route.",
+        points: buildBatchESupportPoints(page),
+      },
+      routeGroups: [
+        {
+          id: `${page.slug}-society-sector-locality`,
+          badge: "Related Societies and Sectors",
+          title: "Related society, sector, and locality pages",
+          subtitle:
+            "Use these routes when society access, nearby sector fit, or school-corridor convenience changes the shortlist.",
+          cards: createBatchEAreaCards(page),
+        },
+        {
+          id: `${page.slug}-boards`,
+          badge: "Related Boards",
+          title: "Related board and school-support pages",
+          subtitle:
+            "Move into the right curriculum route when board style matters more than the exact locality.",
+          cards: createBatchEBoardCards(),
+          backgroundClassName: "bg-slate-50",
+        },
+        {
+          id: `${page.slug}-classes`,
+          badge: "Related Classes",
+          title: "Related class pages",
+          subtitle:
+            "Use class pages when the student's grade, test calendar, or senior-school rhythm is the main decision signal.",
+          cards: createBatchEClassCards(),
+        },
+        {
+          id: `${page.slug}-topics`,
+          badge: "Related Topics",
+          title: "Related topic and revision pages",
+          subtitle:
+            "These routes help families move from local search into the chapters or revision pressure causing the most friction.",
+          cards: createBatchETopicCards(),
+          backgroundClassName: "bg-slate-50",
+        },
+      ],
+      featuredTutors: {
+        badge: "Tutor Profiles",
+        title: `Published maths tutors relevant to ${areaLabel}`,
+        subtitle:
+          "Only real published Maths Bodhi tutor profiles are shown here when they match locality, society, board, class, or topic signals.",
+        emptyState: {
+          title: `No exact published tutor profile is shown for ${areaLabel} yet`,
+          description:
+            "Maths Bodhi can still check current fit after the family shares the student's class, board, school area, weak chapters, and preferred learning mode.",
+          primaryAction: {
+            label: "Book a free maths demo class",
+            to: "/book-free-demo-class",
+          },
+          secondaryAction: {
+            label: "Back to Gurugram hub",
+            to: "/gurugram",
+          },
+        },
+      },
+      faqs: buildBatchEFaqs(page),
+      cta: {
+        title: `Book a free maths demo for ${areaLabel}`,
+        description:
+          "Share the student's class, board, locality or society, school area, and current maths concern. Maths Bodhi can guide the next step on WhatsApp.",
+        primaryAction: {
+          label: "Book a free maths demo class",
+          to: "/book-free-demo-class",
+        },
+        secondaryAction: {
+          label: "WhatsApp Maths Bodhi",
+          href: createBatchEWhatsAppHref(page),
+          external: true,
+        },
+        tertiaryAction: {
+          label: "Talk to a mentor",
+          href: createBatchEWhatsAppHref(page, "mentor guidance"),
+          external: true,
+        },
+      },
+    },
+  });
+}
+
 export const batchTwoGurugramEntryConfigs = [
   createPublishedGurugramEntryConfig({
     id: "gurugram-sector-57-service",
@@ -4738,10 +5110,15 @@ const batchALocalityConfigs = batchALocalityPages.map((page) =>
   createBatchALocalityConfig(page),
 );
 
+const batchELocalityConfigs = batchERootSeoPages.map((page) =>
+  createBatchEConfig(page),
+);
+
 export const gurugramPublicEntryConfigs = [
   ...batchOneGurugramEntryConfigs,
   ...batchTwoGurugramEntryConfigs,
   ...batchALocalityConfigs,
+  ...batchELocalityConfigs,
   ...seoRecoveryLocalityBoardConfigs,
   ...cityGurugramLocalityFallbackConfigs,
 ];

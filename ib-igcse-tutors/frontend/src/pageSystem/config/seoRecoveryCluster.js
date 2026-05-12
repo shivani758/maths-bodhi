@@ -1374,6 +1374,68 @@ const BATCH_D_INTENT_META = [
   ),
 ];
 
+const BATCH_E_SECTOR_META = [
+  ["sector-21", "Sector 21", "old Gurugram access with school-test follow-through and practical weekday scheduling"],
+  ["sector-22", "Sector 22", "Palam Vihar-side convenience, school homework rhythm, and board support"],
+  ["sector-23", "Sector 23", "family-focused locality fit, school support, and regular maths practice"],
+  ["sector-27", "Sector 27", "central access, DLF proximity, and after-school maths support"],
+  ["sector-28", "Sector 28", "MG Road and DLF access with practical home tuition timing"],
+  ["sector-29", "Sector 29", "central Gurugram convenience and class-wise maths support"],
+  ["sector-30", "Sector 30", "central school support, board readiness, and worksheet correction"],
+  ["sector-32", "Sector 32", "NH8 access, senior-school support, and board practice"],
+  ["sector-38", "Sector 38", "Medanta-side access, school rhythm, and exam practice support"],
+  ["sector-39", "Sector 39", "central residential convenience and regular chapter follow-through"],
+  ["sector-44", "Sector 44", "central Gurugram access, school support, and one-to-one maths planning"],
+  ["sector-47", "Sector 47", "Sohna Road-side convenience, school tests, and board preparation"],
+  ["sector-48", "Sector 48", "Sohna Road corridor access, premium societies, and senior-class support"],
+  ["sector-51", "Sector 51", "school corridor fit, board support, and steady weekly maths rhythm"],
+  ["sector-58", "Sector 58", "Golf Course Extension access, premium-school context, and senior maths support"],
+  ["sector-59", "Sector 59", "Golf Course Extension convenience, class-wise support, and exam planning"],
+  ["sector-60", "Sector 60", "extension-road access, premium society context, and board-specific support"],
+  ["sector-61", "Sector 61", "premium corridor convenience, IB or IGCSE context, and home tuition planning"],
+  ["sector-63", "Sector 63", "Golf Course Extension-side access, premium societies, and exam support"],
+  ["sector-66", "Sector 66", "Golf Course Extension and Sohna Road access with senior-school support"],
+  ["sector-68", "Sector 68", "southern Gurugram access, school support, and board preparation"],
+  ["sector-69", "Sector 69", "Sohna Road-side convenience, chapter repair, and homework follow-through"],
+  ["sector-71", "Sector 71", "SPR-side access, school rhythm, and practical home tuition"],
+  ["sector-74", "Sector 74", "new Gurugram access, board support, and regular practice"],
+  ["sector-75", "Sector 75", "new Gurugram corridor fit, class-wise support, and exam planning"],
+  ["sector-76", "Sector 76", "NH8 and new-sector access with school-test support"],
+  ["sector-77", "Sector 77", "new Gurugram society context, homework support, and revision rhythm"],
+  ["sector-78", "Sector 78", "new-sector convenience, class support, and board practice"],
+  ["sector-79", "Sector 79", "new Gurugram residential access, school support, and concept repair"],
+  ["sector-80", "Sector 80", "NH8-side convenience, steady maths practice, and board follow-through"],
+].map(([slug, label, note]) => ({
+  slug,
+  label,
+  note,
+}));
+
+const BATCH_E_SOCIETY_META = [
+  ["the-aralias", "The Aralias", "golf-course-road"],
+  ["the-magnolias", "The Magnolias", "golf-course-road"],
+  ["the-camellias", "The Camellias", "golf-course-road"],
+  ["dlf-crest", "DLF Crest", "sector-54"],
+  ["dlf-park-place", "DLF Park Place", "sector-54"],
+  ["dlf-the-belaire", "DLF The Belaire", "golf-course-road"],
+  ["dlf-the-pinnacle", "DLF The Pinnacle", "dlf-phase-5"],
+  ["dlf-the-icon", "DLF The Icon", "dlf-phase-5"],
+  ["emaar-palm-springs", "Emaar Palm Springs", "golf-course-road"],
+  ["emaar-marbella", "Emaar Marbella", "sector-66"],
+  ["m3m-golf-estate", "M3M Golf Estate", "sector-65"],
+  ["m3m-merlin", "M3M Merlin", "sector-67"],
+  ["ireo-grand-arch", "Ireo Grand Arch", "sector-58"],
+  ["ireo-victory-valley", "Ireo Victory Valley", "sector-67"],
+  ["tata-primanti", "Tata Primanti", "sector-72"],
+  ["central-park-resorts", "Central Park Resorts", "sector-48"],
+  ["unitech-uniworld-gardens", "Unitech Uniworld Gardens", "sector-47"],
+  ["vatika-city", "Vatika City", "sector-49"],
+].map(([slug, label, localitySlug]) => ({
+  slug,
+  label,
+  localitySlug,
+}));
+
 const localityBySlug = new Map(LOCALITY_META.map((item) => [item.slug, item]));
 const batchALocalityBySlug = new Map(BATCH_A_LOCALITY_META.map((item) => [item.slug, item]));
 
@@ -1657,6 +1719,50 @@ export const batchDRootSeoPages = BATCH_D_INTENT_META.map((item) => ({
   focus: item.focus,
 }));
 
+export const batchESectorPages = BATCH_E_SECTOR_META.map((item) => ({
+  id: `batch-e-sector-${item.slug}`,
+  group: "batch-e-sector",
+  slug: `${item.slug}-maths-home-tutor`,
+  path: `/gurugram/${item.slug}-maths-home-tutor`,
+  title: `Maths Home Tutor in ${item.label}, Gurugram`,
+  h1: `Maths home tutor in ${item.label}, Gurugram`,
+  localitySlug: item.slug,
+  localityLabel: item.label,
+  localityNote: item.note,
+  parentHubPath: "/maths-home-tutor-in-gurgaon",
+  primaryKeyword: `maths home tutor in ${item.label.toLowerCase()} gurugram`,
+  audience: "Gurugram parents and school students",
+  cluster: "Gurugram Sector SEO",
+}));
+
+export const batchESocietyPages = BATCH_E_SOCIETY_META.map((item) => {
+  const linkedLocality =
+    batchALocalityBySlug.get(item.localitySlug) ?? localityBySlug.get(item.localitySlug);
+  const linkedLocalityPath = linkedLocality
+    ? `/gurugram/${item.localitySlug}-maths-home-tutor`
+    : "/maths-home-tutor-in-gurgaon";
+
+  return {
+    id: `batch-e-society-${item.slug}`,
+    group: "batch-e-society",
+    slug: `maths-home-tutor-near-${item.slug}`,
+    path: `/gurugram/maths-home-tutor-near-${item.slug}`,
+    title: `Maths Home Tutor near ${item.label}, Gurugram`,
+    h1: `Maths home tutor near ${item.label}, Gurugram`,
+    societySlug: item.slug,
+    societyLabel: item.label,
+    localitySlug: item.localitySlug,
+    localityLabel: linkedLocality?.label ?? "Gurugram",
+    localityPath: linkedLocalityPath,
+    parentHubPath: linkedLocalityPath,
+    primaryKeyword: `maths home tutor near ${item.label.toLowerCase()} gurugram`,
+    audience: "Premium society parents and students",
+    cluster: "Premium Society SEO",
+  };
+});
+
+export const batchERootSeoPages = [...batchESectorPages, ...batchESocietyPages];
+
 export const recoveryRootSeoPages = [
   ...recoveryClassBoardPages,
   ...recoveryTopicBoardPages,
@@ -1671,6 +1777,7 @@ export const recoverySeoClusterPaths = [
   ...batchBRootSeoPages.map((page) => page.path),
   ...batchCRootSeoPages.map((page) => page.path),
   ...batchDRootSeoPages.map((page) => page.path),
+  ...batchERootSeoPages.map((page) => page.path),
 ];
 
 export const recoveryRouteCatalogRows = [
@@ -1681,11 +1788,16 @@ export const recoveryRouteCatalogRows = [
   ...batchBRootSeoPages,
   ...batchCRootSeoPages,
   ...batchDRootSeoPages,
+  ...batchERootSeoPages,
 ].map((page) => ({
   path: page.path,
   title: page.title,
   segment:
-    page.group === "locality-board" || page.group === "batch-a-locality" || page.group === "batch-a-school"
+    page.group === "locality-board" ||
+    page.group === "batch-a-locality" ||
+    page.group === "batch-a-school" ||
+    page.group === "batch-e-sector" ||
+    page.group === "batch-e-society"
       ? "Location"
       : page.group === "batch-b-intent"
         ? "Curriculum / Class"
@@ -1708,6 +1820,10 @@ export const recoveryRouteCatalogRows = [
   pageType:
     page.group === "locality-board" || page.group === "batch-a-locality"
       ? "Location Service"
+      : page.group === "batch-e-sector"
+        ? "Sector Service"
+      : page.group === "batch-e-society"
+        ? "Society Service"
       : page.group === "batch-a-school"
         ? "School-Specific Service"
       : page.group === "batch-b-intent"
