@@ -109,6 +109,129 @@ const DEFAULT_LOCAL_SEARCH_ITEMS = [
   route: `/city/gurugram/${slugifyPathSegment(sectorLabel)}`,
 }));
 
+const SCHOOL_CONTEXT_EXAMPLES = [
+  {
+    key: "school-the-shri-ram-aravali",
+    locality: "Aravali and Golf Course Road corridor",
+    school: "The Shri Ram School Aravali",
+    support:
+      "Families searching around this corridor often ask for steady worksheet follow-through, clearer written method, and a weekly maths rhythm that fits school routines.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["School corridor", "Board fit", "Weekly practice"],
+  },
+  {
+    key: "school-heritage-xperiential",
+    locality: "Sector 62 and Golf Course Extension",
+    school: "Heritage Xperiential",
+    support:
+      "Useful context when parents want maths support that respects project work, school pace, and regular doubt clearing without making unsupported school claims.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["Extension Road", "Concept clarity", "Doubt clearing"],
+  },
+  {
+    key: "school-shiv-nadar",
+    locality: "Golf Course Extension Road",
+    school: "Shiv Nadar School",
+    support:
+      "Parents commonly compare locality convenience, school timing, and whether the tutor can help with deeper problem-solving and consistent revision.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["School timing", "Revision", "Problem solving"],
+  },
+  {
+    key: "school-dps-sector-45",
+    locality: "Sector 45 and South City",
+    school: "DPS Sector 45",
+    support:
+      "A practical reference for families asking about school-paced maths, homework correction, test preparation, and board-year routines.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["Sector 45", "Homework", "Tests"],
+  },
+  {
+    key: "school-scottish-high",
+    locality: "Sector 57 and Sushant Lok",
+    school: "Scottish High",
+    support:
+      "Helpful context for families comparing international-school pace, written method, class level, and home-tuition convenience.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["Sushant Lok", "Method clarity", "Home tuition"],
+  },
+  {
+    key: "school-lotus-valley",
+    locality: "Sector 50 and South City 2",
+    school: "Lotus Valley",
+    support:
+      "Parents around this corridor often want a tutor who can keep classwork, worksheets, and exam practice moving together.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["Sector 50", "Worksheets", "Exam practice"],
+  },
+  {
+    key: "school-gd-goenka",
+    locality: "Sohna Road and Golf Course Extension",
+    school: "GD Goenka",
+    support:
+      "Useful for families balancing school schedule, travel convenience, and the student's current maths confidence.",
+    note: "School name used for local planning context only; no official affiliation is claimed.",
+    chips: ["Sohna Road", "Schedule", "Confidence"],
+  },
+];
+
+const HOME_FALLBACK_SECTOR_PAGES = [
+  {
+    slug: "sector-54",
+    citySlug: "gurugram",
+    route: "/gurugram/sector-54",
+    sectorLabel: "Sector 54",
+    subtitle: "Golf Course Road access with strong relevance for premium-school and board-aware maths support.",
+    landmarks: ["Golf Course Road", "DLF Phase 5"],
+    nearbySchools: ["The Shri Ram School Aravali", "Scottish High"],
+  },
+  {
+    slug: "sector-56",
+    citySlug: "gurugram",
+    route: "/gurugram/sector-56",
+    sectorLabel: "Sector 56",
+    subtitle: "A mixed-demand Gurugram pocket for CBSE, IB, IGCSE, and JEE maths home tuition searches.",
+    landmarks: ["Golf Course Extension", "Sector 55"],
+    nearbySchools: ["Scottish High", "Shiv Nadar School"],
+  },
+  {
+    slug: "sector-57",
+    citySlug: "gurugram",
+    route: "/gurugram/sector-57",
+    sectorLabel: "Sector 57",
+    subtitle: "Useful for weekday home-tuition planning around Sushant Lok 3, Mayfield Garden, and Extension Road access.",
+    landmarks: ["Sushant Lok 3", "Mayfield Garden"],
+    nearbySchools: ["Scottish High", "Lotus Valley"],
+  },
+  {
+    slug: "golf-course-road",
+    citySlug: "gurugram",
+    route: "/gurugram/golf-course-road",
+    sectorLabel: "Golf Course Road",
+    subtitle: "A corridor route for families comparing premium-school access, board fit, and maths tutor availability.",
+    landmarks: ["DLF Phase 1", "Sector 54"],
+    nearbySchools: ["The Shri Ram School Aravali", "Scottish High"],
+  },
+  {
+    slug: "sohna-road",
+    citySlug: "gurugram",
+    route: "/gurugram/sohna-road",
+    sectorLabel: "Sohna Road",
+    subtitle: "A practical corridor for school-paced maths support, board preparation, and regular after-school routines.",
+    landmarks: ["South City 2", "Sector 49"],
+    nearbySchools: ["GD Goenka", "Lotus Valley"],
+  },
+  {
+    slug: "dlf-phase-4",
+    citySlug: "gurugram",
+    route: "/gurugram/dlf-phase-4",
+    sectorLabel: "DLF Phase 4",
+    subtitle: "A central Gurugram route for families who want locality convenience and board-aware maths support together.",
+    landmarks: ["Galleria", "Sushant Lok"],
+    nearbySchools: ["The Shri Ram School Aravali", "DPS Sector 45"],
+  },
+];
+
 const INTENT_SECTIONS = [
   {
     title: "Board-based matching",
@@ -265,7 +388,7 @@ function buildLocalSearchItems(sectorPages) {
   const sectorItems = sectorPages.slice(0, 8).map((sector) => ({
     label: `Maths home tutor in ${sector.sectorLabel}`,
     sectorLabel: sector.sectorLabel,
-    route: `/city/${sector.citySlug || "gurugram"}/${sector.slug}`,
+    route: sector.route ?? `/city/${sector.citySlug || "gurugram"}/${sector.slug}`,
   }));
 
   const mergedItems = [...DEFAULT_LOCAL_SEARCH_ITEMS, ...sectorItems];
@@ -334,14 +457,23 @@ function buildPopularSearchGroups(sectorPages) {
 }
 
 function buildLocalContextCards(premiumSchools, sectorPages, tutors) {
-  const schoolCards = premiumSchools.slice(0, 5).map((item) => ({
-    key: `school-${item.id}`,
-    eyebrow: item.locality,
-    title: `Commonly requested maths support near ${item.school}`,
-    description: item.support,
-    note: `Popular for ${item.board} families in this area`,
-    chips: [item.board, item.locality],
-  }));
+  const schoolCards = premiumSchools.length
+    ? premiumSchools.slice(0, 5).map((item) => ({
+        key: `school-${item.id}`,
+        eyebrow: item.locality,
+        title: `Commonly requested maths support near ${item.school}`,
+        description: item.support,
+        note: `Popular for ${item.board} families in this area. No official school affiliation is claimed.`,
+        chips: [item.board, item.locality],
+      }))
+    : SCHOOL_CONTEXT_EXAMPLES.map((item) => ({
+        key: item.key,
+        eyebrow: item.locality,
+        title: `Commonly requested maths support near ${item.school}`,
+        description: item.support,
+        note: item.note,
+        chips: item.chips,
+      }));
 
   const localityCards = sectorPages.slice(0, 5).map((sector) => {
     const supportingBoards = [
@@ -371,6 +503,7 @@ function buildLocalContextCards(premiumSchools, sectorPages, tutors) {
 function Home() {
   const { siteData } = useSiteData();
   const { seo, home, contact, reviews, premiumSchools, sectorPages } = siteData;
+  const displaySectorPages = sectorPages.length ? sectorPages : HOME_FALLBACK_SECTOR_PAGES;
 
   const [apiTutors, setApiTutors] = useState([]);
   const [tutorsLoading, setTutorsLoading] = useState(true);
@@ -424,10 +557,10 @@ function Home() {
   const sectorOptions = useMemo(
     () =>
       mergeFilterOptions(SECTOR_OPTIONS, [
-        ...sectorPages.map((sector) => sector.sectorLabel),
+        ...displaySectorPages.map((sector) => sector.sectorLabel),
         ...tutors.flatMap((tutor) => tutor.sectors ?? []),
       ]),
-    [sectorPages, tutors],
+    [displaySectorPages, tutors],
   );
 
   const boardOptions = useMemo(
@@ -500,12 +633,12 @@ function Home() {
   }, [reviews]);
 
   const popularSearchGroups = useMemo(
-    () => buildPopularSearchGroups(sectorPages),
-    [sectorPages],
+    () => buildPopularSearchGroups(displaySectorPages),
+    [displaySectorPages],
   );
   const localContextCards = useMemo(
-    () => buildLocalContextCards(premiumSchools, sectorPages, tutors),
-    [premiumSchools, sectorPages, tutors],
+    () => buildLocalContextCards(premiumSchools, displaySectorPages, tutors),
+    [premiumSchools, displaySectorPages, tutors],
   );
   const totalPopularSearches = useMemo(
     () => popularSearchGroups.reduce((sum, group) => sum + group.items.length, 0),
@@ -584,7 +717,7 @@ function Home() {
         "@type": "Organization",
         name: siteData.brandName,
         url: siteUrl,
-        logo: `${siteUrl}/favicon.svg`,
+        logo: `${siteUrl}/assets/mathsbodhi-logo.png`,
         contactPoint: [
           {
             "@type": "ContactPoint",
@@ -605,6 +738,7 @@ function Home() {
         areaServed: ["Gurugram", "Gurgaon"],
         address: {
           "@type": "PostalAddress",
+          streetAddress: contact.streetAddress,
           addressLocality: contact.city,
           addressRegion: contact.state,
           addressCountry: contact.country,
@@ -639,6 +773,7 @@ function Home() {
       contact.city,
       contact.email,
       contact.phoneDisplay,
+      contact.streetAddress,
       seo.description,
       siteData.brandName,
       siteUrl,
@@ -900,7 +1035,7 @@ function Home() {
                   </div>
                   <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-4">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Priority sectors</p>
-                    <p className="mt-1 text-3xl font-bold text-slate-950">{sectorPages.length}</p>
+                    <p className="mt-1 text-3xl font-bold text-slate-950">{displaySectorPages.length}</p>
                   </div>
                 </div>
               </div>
@@ -1257,9 +1392,9 @@ function Home() {
                   ))
                 ) : (
                   <article className="min-w-[280px] max-w-[420px] rounded-[24px] border border-dashed border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 className="text-xl font-bold text-slate-950">Local context is loading</h3>
+                    <h3 className="text-xl font-bold text-slate-950">Useful Gurugram school and locality context</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-600">
-                      Gurugram school and locality notes will appear here once public data is available.
+                      Families can discuss the student's school area, nearby sector, board, weak chapters, and preferred schedule before choosing a tutor route. School names are used only as local planning context.
                     </p>
                   </article>
                 )}
@@ -1390,12 +1525,11 @@ function Home() {
               subtitle="A more professional locality view for parents who want fast sector-level clarity before booking a demo."
             />
 
-            {sectorPages.length ? (
-              <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {sectorPages.slice(0, visibleSectors).map((sector) => (
+            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {displaySectorPages.slice(0, visibleSectors).map((sector) => (
                   <Link
                     key={sector.slug}
-                    to={`/city/${sector.citySlug}/${sector.slug}`}
+                    to={sector.route ?? `/city/${sector.citySlug || "gurugram"}/${sector.slug}`}
                     className="group rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg sm:p-6"
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -1408,14 +1542,14 @@ function Home() {
                         </h3>
                       </div>
                       <div className="w-fit rounded-2xl bg-slate-950 px-3 py-2 text-xs font-semibold text-white">
-                        {sector.nearbySchools.length} school zones
+                        {getList(sector.nearbySchools).length} school zones
                       </div>
                     </div>
 
                     <p className="mt-4 text-sm leading-6 text-slate-600">{sector.subtitle}</p>
 
                     <div className="mt-5 flex flex-wrap gap-2">
-                      {sector.landmarks.slice(0, 2).map((landmark) => (
+                      {getList(sector.landmarks).slice(0, 2).map((landmark) => (
                         <span
                           key={landmark}
                           className="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
@@ -1423,9 +1557,9 @@ function Home() {
                           {landmark}
                         </span>
                       ))}
-                      {sector.nearbySchools[0] ? (
+                      {getList(sector.nearbySchools)[0] ? (
                         <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
-                          {sector.nearbySchools[0]}
+                          {getList(sector.nearbySchools)[0]}
                         </span>
                       ) : null}
                     </div>
@@ -1440,23 +1574,15 @@ function Home() {
                     </div>
                   </Link>
                 ))}
-              </div>
-            ) : (
-              <div className="mt-10 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                <h3 className="text-xl font-bold text-slate-950">Locality pages are being prepared</h3>
-                <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                  Sector links will appear here once Gurugram locality content is available.
-                </p>
-              </div>
-            )}
+            </div>
 
-            {sectorPages.length > 6 ? (
+            {displaySectorPages.length > 6 ? (
               <div className="mt-8 flex justify-center">
-                {visibleSectors < sectorPages.length ? (
+                {visibleSectors < displaySectorPages.length ? (
                   <button
                     type="button"
                     onClick={() =>
-                      setVisibleSectors((current) => Math.min(current + 3, sectorPages.length))
+                      setVisibleSectors((current) => Math.min(current + 3, displaySectorPages.length))
                     }
                     className="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
                   >

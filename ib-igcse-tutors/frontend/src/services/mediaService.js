@@ -16,7 +16,7 @@ export async function createMediaFromFile(file, metadata = {}) {
   }
 
   if (!ACCEPTED_TYPES.includes(file.type)) {
-    throw new Error("Only JPEG, PNG, SVG, and WebP files are supported in the frontend mock flow.");
+    throw new Error("Only JPEG, PNG, SVG, and WebP files are supported for Maths Bodhi media uploads.");
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {

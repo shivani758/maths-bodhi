@@ -10,9 +10,10 @@ import {
   recoveryRouteCatalogRows,
   recoveryRootSeoPages,
 } from "./seoRecoveryCluster";
+import { MATHS_BODHI_WHATSAPP_NUMBER } from "../../constants/contact";
 
 const DEMO_PATH = "/book-free-demo-class";
-const WHATSAPP_NUMBER = "919896825986";
+const WHATSAPP_NUMBER = MATHS_BODHI_WHATSAPP_NUMBER;
 
 function row({
   id,
@@ -950,7 +951,7 @@ function buildBatchASupportPoints(page) {
     {
       title: "Locality pages should avoid generic city swapping",
       description:
-        "The Batch A locality pages use corridor context, school timing, board pressure, and class need to keep each route useful without fake tutor counts or unsupported claims.",
+        "The Gurugram locality pages use corridor context, school timing, board pressure, and class need to keep each route useful without fake tutor counts or unsupported claims.",
     },
     {
       title: "School-intent pages need affiliation-safe copy",
@@ -1078,7 +1079,7 @@ function createBatchARootSeoConfig(page) {
           "Gurugram",
         ]).slice(0, 5),
         stats: [
-          { value: isSchoolPage ? "School" : "46", label: isSchoolPage ? "Intent route" : "Batch A routes" },
+          { value: isSchoolPage ? "School" : "46", label: isSchoolPage ? "Intent route" : "Locality routes" },
           { value: "4", label: "Related link groups" },
           { value: "Demo", label: "Next-step CTA" },
         ],
