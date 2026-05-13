@@ -89,7 +89,7 @@ function BlogDetailPage() {
           <div className="mx-auto max-w-4xl rounded-[28px] border border-slate-200 bg-slate-50 p-8 text-center shadow-sm">
             <h1 className="text-3xl font-bold text-slate-950">Loading maths guide</h1>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Fetching the published Maths Bodhi guide.
+              Preparing the Maths Bodhi guide.
             </p>
           </div>
         </div>
@@ -109,7 +109,7 @@ function BlogDetailPage() {
   const contentParagraphs = paragraphs.length
     ? paragraphs
     : [
-        "This guide is being expanded. Families can still use the related board, tutor, and locality links on this page to continue their maths support search.",
+        "Families can use the related board, tutor, and locality links on this page to continue their maths support search.",
       ];
   const primaryBoardLink = getPrimaryBoardLinkForBlog(blog);
   const relatedTutors = getRelatedTutorsForBlog(blog, { limit: 3 });

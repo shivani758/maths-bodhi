@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import BrandLogo from "../components/BrandLogo";
 import Seo from "../components/Seo";
 import { useAuth } from "../contexts/AuthContext";
 import { useSiteData } from "../contexts/SiteDataContext";
@@ -142,6 +143,10 @@ function TutorLogin() {
       <div className="min-h-screen bg-slate-50 px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
           <div className="rounded-[32px] bg-blue-600 p-8 text-white shadow-xl shadow-blue-100">
+            <div className="mb-6">
+              <BrandLogo className="h-14 max-w-[240px]" />
+              <p className="mt-3 text-xs uppercase tracking-[0.16em] text-blue-100">Tutor</p>
+            </div>
             <span className="inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold">
               Tutor Access
             </span>

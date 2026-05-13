@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import SectionTitle from "../../components/SectionTitle";
@@ -177,13 +177,131 @@ export function PageSupportPointsSection({ badge, title, subtitle, points = [], 
                 key={`${item.title}-${index}`}
                 className={`rounded-[26px] border border-slate-200 ${cardClassName} p-6 shadow-sm`}
               >
-                <h2 className="text-xl font-bold text-slate-950">{item.title}</h2>
+                <h3 className="text-xl font-bold text-slate-950">{item.title}</h3>
                 {item.description ? (
                   <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
                 ) : null}
               </article>
             );
           })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function getRouteCardSearchText(card = {}) {
+  return [
+    card.eyebrow,
+    card.title,
+    card.description,
+    ...(card.tags ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function RouteGroupSection({ group, index }) {
+  const searchId = useId();
+  const [query, setQuery] = useState("");
+  const hasCardLimit = Number.isFinite(group.initialVisibleCount);
+  const initialVisibleCount = hasCardLimit ? Math.max(1, group.initialVisibleCount) : group.cards.length;
+  const loadStep = Math.max(1, group.loadStep ?? initialVisibleCount);
+  const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
+  const filteredCards = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return group.cards;
+    }
+
+    return group.cards.filter((card) => getRouteCardSearchText(card).includes(normalizedQuery));
+  }, [group.cards, query]);
+  const visibleCards = useMemo(
+    () => (hasCardLimit ? filteredCards.slice(0, visibleCount) : filteredCards),
+    [filteredCards, hasCardLimit, visibleCount],
+  );
+  const canLoadMore = hasCardLimit && visibleCount < filteredCards.length;
+  const shouldShowLoadControl = hasCardLimit && filteredCards.length > initialVisibleCount;
+  const activeSearch = query.trim().length > 0;
+
+  useEffect(() => {
+    setVisibleCount(initialVisibleCount);
+  }, [initialVisibleCount, group.cards.length, query]);
+
+  return (
+    <section
+      className={`${group.backgroundClassName ?? (index % 2 === 0 ? "bg-white" : "bg-slate-50")} px-6 py-16`}
+    >
+      <div className="mx-auto max-w-7xl min-w-0">
+        <SectionTitle
+          badge={group.badge}
+          title={group.title}
+          subtitle={group.subtitle}
+          align="left"
+        />
+
+        {group.note ? (
+          <p className="mt-4 max-w-3xl text-xs leading-6 text-slate-500">
+            {group.note}
+          </p>
+        ) : null}
+
+        {group.searchable ? (
+          <label htmlFor={searchId} className="mt-7 block max-w-2xl">
+            <span className="mb-2 block text-sm font-semibold text-slate-800">
+              {group.searchLabel ?? "Find maths home tutors by sector, locality, or society"}
+            </span>
+            <input
+              id={searchId}
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={group.searchPlaceholder ?? "Search an area, sector, society, or school corridor"}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            />
+          </label>
+        ) : null}
+
+        <div className="mt-8">
+          {filteredCards.length ? (
+            <>
+              <MathsRouteCardGrid
+                cards={visibleCards}
+                className={group.className ?? "grid gap-4 md:grid-cols-2 xl:grid-cols-3"}
+                activeTo={group.activeTo}
+                variant={group.variant ?? "default"}
+              />
+              {shouldShowLoadControl ? (
+                <div className="mt-8 flex flex-col items-center gap-3 text-center">
+                  <p className="text-sm text-slate-600" aria-live="polite">
+                    Showing {visibleCards.length} of {filteredCards.length}{" "}
+                    {activeSearch ? "matching" : "available"} {group.itemLabel ?? "localities"}.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      canLoadMore
+                        ? setVisibleCount((current) =>
+                            Math.min(current + loadStep, filteredCards.length),
+                          )
+                        : setVisibleCount(initialVisibleCount)
+                    }
+                    className="rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                  >
+                    {canLoadMore
+                      ? group.loadMoreLabel ?? "Load more localities"
+                      : group.showLessLabel ?? "Show fewer localities"}
+                  </button>
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 text-sm leading-6 text-slate-600 shadow-sm">
+              No matching area found. Try a broader sector, society, or nearby locality.
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -200,28 +318,7 @@ export function PageRouteGroupsSection({ groups = [] }) {
   return (
     <>
       {visibleGroups.map((group, index) => (
-        <section
-          key={group.id ?? group.title ?? index}
-          className={`${group.backgroundClassName ?? (index % 2 === 0 ? "bg-white" : "bg-slate-50")} px-6 py-16`}
-        >
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              badge={group.badge}
-              title={group.title}
-              subtitle={group.subtitle}
-              align="left"
-            />
-
-            <div className="mt-8">
-              <MathsRouteCardGrid
-                cards={group.cards}
-                className={group.className ?? "grid gap-4 md:grid-cols-2 xl:grid-cols-3"}
-                activeTo={group.activeTo}
-                variant={group.variant ?? "default"}
-              />
-            </div>
-          </div>
-        </section>
+        <RouteGroupSection key={group.id ?? group.title ?? index} group={group} index={index} />
       ))}
     </>
   );

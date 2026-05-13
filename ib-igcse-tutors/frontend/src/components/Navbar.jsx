@@ -155,46 +155,48 @@ function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-3 px-5 py-4 sm:px-6">
-        <Link to="/" className="flex min-w-0 flex-1 items-center xl:flex-none">
-          <BrandLogo className="h-11 max-w-[180px] sm:h-12 sm:max-w-[230px]" />
-          <span className="sr-only">{siteData.brandName}</span>
-        </Link>
+    <>
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
+        <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-3 px-5 py-4 sm:px-6">
+          <Link to="/" className="flex min-w-0 flex-1 items-center xl:flex-none">
+            <BrandLogo className="h-11 max-w-[190px] sm:h-12 sm:max-w-[240px]" />
+            <span className="sr-only">{siteData.brandName}</span>
+          </Link>
 
-        <nav className="hidden items-center gap-2 xl:flex">
+          <nav className="hidden items-center gap-2 xl:flex">
+            {coreNavItems.map((item) => (
+              <Link key={item.to} to={item.to} className={navClassName(item.isActive)}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <div className="hidden items-center gap-2 md:flex">{renderAccountActions()}</div>
+          </div>
+        </div>
+
+        <nav className="mx-auto flex max-w-7xl flex-wrap gap-2 px-5 pb-4 xl:hidden">
           {coreNavItems.map((item) => (
             <Link key={item.to} to={item.to} className={navClassName(item.isActive)}>
               {item.label}
             </Link>
           ))}
+          <span className="hidden h-9 w-px bg-slate-200 sm:block" />
+          <div className="flex flex-wrap gap-2 md:hidden">{renderAccountActions({ mobile: true })}</div>
         </nav>
+      </header>
 
-        <div className="flex shrink-0 items-center gap-2">
-          <div className="hidden items-center gap-2 md:flex">{renderAccountActions()}</div>
-          <a
-            href={callbackUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-xl bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-100 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.02] sm:px-5"
-            aria-label="Request a callback from Maths Bodhi"
-          >
-            <span className="hidden lg:inline">Request a callback from Maths Bodhi</span>
-            <span className="lg:hidden">Callback</span>
-          </a>
-        </div>
-      </div>
-
-      <nav className="mx-auto flex max-w-7xl flex-wrap gap-2 px-5 pb-4 xl:hidden">
-        {coreNavItems.map((item) => (
-          <Link key={item.to} to={item.to} className={navClassName(item.isActive)}>
-            {item.label}
-          </Link>
-        ))}
-        <span className="hidden h-9 w-px bg-slate-200 sm:block" />
-        <div className="flex flex-wrap gap-2 md:hidden">{renderAccountActions({ mobile: true })}</div>
-      </nav>
-    </header>
+      <a
+        href={callbackUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-[320px] rounded-full bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white shadow-xl shadow-blue-200 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:mx-0 sm:max-w-none sm:px-5"
+        aria-label="Request a callback from Maths Bodhi"
+      >
+        Request a callback
+      </a>
+    </>
   );
 }
 

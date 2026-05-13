@@ -125,7 +125,7 @@ function TutorProfile() {
           <div className="mx-auto max-w-4xl rounded-[28px] border border-slate-200 bg-slate-50 p-8 text-center shadow-sm">
             <h1 className="text-3xl font-bold text-slate-950">Loading tutor profile</h1>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Fetching the live tutor record from Maths Bodhi.
+              Preparing the tutor profile details.
             </p>
           </div>
         </div>

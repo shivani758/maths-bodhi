@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
@@ -23,6 +23,8 @@ const GURUGRAM_CITY_ALIASES = ["gurugram", "gurgaon"];
 const FALLBACK_GURUGRAM_SECTORS = stripAllFilterOption(SECTOR_OPTIONS);
 const FALLBACK_GURUGRAM_BOARDS = ["CBSE", "ICSE", "ISC", "IB", "IGCSE", "Cambridge", "JEE"];
 const CITY_TUTOR_LIMIT = 6;
+const INITIAL_VISIBLE_SECTORS = 6;
+const SECTOR_LOAD_STEP = 6;
 
 const BOARD_ROUTE_LINKS = [
   {
@@ -253,6 +255,7 @@ function CityPage() {
   const [selectedClass, setSelectedClass] = useState("All Classes");
   const [selectedBoard, setSelectedBoard] = useState("All Boards");
   const [selectedSector, setSelectedSector] = useState("All Sectors");
+  const [visibleSectorCount, setVisibleSectorCount] = useState(INITIAL_VISIBLE_SECTORS);
   const isGurugramPage = page
     ? [page.slug, page.label, ...getList(page.aliases)]
         .map(normalizeSlug)
@@ -316,6 +319,15 @@ function CityPage() {
     () => filteredTutors.slice(0, CITY_TUTOR_LIMIT).map(toCityTutorCard),
     [filteredTutors],
   );
+  const visibleSectors = useMemo(
+    () => (page?.topSectors ?? []).slice(0, visibleSectorCount),
+    [page?.topSectors, visibleSectorCount],
+  );
+  const hasMoreSectors = Boolean(page && visibleSectorCount < page.topSectors.length);
+
+  useEffect(() => {
+    setVisibleSectorCount(INITIAL_VISIBLE_SECTORS);
+  }, [page?.slug]);
 
   const cityWhatsAppUrl = useMemo(
     () =>
@@ -449,9 +461,9 @@ function CityPage() {
               </div>
 
               <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                <h3 className="text-2xl font-bold text-neutral-950">
+                <h2 className="text-2xl font-bold text-neutral-950">
                   Find a tutor in {page.label}
-                </h3>
+                </h2>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                   Use the same class, board, and sector options as the homepage. Results only show
                   matching published tutor profiles.
@@ -616,25 +628,25 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Sectors"
-              title="Popular Gurugram sectors"
-              subtitle="Open locality pages where they are available, or choose a sector to focus the tutor shortlist on this page."
+              title="Find maths home tutors by Gurugram sector or society"
+              subtitle="Choose your area to explore relevant home tuition support nearby."
               align="left"
             />
 
             <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {page.topSectors.map((sector) => {
+              {visibleSectors.map((sector) => {
                 const sectorPath = getSupportedSectorPath(siteData, page, sector);
                 const cardClass =
                   "group rounded-[24px] border border-slate-200 bg-white p-6 text-left shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md";
                 const content = (
                   <>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
-                      {sectorPath ? "Locality page" : "Tutor filter"}
+                      {sectorPath ? "Locality page" : "Area filter"}
                     </p>
                     <h3 className="mt-3 text-xl font-bold text-slate-950">{sector.label}</h3>
                     <p className="mt-3 text-sm leading-6 text-slate-600">{sector.summary}</p>
                     <p className="mt-5 text-sm font-semibold text-blue-700">
-                      {sectorPath ? "Open sector page" : "Use in tutor filter"}
+                      {sectorPath ? "Open locality page" : "Use this area"}
                     </p>
                   </>
                 );
@@ -659,6 +671,28 @@ function CityPage() {
                 );
               })}
             </div>
+
+            {page.topSectors.length > INITIAL_VISIBLE_SECTORS ? (
+              <div className="mt-8 flex flex-col items-center gap-3 text-center">
+                <p className="text-sm text-slate-600">
+                  Showing {Math.min(visibleSectorCount, page.topSectors.length)} of{" "}
+                  {page.topSectors.length} Gurugram sector options.
+                </p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    hasMoreSectors
+                      ? setVisibleSectorCount((current) =>
+                          Math.min(current + SECTOR_LOAD_STEP, page.topSectors.length),
+                        )
+                      : setVisibleSectorCount(INITIAL_VISIBLE_SECTORS)
+                  }
+                  className="rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
+                >
+                  {hasMoreSectors ? "Load more localities" : "Show fewer localities"}
+                </button>
+              </div>
+            ) : null}
           </div>
         </section>
 

@@ -12,7 +12,7 @@ import {
 } from "./seoRecoveryCluster";
 
 const DEMO_PATH = "/book-free-demo-class";
-const WHATSAPP_NUMBER = "919896825986";
+const WHATSAPP_NUMBER = "918796499818";
 
 function row({
   id,

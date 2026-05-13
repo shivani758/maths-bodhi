@@ -116,7 +116,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "The Shri Ram School Aravali",
     support:
       "Families searching around this corridor often ask for steady worksheet follow-through, clearer written method, and a weekly maths rhythm that fits school routines.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["School corridor", "Board fit", "Weekly practice"],
   },
   {
@@ -125,7 +124,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "Heritage Xperiential",
     support:
       "Useful context when parents want maths support that respects project work, school pace, and regular doubt clearing without making unsupported school claims.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["Extension Road", "Concept clarity", "Doubt clearing"],
   },
   {
@@ -134,7 +132,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "Shiv Nadar School",
     support:
       "Parents commonly compare locality convenience, school timing, and whether the tutor can help with deeper problem-solving and consistent revision.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["School timing", "Revision", "Problem solving"],
   },
   {
@@ -143,7 +140,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "DPS Sector 45",
     support:
       "A practical reference for families asking about school-paced maths, homework correction, test preparation, and board-year routines.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["Sector 45", "Homework", "Tests"],
   },
   {
@@ -152,7 +148,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "Scottish High",
     support:
       "Helpful context for families comparing international-school pace, written method, class level, and home-tuition convenience.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["Sushant Lok", "Method clarity", "Home tuition"],
   },
   {
@@ -161,7 +156,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "Lotus Valley",
     support:
       "Parents around this corridor often want a tutor who can keep classwork, worksheets, and exam practice moving together.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["Sector 50", "Worksheets", "Exam practice"],
   },
   {
@@ -170,7 +164,6 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     school: "GD Goenka",
     support:
       "Useful for families balancing school schedule, travel convenience, and the student's current maths confidence.",
-    note: "School name used for local planning context only; no official affiliation is claimed.",
     chips: ["Sohna Road", "Schedule", "Confidence"],
   },
 ];
@@ -463,7 +456,7 @@ function buildLocalContextCards(premiumSchools, sectorPages, tutors) {
         eyebrow: item.locality,
         title: `Commonly requested maths support near ${item.school}`,
         description: item.support,
-        note: `Popular for ${item.board} families in this area. No official school affiliation is claimed.`,
+        note: `Popular for ${item.board} families in this area.`,
         chips: [item.board, item.locality],
       }))
     : SCHOOL_CONTEXT_EXAMPLES.map((item) => ({
@@ -471,7 +464,6 @@ function buildLocalContextCards(premiumSchools, sectorPages, tutors) {
         eyebrow: item.locality,
         title: `Commonly requested maths support near ${item.school}`,
         description: item.support,
-        note: item.note,
         chips: item.chips,
       }));
 
@@ -1355,50 +1347,53 @@ function Home() {
             <SectionTitle
               badge="School and Local Context"
               title="Commonly requested maths support across Gurugram school corridors and local clusters"
-              subtitle="These cards stay practical: they highlight areas and school clusters families often ask about, without making claims beyond the current content."
+              subtitle="These cards stay practical: they highlight areas and school clusters families often ask about when planning maths support."
             />
+            <p className="mx-auto mt-4 max-w-3xl text-center text-xs leading-6 text-slate-500">
+              School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.
+            </p>
 
-            <div className="mt-10 -mx-6 overflow-x-auto px-6 pb-2">
-              <div className="flex min-w-full gap-5">
-                {localContextCards.length ? (
-                  localContextCards.map((item) => (
-                    <article
-                      key={item.key}
-                      className="min-w-[280px] max-w-[320px] flex-1 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:rounded-[28px] sm:p-6"
-                    >
-                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                        {item.eyebrow}
-                      </p>
-                      <h3 className="mt-4 text-xl font-bold leading-tight text-slate-950 sm:text-2xl">
-                        {item.title}
-                      </h3>
-                      <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
-                      <div className="mt-5 rounded-2xl bg-slate-50 p-4">
-                        <p className="text-sm font-semibold text-slate-900">{item.note}</p>
-                      </div>
-                      {item.chips?.length ? (
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {item.chips.map((chip) => (
-                            <span
-                              key={`${item.key}-${chip}`}
-                              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
-                            >
-                              {chip}
-                            </span>
-                          ))}
-                        </div>
-                      ) : null}
-                    </article>
-                  ))
-                ) : (
-                  <article className="min-w-[280px] max-w-[420px] rounded-[24px] border border-dashed border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 className="text-xl font-bold text-slate-950">Useful Gurugram school and locality context</h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-600">
-                      Families can discuss the student's school area, nearby sector, board, weak chapters, and preferred schedule before choosing a tutor route. School names are used only as local planning context.
+            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {localContextCards.length ? (
+                localContextCards.map((item) => (
+                  <article
+                    key={item.key}
+                    className="flex h-full flex-col rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-200 hover:shadow-md sm:p-6"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
+                      {item.eyebrow}
                     </p>
+                    <h3 className="mt-4 text-lg font-bold leading-snug text-slate-950 sm:text-xl">
+                      {item.title}
+                    </h3>
+                    <p className="mt-4 text-sm leading-7 text-slate-600">{item.description}</p>
+                    {item.note ? (
+                      <div className="mt-5 rounded-2xl bg-slate-50 p-4">
+                        <p className="text-sm font-semibold leading-6 text-slate-900">{item.note}</p>
+                      </div>
+                    ) : null}
+                    {item.chips?.length ? (
+                      <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                        {item.chips.map((chip) => (
+                          <span
+                            key={`${item.key}-${chip}`}
+                            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                   </article>
-                )}
-              </div>
+                ))
+              ) : (
+                <article className="rounded-[24px] border border-dashed border-slate-200 bg-white p-6 shadow-sm md:col-span-2 xl:col-span-3">
+                  <h3 className="text-xl font-bold text-slate-950">Useful Gurugram school and locality context</h3>
+                  <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+                    Families can discuss the student's school area, nearby sector, board, weak chapters, and preferred schedule before choosing a tutor route. School names are used only as local planning context.
+                  </p>
+                </article>
+              )}
             </div>
           </div>
         </section>

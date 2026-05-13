@@ -15,7 +15,7 @@ function RouteCard({ card, isActive = false, variant = "default" }) {
       ) : null}
 
       <h3
-        className={`font-bold tracking-tight text-slate-950 ${
+        className={`break-words font-bold tracking-tight text-slate-950 ${
           isBoardVariant
             ? "mt-2.5 line-clamp-2 text-lg leading-6"
             : "mt-3 text-lg"
@@ -25,7 +25,7 @@ function RouteCard({ card, isActive = false, variant = "default" }) {
       </h3>
 
       <p
-        className={`line-clamp-3 text-slate-600 ${
+        className={`line-clamp-3 break-words text-slate-600 ${
           isBoardVariant ? "mt-2 text-[13px] leading-5" : "mt-2 text-sm leading-6"
         }`}
       >
@@ -65,7 +65,7 @@ function RouteCard({ card, isActive = false, variant = "default" }) {
     isActive
       ? "border-blue-200 bg-blue-50/60 shadow-sky-100"
       : "border-slate-200 bg-white hover:border-blue-200"
-  } ${isBoardVariant ? "p-4 sm:p-5" : "h-full p-5"}`;
+  } min-w-0 ${isBoardVariant ? "p-4 sm:p-5" : "h-full p-5"}`;
 
   if (card.to) {
     return (

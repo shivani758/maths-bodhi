@@ -23,8 +23,8 @@ const gurugramSchoolContextCards = [
     eyebrow: "School context",
     title: "The Shri Ram School Aravali",
     description:
-      "Families around the Aravali and Golf Course Road corridor often ask how to align maths practice with school pace, worksheets, and weekly revision. Maths Bodhi does not claim official affiliation.",
-    tags: ["Aravali corridor", "School pace", "No affiliation claim"],
+      "Families around the Aravali and Golf Course Road corridor often ask how to align maths practice with school pace, worksheets, and weekly revision.",
+    tags: ["Aravali corridor", "School pace", "Revision"],
   }),
   routeCard({
     eyebrow: "School context",
@@ -51,8 +51,8 @@ const gurugramSchoolContextCards = [
     eyebrow: "School context",
     title: "Scottish High",
     description:
-      "Useful when parents want maths tutoring that respects school rhythm, locality convenience, written method, and international-school expectations without implying partnership.",
-    tags: ["Sushant Lok", "Method clarity", "No affiliation claim"],
+      "Useful when parents want maths tutoring that respects school rhythm, locality convenience, written method, and international-school expectations.",
+    tags: ["Sushant Lok", "Method clarity", "School rhythm"],
   }),
   routeCard({
     eyebrow: "School context",
@@ -70,11 +70,8 @@ const gurugramSchoolContextCards = [
   }),
 ];
 
-function createSchoolContextCards(areaLabel = "Gurugram") {
-  return gurugramSchoolContextCards.map((card) => ({
-    ...card,
-    description: `${card.description} Use this as local planning context for ${areaLabel}, not as an official school listing.`,
-  }));
+function createSchoolContextCards() {
+  return gurugramSchoolContextCards.map((card) => ({ ...card }));
 }
 
 const gurugramHubBoardCards = [
@@ -219,8 +216,8 @@ const gurugramHubSectorSocietyCards = batchERootSeoPages.map((page) =>
     eyebrow: page.group === "batch-e-society" ? "Society route" : "Sector route",
     title: page.societyLabel ? `Near ${page.societyLabel}` : page.localityLabel,
     description: page.societyLabel
-      ? `Open the working ${page.societyLabel} route when society access, nearby sector fit, and board needs matter. No official society affiliation is claimed.`
-      : `Open the working ${page.localityLabel} sector route when travel convenience, school timing, and tutor fit need to be compared together.`,
+      ? `Use this route when society access, nearby sector fit, and board needs matter for regular maths support.`
+      : `Use this sector route when travel convenience, school timing, and tutor fit need to be compared together.`,
     tags: [page.localityLabel, page.societyLabel ?? "Sector", "Gurugram"].filter(Boolean),
     to: page.path,
   }),
@@ -1003,8 +1000,11 @@ export const gurugramHubPageConfig = {
         badge: "School Context",
         title: "School and locality context families often mention in Gurugram maths enquiries",
         subtitle:
-          "School names are used only as parent search and local planning context. Maths Bodhi does not claim official school affiliation.",
+          "Use these school-area cues to explain the student's schedule, worksheet rhythm, and nearby travel context more clearly.",
+        note:
+          "School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.",
         cards: createSchoolContextCards("Gurugram"),
+        className: "grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3",
       },
       {
         id: "gurugram-board-links",
@@ -1017,33 +1017,47 @@ export const gurugramHubPageConfig = {
       {
         id: "gurugram-locality-links",
         badge: "By Locality",
-        title: "Open the first Gurugram locality page that best matches school corridor and travel fit",
+        title: "Find maths home tutors by Gurugram locality",
         subtitle:
-          "These locality routes focus on the premium and high-intent pockets where maths home tuition discovery is most useful first.",
+          "Choose the area that best matches the student's school corridor, travel routine, and home tuition preference.",
         cards: gurugramHubSectorCards,
         searchable: true,
-        searchPlaceholder: "Search Sector 54, Sector 56, Golf Course Road, DLF, or school corridor",
+        searchLabel: "Search Gurugram locality",
+        searchPlaceholder: "Try Sector 54, Sector 56, Golf Course Road, or DLF",
+        initialVisibleCount: 6,
+        loadStep: 6,
+        itemLabel: "localities",
         backgroundClassName: "bg-slate-50",
       },
       {
         id: "gurugram-more-locality-links",
         badge: "More Localities",
-        title: "Open the next Gurugram pocket when the locality is already clear",
+        title: "Choose another Gurugram sector or neighbourhood",
         subtitle:
-          "These pages help families move from a broad city search into the corridor, neighbourhood, or sector that feels most practical for regular maths support.",
+          "Choose your area to explore relevant home tuition support nearby.",
         cards: gurugramHubMoreLocalityCards,
         searchable: true,
-        searchPlaceholder: "Search Sector 57, Sector 62, Sohna Road, DLF Phase, South City, or Sushant Lok",
+        searchLabel: "Search sector or neighbourhood",
+        searchPlaceholder: "Try Sector 57, Sector 62, Sohna Road, South City, or Sushant Lok",
+        initialVisibleCount: 6,
+        loadStep: 6,
+        itemLabel: "localities",
       },
       {
         id: "gurugram-sector-society-links",
         badge: "Sectors And Societies",
-        title: "Search more Gurugram sector and society routes",
+        title: "Find maths home tutors by Gurugram sector or society",
         subtitle:
-          "These are existing working pages for families who already know the sector, society, or nearby locality they want to compare.",
+          "Choose your area to explore relevant home tuition support nearby.",
         cards: gurugramHubSectorSocietyCards,
         searchable: true,
-        searchPlaceholder: "Search Sector 46, DLF Crest, Park Place, society, or locality",
+        searchLabel: "Search sector, society, or nearby area",
+        searchPlaceholder: "Try Sector 46, DLF Crest, Park Place, or a nearby area",
+        initialVisibleCount: 6,
+        loadStep: 6,
+        itemLabel: "sectors and societies",
+        loadMoreLabel: "Load more sectors",
+        showLessLabel: "Show fewer sectors",
         backgroundClassName: "bg-slate-50",
       },
       {
@@ -2133,7 +2147,7 @@ export const batchOneGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages Sector 55 families often open next",
           subtitle:
-            "These pages help families move from locality convenience into the right board route without losing the practical Gurugram context.",
+            "Choose a nearby board route while keeping the student's locality and schedule in view.",
           cards: sector55BoardCards,
         },
       ],
@@ -2533,7 +2547,7 @@ function createPublishedGurugramEntryConfig(config) {
   };
 }
 
-const WHATSAPP_NUMBER = "919896825986";
+const WHATSAPP_NUMBER = "918796499818";
 
 function createLocalityWhatsAppHref(label) {
   const message = `Hello Maths Bodhi, I want to check maths home tuition options in ${label}, Gurugram. Please guide me on tutor fit and a demo class.`;
@@ -2681,7 +2695,9 @@ function createCityGurugramLocalityFallbackConfig({
           badge: "School Context",
           title: `School and locality context families may mention near ${label}`,
           subtitle:
-            "These school names are practical local reference points only. Maths Bodhi does not claim official affiliation.",
+            "Use these school-area cues to discuss timing, worksheets, and nearby travel context more clearly.",
+          note:
+            "School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.",
           cards: createSchoolContextCards(label),
           backgroundClassName: "bg-slate-50",
         },
@@ -3264,7 +3280,9 @@ function createBatchALocalityConfig(page) {
           badge: "School Context",
           title: `School and locality context families may mention near ${page.localityLabel}`,
           subtitle:
-            "These school names are practical local reference points only. Maths Bodhi does not claim official affiliation.",
+            "Use these school-area cues to discuss timing, worksheets, and nearby travel context more clearly.",
+          note:
+            "School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.",
           cards: createSchoolContextCards(page.localityLabel),
           backgroundClassName: "bg-slate-50",
         },
@@ -3657,7 +3675,9 @@ function createBatchEConfig(page) {
           badge: "School Context",
           title: `School and locality context families may mention near ${areaLabel}`,
           subtitle:
-            "These school names are practical local reference points only. Maths Bodhi does not claim official affiliation.",
+            "Use these school-area cues to discuss timing, worksheets, and nearby travel context more clearly.",
+          note:
+            "School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.",
           cards: createSchoolContextCards(areaLabel),
           backgroundClassName: "bg-slate-50",
         },
@@ -3815,7 +3835,7 @@ export const batchTwoGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages Sector 57 families often open next",
           subtitle:
-            "These pages help families move from locality convenience into the exact board or class route that matches the student's maths need more closely.",
+            "Choose a nearby board or class route that matches the student's maths need more closely.",
           cards: sector57BoardCards,
         },
       ],
@@ -4086,7 +4106,7 @@ export const batchTwoGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages Sohna Road families often open next",
           subtitle:
-            "These pages help families move from the corridor view into the board or class route that best matches the student's current maths pressure.",
+            "Choose the board or class route that best matches the student's current maths pressure.",
           cards: sohnaRoadBoardCards,
         },
       ],
@@ -4356,7 +4376,7 @@ export const batchTwoGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages DLF Phase 4 families often open next",
           subtitle:
-            "These pages help families move from premium-neighbourhood thinking into the board route that best matches the student's maths need.",
+            "Choose the board route that best matches the student's maths need in this neighbourhood.",
           cards: dlfPhase4BoardCards,
         },
       ],
@@ -4622,7 +4642,7 @@ export const batchTwoGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages Sushant Lok 1 families often open next",
           subtitle:
-            "These pages help families move from a central Gurugram neighbourhood search into the class, board, or format route that matches the student's maths need most closely.",
+            "Choose the class, board, or format route that matches the student's maths need most closely.",
           cards: sushantLok1BoardCards,
         },
       ],
@@ -4890,7 +4910,7 @@ export const batchTwoGurugramEntryConfigs = [
           badge: "Useful Next Pages",
           title: "Pages Class 12 families often open next",
           subtitle:
-            "These pages help families move from the class-specific need into the exact board or exam route that best matches the student's maths pressure.",
+            "Choose the board or exam route that best matches the student's maths pressure.",
           cards: class12BoardCards,
         },
       ],

@@ -1,9 +1,25 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Seo from "../components/Seo";
+import { GURUGRAM_LOCALITY_OPTIONS } from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
 import { buildDemoMessage, buildWhatsAppUrl } from "../utils/whatsapp";
+
+function getUniqueOptions(options) {
+  const seen = new Set();
+
+  return options.filter((option) => {
+    const key = String(option ?? "").trim().toLowerCase();
+
+    if (!key || seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
 
 function BookDemo() {
   const { siteData } = useSiteData();
@@ -18,6 +34,14 @@ function BookDemo() {
     preferredTutor: "No preference",
     mode: "Home Tuition",
   });
+  const sectorOptions = useMemo(
+    () =>
+      getUniqueOptions([
+        ...GURUGRAM_LOCALITY_OPTIONS,
+        ...siteData.sectorPages.map((sector) => sector.sectorLabel),
+      ]),
+    [siteData.sectorPages],
+  );
 
   const whatsappUrl = useMemo(
     () =>
@@ -48,7 +72,7 @@ function BookDemo() {
             <div className="mt-8 space-y-3 text-sm text-blue-50">
               <p>Board-aware matching for CBSE, ICSE, IGCSE, IB, and JEE maths.</p>
               <p>Premium school-specific tutoring routes for Gurugram families.</p>
-              <p>Simple, operationally efficient WhatsApp-led demo booking.</p>
+              <p>Quick WhatsApp-led booking with class, board, sector, and topic details.</p>
             </div>
           </div>
 
@@ -117,9 +141,9 @@ function BookDemo() {
                   }
                   className="w-full rounded-2xl border border-slate-200 px-4 py-3.5 outline-none"
                 >
-                  {siteData.sectorPages.map((sector) => (
-                    <option key={sector.slug} value={sector.sectorLabel}>
-                      {sector.sectorLabel}
+                  {sectorOptions.map((sectorLabel) => (
+                    <option key={sectorLabel} value={sectorLabel}>
+                      {sectorLabel}
                     </option>
                   ))}
                 </select>
