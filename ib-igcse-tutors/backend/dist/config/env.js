@@ -1,20 +1,46 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 dotenv.config();
+const optionalTrimmedString = z.preprocess((value) => (typeof value === "string" && value.trim() === "" ? undefined : value), z.string().trim().optional());
 const rawEnvSchema = z.object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     HOST: z.string().min(1).default(process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"),
     PORT: z.coerce.number().default(4000),
-    MONGO_URI: z.string().min(1, "MONGO_URI is required."),
+    DB_PROVIDER: z.enum(["postgres"]).default("postgres"),
+    DATABASE_URL: optionalTrimmedString,
+    DB_HOST: optionalTrimmedString.default("localhost"),
+    DB_PORT: z.coerce.number().int().positive().default(5432),
+    DB_NAME: optionalTrimmedString,
+    DB_USER: optionalTrimmedString,
+    DB_PASSWORD: z.preprocess((value) => (typeof value === "string" && value.length === 0 ? undefined : value), z.string().optional()),
+    MONGO_URI: optionalTrimmedString,
     SESSION_SECRET: z.string().min(16, "SESSION_SECRET must be at least 16 characters."),
     SESSION_COOKIE_NAME: z.string().min(1).default("maths_bodhi_admin_sid"),
     SESSION_COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).optional(),
     SESSION_COOKIE_SECURE: z.coerce.boolean().optional(),
     SESSION_COOKIE_DOMAIN: z.string().trim().optional(),
+    JWT_SECRET: optionalTrimmedString,
     FRONTEND_ORIGIN: z.string().min(1).default("http://localhost:5173"),
     ADMIN_SEED_NAME: z.string().min(1).default("Maths Bodhi Super Admin"),
     ADMIN_SEED_EMAIL: z.string().email(),
     ADMIN_SEED_PASSWORD: z.string().min(8, "ADMIN_SEED_PASSWORD must be at least 8 characters."),
+}).superRefine((value, context) => {
+    if (value.DATABASE_URL) {
+        return;
+    }
+    const requiredDatabaseFields = [
+        ["DB_NAME", value.DB_NAME],
+        ["DB_USER", value.DB_USER],
+        ["DB_PASSWORD", value.DB_PASSWORD],
+    ];
+    const missingFields = requiredDatabaseFields.filter(([, fieldValue]) => !fieldValue);
+    for (const [fieldName] of missingFields) {
+        context.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [fieldName],
+            message: `${fieldName} is required when DATABASE_URL is not set.`,
+        });
+    }
 });
 const rawEnv = rawEnvSchema.parse(process.env);
 function parseFrontendOrigins(value) {

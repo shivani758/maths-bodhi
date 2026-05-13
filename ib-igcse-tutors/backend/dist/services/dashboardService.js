@@ -1,17 +1,18 @@
-import { BlogPostModel } from "../models/BlogPost.js";
-import { ReviewModel } from "../models/Review.js";
-import { StudentResultModel } from "../models/StudentResult.js";
-import { TutorModel } from "../models/Tutor.js";
+import { query } from "../db/postgres.js";
+async function count(sql) {
+    const result = await query(sql);
+    return Number(result.rows[0]?.count ?? 0);
+}
 export async function getDashboardSnapshot() {
     const [totalTutors, featuredTutors, pendingReviews, publishedBlogs, draftBlogs, totalResults, recentTutors, recentBlogs,] = await Promise.all([
-        TutorModel.countDocuments(),
-        TutorModel.countDocuments({ featured: true }),
-        ReviewModel.countDocuments({ moderationStatus: "pending" }),
-        BlogPostModel.countDocuments({ status: "published" }),
-        BlogPostModel.countDocuments({ status: "draft" }),
-        StudentResultModel.countDocuments(),
-        TutorModel.find().sort({ updatedAt: -1 }).limit(4).select("name updatedAt"),
-        BlogPostModel.find().sort({ updatedAt: -1 }).limit(4).select("title updatedAt"),
+        count("SELECT COUNT(*) FROM tutors"),
+        count("SELECT COUNT(*) FROM tutors WHERE featured = TRUE"),
+        count("SELECT COUNT(*) FROM reviews WHERE moderation_status = 'pending'"),
+        count("SELECT COUNT(*) FROM blog_posts WHERE status = 'published'"),
+        count("SELECT COUNT(*) FROM blog_posts WHERE status = 'draft'"),
+        count("SELECT COUNT(*) FROM student_results"),
+        query("SELECT id, name, updated_at FROM tutors ORDER BY updated_at DESC LIMIT 4"),
+        query("SELECT id, title, updated_at FROM blog_posts ORDER BY updated_at DESC LIMIT 4"),
     ]);
     return {
         summaryCards: [
@@ -29,21 +30,21 @@ export async function getDashboardSnapshot() {
             { label: "Add Result", to: "/admin/results" },
         ],
         recentActivity: [
-            ...recentTutors.map((item) => ({
-                id: `tutor-${item._id.toString()}`,
+            ...recentTutors.rows.map((item) => ({
+                id: `tutor-${item.id}`,
                 module: "Tutors",
                 action: "Updated tutor",
                 entityLabel: item.name,
                 actorName: "Maths Bodhi Admin",
-                createdAt: item.updatedAt,
+                createdAt: item.updated_at,
             })),
-            ...recentBlogs.map((item) => ({
-                id: `blog-${item._id.toString()}`,
+            ...recentBlogs.rows.map((item) => ({
+                id: `blog-${item.id}`,
                 module: "Blogs",
                 action: "Updated blog",
                 entityLabel: item.title,
                 actorName: "Maths Bodhi Admin",
-                createdAt: item.updatedAt,
+                createdAt: item.updated_at,
             })),
         ]
             .sort((first, second) => String(second.createdAt).localeCompare(String(first.createdAt)))

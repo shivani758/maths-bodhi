@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
-import { UserModel } from "../models/User.js";
+import { createUser, findPortalUserByVerificationToken, findUserByEmail, findUserByEmailAndRole, findUserById, updateUser, } from "../repositories/postgres/userRepository.js";
+import { isProduction } from "../config/env.js";
 import { ApiError } from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { createFieldErrorDetails } from "../utils/validationDetails.js";
@@ -132,7 +133,7 @@ function toPortalSessionUser(user) {
 }
 function serializePortalUser(user) {
     return {
-        id: user._id.toString(),
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -153,13 +154,19 @@ function createVerificationToken() {
     };
 }
 function buildVerificationPreviewUrl(token) {
+    if (isProduction) {
+        return null;
+    }
     return `http://localhost:5173/verify-email?token=${token}`;
 }
 function logVerificationPreview(email, previewUrl) {
+    if (!previewUrl) {
+        return;
+    }
     console.log(`[Maths Bodhi] Email verification for ${email}: ${previewUrl}`);
 }
 async function findPortalUserById(userId) {
-    const user = await UserModel.findById(userId).exec();
+    const user = await findUserById(userId);
     if (!user || !isPortalRole(user.role)) {
         return null;
     }
@@ -167,7 +174,7 @@ async function findPortalUserById(userId) {
 }
 export async function registerPortalAccount(payload) {
     const normalizedEmail = normalizeEmail(payload.email);
-    const existingUser = await UserModel.findOne({ email: normalizedEmail }).exec();
+    const existingUser = await findUserByEmail(normalizedEmail);
     if (existingUser) {
         throw new ApiError(409, "An account with this email already exists.", {
             code: "EMAIL_ALREADY_IN_USE",
@@ -179,7 +186,7 @@ export async function registerPortalAccount(payload) {
     const portalProfile = payload.role === "student"
         ? buildStudentProfile(payload.profile)
         : buildTutorProfile(payload.profile);
-    const user = (await UserModel.create({
+    const user = (await createUser({
         name: payload.name.trim(),
         email: normalizedEmail,
         passwordHash,
@@ -201,10 +208,7 @@ export async function registerPortalAccount(payload) {
 }
 export async function authenticatePortalUser(payload) {
     const normalizedEmail = normalizeEmail(payload.email);
-    const user = (await UserModel.findOne({
-        email: normalizedEmail,
-        role: payload.role,
-    }).exec());
+    const user = (await findUserByEmailAndRole(normalizedEmail, payload.role));
     if (!user || !user.active) {
         throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
     }
@@ -212,8 +216,7 @@ export async function authenticatePortalUser(payload) {
     if (!isValidPassword) {
         throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
     }
-    user.lastLoginAt = new Date();
-    await user.save();
+    await updateUser(user.id, { lastLoginAt: new Date() });
     const serializedUser = serializePortalUser(user);
     return {
         user: serializedUser,
@@ -235,12 +238,14 @@ export async function updatePortalProfile(userId, role, payload) {
     if (payload.name !== undefined) {
         user.name = payload.name.trim();
     }
-    user.portalProfile =
-        role === "student"
-            ? buildStudentProfile(payload.profile, user.portalProfile)
-            : buildTutorProfile(payload.profile, user.portalProfile);
-    await user.save();
-    return serializePortalUser(user);
+    const portalProfile = role === "student"
+        ? buildStudentProfile(payload.profile, user.portalProfile)
+        : buildTutorProfile(payload.profile, user.portalProfile);
+    const updatedUser = await updateUser(user.id, {
+        name: user.name,
+        portalProfile,
+    });
+    return serializePortalUser(updatedUser);
 }
 export async function resendPortalVerification(userId) {
     const user = await findPortalUserById(userId);
@@ -254,34 +259,32 @@ export async function resendPortalVerification(userId) {
         };
     }
     const verification = createVerificationToken();
-    user.emailVerificationTokenHash = verification.tokenHash;
-    user.emailVerificationExpiresAt = verification.expiresAt;
-    user.emailVerificationSentAt = new Date();
-    await user.save();
+    const updatedUser = await updateUser(user.id, {
+        emailVerificationTokenHash: verification.tokenHash,
+        emailVerificationExpiresAt: verification.expiresAt,
+        emailVerificationSentAt: new Date(),
+    });
     const previewUrl = buildVerificationPreviewUrl(verification.token);
-    logVerificationPreview(user.email, previewUrl);
+    logVerificationPreview(updatedUser?.email ?? user.email, previewUrl);
     return {
-        user: serializePortalUser(user),
+        user: serializePortalUser((updatedUser ?? user)),
         verificationPreviewUrl: previewUrl,
     };
 }
 export async function verifyPortalEmail(token) {
     const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-    const user = (await UserModel.findOne({
-        emailVerificationTokenHash: tokenHash,
-        emailVerificationExpiresAt: { $gt: new Date() },
-        role: { $in: ["student", "tutor"] },
-    }).exec());
+    const user = (await findPortalUserByVerificationToken(tokenHash));
     if (!user || !isPortalRole(user.role) || !user.active) {
         throw new ApiError(400, "This verification link is invalid or has expired.", {
             code: "INVALID_VERIFICATION_TOKEN",
             details: createFieldErrorDetails("token", "This verification link is invalid or has expired."),
         });
     }
-    user.emailVerifiedAt = new Date();
-    user.emailVerificationTokenHash = "";
-    user.emailVerificationExpiresAt = null;
-    await user.save();
-    return serializePortalUser(user);
+    const updatedUser = await updateUser(user.id, {
+        emailVerifiedAt: new Date(),
+        emailVerificationTokenHash: "",
+        emailVerificationExpiresAt: null,
+    });
+    return serializePortalUser(updatedUser);
 }
 //# sourceMappingURL=portalAuthService.js.map

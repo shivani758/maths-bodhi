@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { ZodError } from "zod";
 import { ApiError } from "../utils/ApiError.js";
 import { mongooseValidationErrorToDetails, zodErrorToDetails, } from "../utils/validationDetails.js";
+import { isProduction } from "../config/env.js";
 export function errorHandler(error, _req, res, _next) {
     if (error instanceof ApiError) {
         return res.status(error.statusCode).json({
@@ -42,7 +43,7 @@ export function errorHandler(error, _req, res, _next) {
             },
         });
     }
-    const fallbackMessage = error instanceof Error ? error.message : "Unexpected server error.";
+    const fallbackMessage = !isProduction && error instanceof Error ? error.message : "Unexpected server error.";
     return res.status(500).json({
         success: false,
         error: {

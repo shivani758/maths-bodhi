@@ -1,5 +1,13 @@
 import crypto from "node:crypto";
-import { UserModel } from "../models/User.js";
+import {
+  createUser,
+  findPortalUserByVerificationToken,
+  findUserByEmail,
+  findUserByEmailAndRole,
+  findUserById,
+  updateUser,
+  type UserRecord,
+} from "../repositories/postgres/userRepository.js";
 import type {
   PortalLoginPayload,
   PortalSignupPayload,
@@ -7,27 +15,14 @@ import type {
   TutorProfileUpdatePayload,
 } from "../validators/portalAuthValidators.js";
 import type { PortalSessionUser, PortalUserRole } from "../types/auth.js";
+import { isProduction } from "../config/env.js";
 import { ApiError } from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { createFieldErrorDetails } from "../utils/validationDetails.js";
 
 const EMAIL_VERIFICATION_TTL_MS = 1000 * 60 * 60 * 48;
 
-type PortalUserDocument = {
-  _id: { toString(): string };
-  name: string;
-  email: string;
-  role: PortalUserRole;
-  active: boolean;
-  passwordHash: string;
-  emailVerifiedAt: Date | null;
-  emailVerificationTokenHash?: string;
-  emailVerificationExpiresAt?: Date | null;
-  emailVerificationSentAt?: Date | null;
-  lastLoginAt?: Date | null;
-  portalProfile?: Record<string, unknown>;
-  save(): Promise<unknown>;
-};
+type PortalUserDocument = UserRecord & { role: PortalUserRole };
 
 type PortalProfilePatch = StudentProfileUpdatePayload | TutorProfileUpdatePayload;
 
@@ -187,7 +182,7 @@ function toPortalSessionUser(user: SerializedPortalUser): PortalSessionUser {
 
 function serializePortalUser(user: PortalUserDocument): SerializedPortalUser {
   return {
-    id: user._id.toString(),
+    id: user.id,
     name: user.name,
     email: user.email,
     role: user.role,
@@ -210,26 +205,34 @@ function createVerificationToken() {
 }
 
 function buildVerificationPreviewUrl(token: string) {
+  if (isProduction) {
+    return null;
+  }
+
   return `http://localhost:5173/verify-email?token=${token}`;
 }
 
-function logVerificationPreview(email: string, previewUrl: string) {
+function logVerificationPreview(email: string, previewUrl: string | null) {
+  if (!previewUrl) {
+    return;
+  }
+
   console.log(`[Maths Bodhi] Email verification for ${email}: ${previewUrl}`);
 }
 
 async function findPortalUserById(userId: string) {
-  const user = await UserModel.findById(userId).exec();
+  const user = await findUserById(userId);
 
   if (!user || !isPortalRole(user.role)) {
     return null;
   }
 
-  return user as unknown as PortalUserDocument;
+  return user as PortalUserDocument;
 }
 
 export async function registerPortalAccount(payload: PortalSignupPayload) {
   const normalizedEmail = normalizeEmail(payload.email);
-  const existingUser = await UserModel.findOne({ email: normalizedEmail }).exec();
+  const existingUser = await findUserByEmail(normalizedEmail);
 
   if (existingUser) {
     throw new ApiError(409, "An account with this email already exists.", {
@@ -245,7 +248,7 @@ export async function registerPortalAccount(payload: PortalSignupPayload) {
       ? buildStudentProfile(payload.profile)
       : buildTutorProfile(payload.profile);
 
-  const user = (await UserModel.create({
+  const user = (await createUser({
     name: payload.name.trim(),
     email: normalizedEmail,
     passwordHash,
@@ -256,7 +259,7 @@ export async function registerPortalAccount(payload: PortalSignupPayload) {
     emailVerificationExpiresAt: verification.expiresAt,
     emailVerificationSentAt: new Date(),
     portalProfile,
-  })) as unknown as PortalUserDocument;
+  })) as PortalUserDocument;
 
   const previewUrl = buildVerificationPreviewUrl(verification.token);
   logVerificationPreview(normalizedEmail, previewUrl);
@@ -270,10 +273,7 @@ export async function registerPortalAccount(payload: PortalSignupPayload) {
 
 export async function authenticatePortalUser(payload: PortalLoginPayload) {
   const normalizedEmail = normalizeEmail(payload.email);
-  const user = (await UserModel.findOne({
-    email: normalizedEmail,
-    role: payload.role,
-  }).exec()) as PortalUserDocument | null;
+  const user = (await findUserByEmailAndRole(normalizedEmail, payload.role)) as PortalUserDocument | null;
 
   if (!user || !user.active) {
     throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
@@ -285,8 +285,7 @@ export async function authenticatePortalUser(payload: PortalLoginPayload) {
     throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
   }
 
-  user.lastLoginAt = new Date();
-  await user.save();
+  await updateUser(user.id, { lastLoginAt: new Date() });
 
   const serializedUser = serializePortalUser(user);
 
@@ -321,13 +320,17 @@ export async function updatePortalProfile(
     user.name = payload.name.trim();
   }
 
-  user.portalProfile =
+  const portalProfile =
     role === "student"
       ? buildStudentProfile(payload.profile as StudentProfileUpdatePayload, user.portalProfile)
       : buildTutorProfile(payload.profile as TutorProfileUpdatePayload, user.portalProfile);
 
-  await user.save();
-  return serializePortalUser(user);
+  const updatedUser = await updateUser(user.id, {
+    name: user.name,
+    portalProfile,
+  });
+
+  return serializePortalUser(updatedUser as PortalUserDocument);
 }
 
 export async function resendPortalVerification(userId: string) {
@@ -345,27 +348,24 @@ export async function resendPortalVerification(userId: string) {
   }
 
   const verification = createVerificationToken();
-  user.emailVerificationTokenHash = verification.tokenHash;
-  user.emailVerificationExpiresAt = verification.expiresAt;
-  user.emailVerificationSentAt = new Date();
-  await user.save();
+  const updatedUser = await updateUser(user.id, {
+    emailVerificationTokenHash: verification.tokenHash,
+    emailVerificationExpiresAt: verification.expiresAt,
+    emailVerificationSentAt: new Date(),
+  });
 
   const previewUrl = buildVerificationPreviewUrl(verification.token);
-  logVerificationPreview(user.email, previewUrl);
+  logVerificationPreview(updatedUser?.email ?? user.email, previewUrl);
 
   return {
-    user: serializePortalUser(user),
+    user: serializePortalUser((updatedUser ?? user) as PortalUserDocument),
     verificationPreviewUrl: previewUrl,
   };
 }
 
 export async function verifyPortalEmail(token: string) {
   const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-  const user = (await UserModel.findOne({
-    emailVerificationTokenHash: tokenHash,
-    emailVerificationExpiresAt: { $gt: new Date() },
-    role: { $in: ["student", "tutor"] },
-  }).exec()) as PortalUserDocument | null;
+  const user = (await findPortalUserByVerificationToken(tokenHash)) as PortalUserDocument | null;
 
   if (!user || !isPortalRole(user.role) || !user.active) {
     throw new ApiError(400, "This verification link is invalid or has expired.", {
@@ -374,10 +374,11 @@ export async function verifyPortalEmail(token: string) {
     });
   }
 
-  user.emailVerifiedAt = new Date();
-  user.emailVerificationTokenHash = "";
-  user.emailVerificationExpiresAt = null;
-  await user.save();
+  const updatedUser = await updateUser(user.id, {
+    emailVerifiedAt: new Date(),
+    emailVerificationTokenHash: "",
+    emailVerificationExpiresAt: null,
+  });
 
-  return serializePortalUser(user);
+  return serializePortalUser(updatedUser as PortalUserDocument);
 }

@@ -1,6 +1,9 @@
 import { connectDatabase, disconnectDatabase } from "../config/db.js";
 import { env } from "../config/env.js";
 import { ensureSeedAdmin } from "../services/authService.js";
+function getErrorMessage(error) {
+    return error instanceof Error ? error.message : "Unknown seed error.";
+}
 function createEmptySeedStore() {
     return {
         tutors: [],
@@ -28,12 +31,12 @@ async function runSeed() {
         reviews: seedStore.reviews.length,
         results: seedStore.results.length,
         pages: seedStore.pages.length,
-        adminEmail: env.ADMIN_SEED_EMAIL,
+        adminUserEnsured: true,
     }, null, 2));
 }
 runSeed()
     .catch((error) => {
-    console.error("Failed to seed Maths Bodhi backend.", error);
+    console.error("Failed to seed Maths Bodhi backend.", getErrorMessage(error));
     process.exitCode = 1;
 })
     .finally(async () => {

@@ -1,5 +1,4 @@
-import { Types } from "mongoose";
-import { PageModel } from "../models/Page.js";
+import { query } from "../db/postgres.js";
 import { ApiError } from "../utils/ApiError.js";
 import { slugify } from "../utils/slug.js";
 import { createFieldErrorDetails } from "../utils/validationDetails.js";
@@ -45,9 +44,75 @@ function sanitizeFaqItems(items = []) {
     }))
         .filter((item) => item.question || item.answer);
 }
+function stringArray(value) {
+    return Array.isArray(value) ? value.map(String).filter(Boolean) : [];
+}
+function objectArray(value) {
+    return Array.isArray(value)
+        ? value.filter((item) => Boolean(item) && typeof item === "object")
+        : [];
+}
+function objectValue(value, fallback) {
+    return value && typeof value === "object" && !Array.isArray(value)
+        ? value
+        : fallback;
+}
+function toPage(row) {
+    const data = row.data ?? {};
+    return {
+        id: row.id,
+        sourceId: row.source_id ?? String(data.sourceId ?? ""),
+        pageType: row.page_type,
+        pageKey: row.page_key,
+        slug: row.slug,
+        route: row.route,
+        label: row.label,
+        title: String(data.title ?? ""),
+        navLabel: String(data.navLabel ?? ""),
+        h1: String(data.h1 ?? ""),
+        intro: String(data.intro ?? ""),
+        status: row.status,
+        badge: String(data.badge ?? ""),
+        heroBadge: String(data.heroBadge ?? ""),
+        parentKey: String(data.parentKey ?? ""),
+        breadcrumbLabel: String(data.breadcrumbLabel ?? ""),
+        chips: stringArray(data.chips),
+        stats: objectArray(data.stats),
+        supportPanel: objectValue(data.supportPanel, { title: "", text: "", bullets: [] }),
+        overview: objectValue(data.overview, { badge: "", title: "", subtitle: "", cards: [] }),
+        childSections: objectArray(data.childSections),
+        detailSections: objectArray(data.detailSections),
+        checklist: stringArray(data.checklist),
+        schoolHighlights: objectArray(data.schoolHighlights),
+        localZones: objectArray(data.localZones),
+        localDemandZones: objectArray(data.localDemandZones),
+        cta: objectValue(data.cta, { label: "", description: "" }),
+        heroImage: String(data.heroImage ?? ""),
+        heroImageAlt: String(data.heroImageAlt ?? ""),
+        featuredTutorIds: stringArray(data.featuredTutorIds),
+        featuredReviewIds: stringArray(data.featuredReviewIds),
+        faqItems: sanitizeFaqItems(Array.isArray(data.faqItems) ? data.faqItems : []),
+        relatedCities: stringArray(data.relatedCities),
+        boards: stringArray(data.boards),
+        topics: stringArray(data.topics),
+        outcomes: stringArray(data.outcomes),
+        learningApproach: objectArray(data.learningApproach),
+        classSegments: objectArray(data.classSegments),
+        boardSupportCards: objectArray(data.boardSupportCards),
+        searchIntentChips: stringArray(data.searchIntentChips),
+        heroStats: objectArray(data.heroStats),
+        heroSupportTitle: String(data.heroSupportTitle ?? ""),
+        heroSupportText: String(data.heroSupportText ?? ""),
+        seoSections: objectArray(data.seoSections),
+        parentChecklist: stringArray(data.parentChecklist),
+        seo: objectValue(data.seo, {}),
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+    };
+}
 function serializePage(doc) {
     return {
-        id: doc.sourceId || doc._id.toString(),
+        id: doc.sourceId || doc.id || "",
         sourceId: doc.sourceId ?? "",
         pageType: doc.pageType,
         pageKey: doc.pageKey ?? "",
@@ -98,18 +163,23 @@ function serializePage(doc) {
     };
 }
 async function findPageByIdentifier(id) {
-    const filters = [{ sourceId: id }];
-    if (Types.ObjectId.isValid(id)) {
-        filters.push({ _id: new Types.ObjectId(id) });
-    }
-    return PageModel.findOne({ $or: filters }).exec();
+    const result = await query(`
+      SELECT *
+      FROM pages
+      WHERE source_id = $1 OR id::text = $1
+      LIMIT 1
+    `, [id]);
+    return result.rows[0] ?? null;
 }
-async function ensureUniqueRoute(route, sourceId) {
-    const existing = await PageModel.findOne({
-        route,
-        sourceId: { $ne: sourceId },
-    }).exec();
-    if (existing) {
+async function ensureUniqueRoute(route, identity) {
+    const existing = await query(`
+      SELECT id
+      FROM pages
+      WHERE LOWER(route) = LOWER($1)
+        AND COALESCE(source_id, id::text) <> $2
+      LIMIT 1
+    `, [route, identity]);
+    if (existing.rows[0]) {
         throw new ApiError(409, "A page with this route already exists.", {
             code: "DUPLICATE_PAGE_ROUTE",
             details: createFieldErrorDetails("route", "A page with this route already exists."),
@@ -125,7 +195,9 @@ function buildPersistedPagePayload(payload, existing) {
     const nextSlug = pageType === "subject"
         ? normalizePageKey("subject", payload.slug || payload.pageKey || existing?.slug || existing?.pageKey || "")
         : nextPageKey;
-    const sourceId = existing?.sourceId || buildSourceId(pageType, pageType === "subject" ? nextSlug : nextPageKey);
+    const sourceId = payload.sourceId ||
+        existing?.sourceId ||
+        buildSourceId(pageType, pageType === "subject" ? nextSlug : nextPageKey);
     const route = normalizeRoute(payload.route ?? existing?.route ?? "", pageType, nextPageKey, nextSlug);
     const label = payload.label ?? existing?.label ?? payload.title ?? existing?.title ?? payload.h1 ?? existing?.h1 ?? "";
     const title = payload.title ?? existing?.title ?? label;
@@ -133,6 +205,7 @@ function buildPersistedPagePayload(payload, existing) {
     const h1 = payload.h1 ?? existing?.h1 ?? label;
     const intro = payload.intro ?? existing?.intro ?? "";
     return {
+        id: existing?.id,
         sourceId,
         pageType,
         pageKey: nextPageKey,
@@ -182,16 +255,60 @@ function buildPersistedPagePayload(payload, existing) {
         heroSupportTitle: payload.heroSupportTitle ?? existing?.heroSupportTitle ?? "",
         heroSupportText: payload.heroSupportText ?? existing?.heroSupportText ?? "",
         seoSections: payload.seoSections ?? existing?.seoSections ?? [],
-        parentChecklist: payload.parentChecklist
-            ? unique(payload.parentChecklist)
-            : existing?.parentChecklist ?? [],
+        parentChecklist: payload.parentChecklist ? unique(payload.parentChecklist) : existing?.parentChecklist ?? [],
         seo: payload.seo ?? existing?.seo ?? {},
+        createdAt: existing?.createdAt,
+        updatedAt: existing?.updatedAt,
     };
+}
+async function insertPage(payload) {
+    const result = await query(`
+      INSERT INTO pages (source_id, page_type, page_key, slug, route, label, status, data)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *
+    `, [
+        payload.sourceId || null,
+        payload.pageType,
+        payload.pageKey,
+        payload.slug,
+        payload.route,
+        payload.label,
+        payload.status,
+        payload,
+    ]);
+    return result.rows[0];
+}
+async function updatePageRow(id, payload) {
+    const result = await query(`
+      UPDATE pages
+      SET
+        source_id = $1,
+        page_type = $2,
+        page_key = $3,
+        slug = $4,
+        route = $5,
+        label = $6,
+        status = $7,
+        data = $8
+      WHERE id::text = $9
+      RETURNING *
+    `, [
+        payload.sourceId || null,
+        payload.pageType,
+        payload.pageKey,
+        payload.slug,
+        payload.route,
+        payload.label,
+        payload.status,
+        payload,
+        id,
+    ]);
+    return result.rows[0] ?? null;
 }
 export async function listPages() {
     await ensureSeedPages();
-    const pages = await PageModel.find().sort({ pageType: 1, updatedAt: -1, label: 1 }).exec();
-    return pages.map((doc) => serializePage(doc));
+    const result = await query("SELECT * FROM pages ORDER BY page_type ASC, updated_at DESC, label ASC");
+    return result.rows.map((row) => serializePage(toPage(row)));
 }
 export async function getPageById(id) {
     await ensureSeedPages();
@@ -199,19 +316,19 @@ export async function getPageById(id) {
     if (!page) {
         throw new ApiError(404, "Page not found.", { code: "PAGE_NOT_FOUND" });
     }
-    return serializePage(page);
+    return serializePage(toPage(page));
 }
 export async function getPublishedPages() {
     await ensureSeedPages();
-    const pages = await PageModel.find({ status: "published" }).sort({ pageType: 1, route: 1 }).exec();
-    return pages.map((doc) => serializePage(doc));
+    const result = await query("SELECT * FROM pages WHERE status = 'published' ORDER BY page_type ASC, route ASC");
+    return result.rows.map((row) => serializePage(toPage(row)));
 }
 export async function createPage(payload) {
     await ensureSeedPages();
     const nextPayload = buildPersistedPagePayload(payload);
-    await ensureUniqueRoute(nextPayload.route, nextPayload.sourceId);
-    const page = await PageModel.create(nextPayload);
-    return serializePage(page);
+    await ensureUniqueRoute(nextPayload.route, nextPayload.sourceId || nextPayload.id || "");
+    const page = await insertPage(nextPayload);
+    return serializePage(toPage(page));
 }
 export async function updatePage(id, payload) {
     await ensureSeedPages();
@@ -219,11 +336,11 @@ export async function updatePage(id, payload) {
     if (!page) {
         throw new ApiError(404, "Page not found.", { code: "PAGE_NOT_FOUND" });
     }
-    const nextPayload = buildPersistedPagePayload(payload, page);
-    await ensureUniqueRoute(nextPayload.route, nextPayload.sourceId);
-    Object.assign(page, nextPayload);
-    await page.save();
-    return serializePage(page);
+    const existing = toPage(page);
+    const nextPayload = buildPersistedPagePayload(payload, existing);
+    await ensureUniqueRoute(nextPayload.route, nextPayload.sourceId || existing.id || id);
+    const updated = await updatePageRow(page.id, nextPayload);
+    return serializePage(toPage(updated));
 }
 export async function deletePage(id) {
     await ensureSeedPages();
@@ -231,7 +348,16 @@ export async function deletePage(id) {
     if (!page) {
         throw new ApiError(404, "Page not found.", { code: "PAGE_NOT_FOUND" });
     }
-    await page.deleteOne();
-    return serializePage(page);
+    await query("DELETE FROM pages WHERE id::text = $1", [page.id]);
+    return serializePage(toPage(page));
+}
+export async function upsertPageBySourceId(payload) {
+    const existing = await query("SELECT * FROM pages WHERE source_id = $1 LIMIT 1", [
+        payload.sourceId,
+    ]);
+    if (existing.rows[0]) {
+        return updatePage(existing.rows[0].id, payload);
+    }
+    return createPage(payload);
 }
 //# sourceMappingURL=pageService.js.map

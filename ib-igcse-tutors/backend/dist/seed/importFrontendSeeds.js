@@ -1,8 +1,8 @@
-import { PageModel } from "../models/Page.js";
-import { BlogPostModel } from "../models/BlogPost.js";
-import { ReviewModel } from "../models/Review.js";
-import { StudentResultModel } from "../models/StudentResult.js";
-import { TutorModel } from "../models/Tutor.js";
+import { upsertBlogBySourceId } from "../services/blogService.js";
+import { upsertPageBySourceId } from "../services/pageService.js";
+import { upsertReviewBySourceId } from "../services/reviewService.js";
+import { upsertStudentResultBySourceId } from "../services/studentResultService.js";
+import { upsertTutorBySourceId } from "../services/tutorService.js";
 function parseExperienceYears(value) {
     const text = String(value ?? "");
     const match = text.match(/\d+/);
@@ -29,7 +29,7 @@ export async function importFrontendSeeds(store) {
     const persistedReviewMap = new Map();
     for (const tutor of store.tutors ?? []) {
         const profile = tutorProfilesByTutorId.get(tutor.id);
-        const persistedTutor = await TutorModel.findOneAndUpdate({ sourceId: tutor.id }, {
+        const persistedTutor = await upsertTutorBySourceId({
             sourceId: tutor.id,
             name: tutor.name,
             slug: tutor.slug,
@@ -63,11 +63,11 @@ export async function importFrontendSeeds(store) {
             linkedReviewIds: tutor.linkedReviewIds ?? [],
             linkedResultIds: tutor.linkedResultIds ?? [],
             featuredOn: tutor.featuredOn ?? [],
-        }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
-        persistedTutorMap.set(tutor.id, persistedTutor._id.toString());
+        });
+        persistedTutorMap.set(tutor.id, persistedTutor.id);
     }
     for (const blog of store.blogs ?? []) {
-        await BlogPostModel.findOneAndUpdate({ sourceId: blog.id }, {
+        await upsertBlogBySourceId({
             sourceId: blog.id,
             title: blog.title,
             slug: blog.slug,
@@ -84,16 +84,16 @@ export async function importFrontendSeeds(store) {
             coverImage: blog.coverImage ?? "",
             faqItems: blog.faqItems ?? [],
             seo: blog.seo ?? {},
-        }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
+        });
     }
     for (const review of store.reviews ?? []) {
-        const persistedReview = await ReviewModel.findOneAndUpdate({ sourceId: review.id }, {
+        const persistedReview = await upsertReviewBySourceId({
             sourceId: review.id,
             reviewerName: review.reviewerName ?? review.parent ?? "",
             reviewerType: review.roleType ?? "Parent",
             text: review.reviewText ?? review.quote ?? "",
             rating: review.rating ?? 4.8,
-            linkedTutor: review.relatedTutorId ? persistedTutorMap.get(review.relatedTutorId) ?? null : null,
+            linkedTutorId: review.relatedTutorId ? persistedTutorMap.get(review.relatedTutorId) ?? "" : "",
             linkedBoard: review.relatedBoard ?? review.board ?? "",
             linkedPage: review.relatedPageId ?? "",
             city: review.city ?? "gurugram",
@@ -104,20 +104,19 @@ export async function importFrontendSeeds(store) {
             anonymized: Boolean(review.anonymized),
             featuredOn: review.featuredOn ?? [],
             order: review.order ?? 99,
-        }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
-        persistedReviewMap.set(review.id, persistedReview._id.toString());
+        });
+        persistedReviewMap.set(review.id, persistedReview.id);
     }
     for (const result of store.results ?? []) {
         const { board, classLevel } = splitClassBoard(result.classBoard ?? "");
-        await StudentResultModel.findOneAndUpdate({ sourceId: result.id }, {
+        await upsertStudentResultBySourceId({
             sourceId: result.id,
             studentLabel: result.studentLabel ?? "",
             board,
             classLevel,
-            resultSummary: result.resultSummary ??
-                [result.beforeResult, result.afterResult].filter(Boolean).join(" to "),
+            resultSummary: result.resultSummary ?? [result.beforeResult, result.afterResult].filter(Boolean).join(" to "),
             story: result.story ?? "",
-            linkedTutor: result.linkedTutorId ? persistedTutorMap.get(result.linkedTutorId) ?? null : null,
+            linkedTutorId: result.linkedTutorId ? persistedTutorMap.get(result.linkedTutorId) ?? "" : "",
             linkedPage: result.linkedPageId ?? "",
             city: result.linkedCitySlug ?? "gurugram",
             locality: result.linkedLocalitySlug ?? "",
@@ -125,7 +124,7 @@ export async function importFrontendSeeds(store) {
             status: result.status ?? "draft",
             beforeResult: result.beforeResult ?? "",
             afterResult: result.afterResult ?? "",
-        }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
+        });
     }
     for (const page of store.pages ?? []) {
         const faqItems = (page.faqIds ?? [])
@@ -136,7 +135,7 @@ export async function importFrontendSeeds(store) {
             question: faq.question ?? "",
             answer: faq.answer ?? "",
         }));
-        await PageModel.findOneAndUpdate({ sourceId: page.id }, {
+        await upsertPageBySourceId({
             sourceId: page.id,
             pageType: page.pageType ?? "board",
             pageKey: page.pageKey ?? page.slug ?? "",
@@ -182,7 +181,7 @@ export async function importFrontendSeeds(store) {
             seoSections: page.seoSections ?? [],
             parentChecklist: page.parentChecklist ?? [],
             seo: page.seo ?? {},
-        }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec();
+        });
     }
 }
 //# sourceMappingURL=importFrontendSeeds.js.map

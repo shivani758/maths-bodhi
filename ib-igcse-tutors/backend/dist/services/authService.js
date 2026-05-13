@@ -1,9 +1,9 @@
-import { UserModel } from "../models/User.js";
+import { createUser, findAdminUserByIdentifier, findUserByEmail, findUserById, updateUser, } from "../repositories/postgres/userRepository.js";
 import { ApiError } from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 function toSessionUser(user) {
     return {
-        id: user._id.toString(),
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -11,29 +11,19 @@ function toSessionUser(user) {
 }
 export async function authenticateAdmin(identifier, password) {
     const normalizedIdentifier = identifier.trim().toLowerCase();
-    const user = await UserModel.findOne({
-        $or: [{ email: normalizedIdentifier }, { name: new RegExp(`^${normalizedIdentifier}$`, "i") }],
-    }).exec();
+    const user = await findAdminUserByIdentifier(normalizedIdentifier);
     if (!user || !user.active) {
         throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
     }
-    const hash = user.passwordHash;
-    if (!password || !hash) {
-        console.error("DEBUG USER:", user);
-        throw new ApiError(500, "Password missing in DB", {
-            code: "PASSWORD_UNDEFINED",
-        });
-    }
-    const isValidPassword = await verifyPassword(password, hash);
+    const isValidPassword = await verifyPassword(password, user.passwordHash);
     if (!isValidPassword) {
         throw new ApiError(401, "Invalid email or password.", { code: "INVALID_CREDENTIALS" });
     }
-    user.lastLoginAt = new Date();
-    await user.save();
+    await updateUser(user.id, { lastLoginAt: new Date() });
     return toSessionUser(user);
 }
 export async function getUserSessionById(userId) {
-    const user = await UserModel.findById(userId).exec();
+    const user = await findUserById(userId);
     if (!user || !user.active) {
         return null;
     }
@@ -41,12 +31,12 @@ export async function getUserSessionById(userId) {
 }
 export async function ensureSeedAdmin(input) {
     const normalizedEmail = input.email.trim().toLowerCase();
-    const existing = await UserModel.findOne({ email: normalizedEmail }).exec();
+    const existing = await findUserByEmail(normalizedEmail);
     if (existing) {
         return existing;
     }
     const passwordHash = await hashPassword(input.password);
-    return UserModel.create({
+    return createUser({
         name: input.name,
         email: normalizedEmail,
         passwordHash,

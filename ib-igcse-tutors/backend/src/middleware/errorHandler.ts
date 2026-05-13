@@ -6,6 +6,7 @@ import {
   mongooseValidationErrorToDetails,
   zodErrorToDetails,
 } from "../utils/validationDetails.js";
+import { isProduction } from "../config/env.js";
 
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {
   if (error instanceof ApiError) {
@@ -51,7 +52,8 @@ export function errorHandler(error: unknown, _req: Request, res: Response, _next
     });
   }
 
-  const fallbackMessage = error instanceof Error ? error.message : "Unexpected server error.";
+  const fallbackMessage =
+    !isProduction && error instanceof Error ? error.message : "Unexpected server error.";
 
   return res.status(500).json({
     success: false,

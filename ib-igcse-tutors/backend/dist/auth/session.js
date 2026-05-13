@@ -1,6 +1,6 @@
 import session from "express-session";
-import MongoStore from "connect-mongo";
 import { env } from "../config/env.js";
+import { PgSessionStore } from "./pgSessionStore.js";
 export function createSessionMiddleware() {
     return session({
         name: env.SESSION_COOKIE_NAME,
@@ -8,10 +8,7 @@ export function createSessionMiddleware() {
         resave: false,
         saveUninitialized: false,
         rolling: false,
-        store: MongoStore.create({
-            mongoUrl: env.MONGO_URI,
-            collectionName: "admin_sessions",
-        }),
+        store: new PgSessionStore(),
         cookie: {
             httpOnly: true,
             sameSite: env.SESSION_COOKIE_SAME_SITE,

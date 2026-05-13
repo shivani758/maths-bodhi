@@ -1,11 +1,13 @@
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
 **/.env
-**/.env.*
-!**/.env.example
+**/.env.local
+**/.env.*.local
+
 node_modules/
 dist/
+
 .codex*/
 .chrome*/
 .chrome-*/
@@ -13,4 +15,3 @@ dist/
 preview*.log
 chrome-*.log
 *.tmp
-frontend-staging/
