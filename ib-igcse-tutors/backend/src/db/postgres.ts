@@ -5,8 +5,37 @@ const { Pool } = pg;
 
 let pool: pg.Pool | null = null;
 
-function getErrorMessage(error: unknown, fallback = "Unknown PostgreSQL error.") {
-  return error instanceof Error ? error.message : fallback;
+function uniqueValues(values: Array<string | undefined>) {
+  return [...new Set(values.filter((value): value is string => Boolean(value && value.length >= 4)))];
+}
+
+function decodeUrlPassword(value: string | undefined) {
+  if (!value) {
+    return undefined;
+  }
+
+  try {
+    const password = new URL(value).password;
+    return password ? decodeURIComponent(password) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function redactPostgresSecrets(message: string) {
+  let sanitized = message
+    .replace(/(postgres(?:ql)?:\/\/[^:\s/@]+:)([^@\s]+)(@)/gi, "$1[redacted]$3")
+    .replace(/(password\s*[=:]\s*)([^,\s;]+)/gi, "$1[redacted]");
+
+  for (const secret of uniqueValues([env.DB_PASSWORD, decodeUrlPassword(env.DATABASE_URL)])) {
+    sanitized = sanitized.split(secret).join("[redacted]");
+  }
+
+  return sanitized;
+}
+
+export function getPostgresErrorMessage(error: unknown, fallback = "Unknown PostgreSQL error.") {
+  return redactPostgresSecrets(error instanceof Error ? error.message : fallback);
 }
 
 function buildPoolConfig(): pg.PoolConfig {
@@ -14,6 +43,7 @@ function buildPoolConfig(): pg.PoolConfig {
     max: 10,
     idleTimeoutMillis: 30_000,
     connectionTimeoutMillis: 10_000,
+    options: "-c search_path=public",
   } satisfies pg.PoolConfig;
 
   if (env.DATABASE_URL) {
@@ -38,7 +68,7 @@ export function getPostgresPool() {
     pool = new Pool(buildPoolConfig());
 
     pool.on("error", (error) => {
-      console.error("Unexpected PostgreSQL pool error.", getErrorMessage(error));
+      console.error("Unexpected PostgreSQL pool error.", getPostgresErrorMessage(error));
     });
   }
 
@@ -56,7 +86,7 @@ export async function connectPostgres() {
   try {
     await query("SELECT 1");
   } catch (error) {
-    const message = getErrorMessage(error, "Unknown PostgreSQL connection error.");
+    const message = getPostgresErrorMessage(error, "Unknown PostgreSQL connection error.");
     throw new Error(`Unable to connect to PostgreSQL: ${message}`);
   }
 }

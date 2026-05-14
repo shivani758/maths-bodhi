@@ -1,22 +1,14 @@
 # CloudPanel Deployment: PostgreSQL Backend
 
-This backend now uses PostgreSQL at runtime. Do not commit production credentials; add them in CloudPanel environment variables.
+This backend uses PostgreSQL at runtime. Do not commit production credentials; add real values only in CloudPanel environment variables or the server-side `.env` file.
 
-This guide assumes the repository is already on the staging branch and the PostgreSQL database/user have already been created on the team server.
-
-## App Path
-
-Use the backend directory as the Node app root:
+Run all commands below from the backend directory:
 
 ```bash
 /home/<cloudpanel-user>/htdocs/<site>/ib-igcse-tutors/backend
 ```
 
-If your repository is deployed to a different release path, run all backend commands from that `backend` directory.
-
-## Runtime
-
-Use Node.js 20 LTS or newer on the CloudPanel Node app.
+Use Node.js 20 LTS or newer.
 
 ## Install And Build
 
@@ -50,45 +42,60 @@ Set these in CloudPanel, not in committed files:
 
 ```bash
 NODE_ENV=production
-HOST=0.0.0.0
 PORT=<cloudpanel-node-port>
 DB_PROVIDER=postgres
-DATABASE_URL=<postgres-connection-url>
-DB_HOST=127.0.0.1
+DATABASE_URL=postgresql://<database-user>:<url-encoded-database-password>@<database-host>:5432/mathsbodhi
+DB_HOST=<database-host>
 DB_PORT=5432
-DB_NAME=<database-name>
+DB_NAME=mathsbodhi
 DB_USER=<database-user>
 DB_PASSWORD=<database-password>
 SESSION_SECRET=<long-random-session-secret>
 JWT_SECRET=<long-random-jwt-secret>
+ADMIN_SEED_NAME=<admin-display-name>
 ADMIN_SEED_EMAIL=<admin-email>
 ADMIN_SEED_PASSWORD=<admin-password>
-ADMIN_SEED_NAME=<admin-display-name>
-FRONTEND_ORIGIN=<https://your-frontend-domain>
+```
+
+`DATABASE_URL` is preferred and is loaded first. If it is set, the backend uses it for the PostgreSQL pool. The split `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` values are the fallback.
+
+Keep `DATABASE_URL` and `DB_PASSWORD` consistent: the password encoded in `DATABASE_URL` must be the same password as `DB_PASSWORD`.
+
+`DB_PASSWORD` and `SESSION_SECRET` must be separate values. Do not reuse the database password as the session secret.
+
+Passwords with special characters must be URL encoded in `DATABASE_URL`. For example, `@` becomes `%40`, `#` becomes `%23`, and `%` becomes `%25`.
+
+`127.0.0.1` works only when the backend process and PostgreSQL run on the same machine/server. From a laptop, `127.0.0.1` points to the laptop, not the CloudPanel server.
+
+## Optional Backend Environment Variables
+
+These are supported backend variables, but have defaults:
+
+```bash
+HOST=0.0.0.0
+FRONTEND_ORIGIN=https://your-frontend-domain.example
 SESSION_COOKIE_NAME=maths_bodhi_admin_sid
 SESSION_COOKIE_SAME_SITE=none
 SESSION_COOKIE_SECURE=true
 SESSION_COOKIE_DOMAIN=<optional-cookie-domain>
 ```
 
-`DATABASE_URL` is preferred. If it is set, the backend ignores the split `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` values. Keep the split values available only as fallback.
-
-`DB_HOST=127.0.0.1` works only when the backend process runs on the same server as PostgreSQL. From a laptop, `127.0.0.1` points to the laptop, not the CloudPanel server. Remote pgAdmin access needs the server IP/hostname and firewall access, or an SSH tunnel to the PostgreSQL server.
+`NEXT_PUBLIC_API_URL` is a frontend variable and is not required by this backend. `MONGO_URI` is not used by the current PostgreSQL backend.
 
 ## PostgreSQL Setup
 
-Create the database and user on the CloudPanel server. Example only:
+Create the database and user on the PostgreSQL server. Example only:
 
 ```sql
-CREATE DATABASE maths_bodhi;
-CREATE USER maths_bodhi_user WITH PASSWORD '<strong-password>';
-GRANT ALL PRIVILEGES ON DATABASE maths_bodhi TO maths_bodhi_user;
+CREATE DATABASE mathsbodhi;
+CREATE USER mathsbodhi_user WITH PASSWORD '<strong-password>';
+GRANT ALL PRIVILEGES ON DATABASE mathsbodhi TO mathsbodhi_user;
 ```
 
 Then connect to the database and grant schema privileges if your PostgreSQL version requires it:
 
 ```sql
-GRANT ALL ON SCHEMA public TO maths_bodhi_user;
+GRANT ALL ON SCHEMA public TO mathsbodhi_user;
 ```
 
 ## Run The Schema
@@ -105,7 +112,46 @@ Or with split variables:
 PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -f src/db/schema.sql
 ```
 
-The schema creates tables for users/admin auth, sessions, tutors, blogs, reviews, student results, pages, FAQs, cities, localities, media assets, and settings.
+The schema sets `search_path` to `public`, creates the `pgcrypto` extension in `public`, and creates the required tables in the `public` schema. It uses `CREATE TABLE IF NOT EXISTS` and does not drop table data. It does refresh update triggers with `DROP TRIGGER IF EXISTS` followed by `CREATE TRIGGER`.
+
+Required public tables:
+
+```text
+users
+admin_sessions
+tutors
+blog_posts
+reviews
+student_results
+pages
+faqs
+cities
+localities
+media_assets
+settings
+```
+
+## Verify In pgAdmin
+
+1. Connect to the PostgreSQL server in pgAdmin.
+2. Expand `Databases`.
+3. Expand `mathsbodhi`.
+4. Expand `Schemas`.
+5. Expand `public`.
+6. Expand `Tables`.
+7. Confirm the required tables listed above are visible.
+
+If tables are missing, run the schema command again against the `mathsbodhi` database and refresh pgAdmin.
+
+## Read-Only Database Check
+
+After the schema has been applied and env variables are present:
+
+```bash
+npm run db:check
+```
+
+This command connects to PostgreSQL, runs `SELECT current_database()`, verifies the required `public` tables exist, and does not mutate data or print secrets.
 
 ## Seed The Admin User
 
@@ -115,7 +161,7 @@ After schema setup and env variables are present:
 npm run seed
 ```
 
-The seed script uses `ADMIN_SEED_EMAIL`, `ADMIN_SEED_PASSWORD`, and `ADMIN_SEED_NAME`. It does not print the password.
+The seed script uses `ADMIN_SEED_EMAIL`, `ADMIN_SEED_PASSWORD`, and `ADMIN_SEED_NAME`. It inserts the admin user when missing and updates the matching admin user's name, role, active status, and password hash when the user already exists. It does not print the password.
 
 ## Health Check
 
@@ -181,16 +227,17 @@ curl "http://127.0.0.1:$PORT/api/reviews"
 4. Run `npm ci`.
 5. Run `npm run build`.
 6. Apply the PostgreSQL schema with `psql "$DATABASE_URL" -f src/db/schema.sql`.
-7. Run `npm run seed` once after schema setup or when intentionally ensuring the admin user.
-8. Start or reload the Node app.
-9. Run the health check and admin login smoke test.
+7. Run `npm run db:check`.
+8. Run `npm run seed` once after schema setup or when intentionally ensuring the admin user.
+9. Start or reload the Node app.
+10. Run the health check and admin login smoke test.
 
 ## Rollback Plan
 
 1. Stop the CloudPanel Node app.
-2. Restore the previous backend release or branch revision that used MongoDB.
-3. Restore the previous MongoDB environment variables, including `MONGO_URI`, in CloudPanel.
+2. Restore the previous backend release or branch revision.
+3. Restore the previous environment variables for that release.
 4. Start the previous backend release.
-5. Leave the PostgreSQL database in place until the rollback is verified and a data-retention decision is made.
+5. Leave the PostgreSQL database in place until rollback is verified and a data-retention decision is made.
 
 This rollback does not require dropping PostgreSQL tables.
