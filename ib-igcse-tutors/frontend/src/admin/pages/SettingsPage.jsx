@@ -27,7 +27,7 @@ function SettingsPage() {
       <AdminPageHeader
         eyebrow="Configuration"
         title="Settings"
-        description="Global brand, contact, footer, and homepage settings live here in a structure that can later map to real CMS configuration endpoints."
+        description="Global brand, contact, footer, and homepage settings for the Maths Bodhi site."
         primaryAction={{
           label: "Save settings",
           onClick: async () => {
@@ -131,6 +131,19 @@ function SettingsPage() {
                 setSettings((current) => ({
                   ...current,
                   contact: { ...current.contact, supportHours: event.target.value },
+                }))
+              }
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500"
+            />
+          </FieldGroup>
+          <FieldGroup label="Address" fullWidth>
+            <textarea
+              rows={3}
+              value={settings.contact.address ?? ""}
+              onChange={(event) =>
+                setSettings((current) => ({
+                  ...current,
+                  contact: { ...current.contact, address: event.target.value },
                 }))
               }
               className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500"

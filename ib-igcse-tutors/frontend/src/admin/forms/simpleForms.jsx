@@ -501,7 +501,17 @@ export function LocalityForm({ draftItem, setDraftItem, cityOptions }) {
         <FieldGroup label="City">
           <select
             value={draftItem.citySlug}
-            onChange={(event) => setDraftItem((current) => ({ ...current, citySlug: event.target.value }))}
+            onChange={(event) =>
+              setDraftItem((current) => {
+                const selectedCity = cityOptions.find((city) => city.slug === event.target.value);
+                return {
+                  ...current,
+                  citySlug: event.target.value,
+                  cityLabel: selectedCity?.label ?? current.cityLabel,
+                  cityAliases: selectedCity?.aliases ?? current.cityAliases,
+                };
+              })
+            }
             className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500"
           >
             {cityOptions.map((city) => (

@@ -3,7 +3,7 @@ import { listCities, listLocalities } from "../../services/locationsService";
 import { listPages } from "../../services/pagesService";
 import { createEmptyFaq, deleteFaq, listFaqs, saveFaq } from "../../services/faqsService";
 import AdminCollectionPage from "../components/AdminCollectionPage";
-import { LoadingPanel, StatusBadge } from "../components/primitives";
+import { StatusBadge } from "../components/primitives";
 import { FaqForm } from "../forms/simpleForms";
 
 function FaqsPage() {
@@ -13,12 +13,13 @@ function FaqsPage() {
     localities: [],
   });
   const [loadingResources, setLoadingResources] = useState(true);
+  const [resourceNotice, setResourceNotice] = useState("");
 
   useEffect(() => {
     let mounted = true;
 
     async function loadResources() {
-      const [pages, cities, localities] = await Promise.all([
+      const [pagesResult, citiesResult, localitiesResult] = await Promise.allSettled([
         listPages(),
         listCities(),
         listLocalities(),
@@ -28,7 +29,22 @@ function FaqsPage() {
         return;
       }
 
-      setResources({ pages, cities, localities });
+      setResources({
+        pages: pagesResult.status === "fulfilled" ? pagesResult.value : [],
+        cities: citiesResult.status === "fulfilled" ? citiesResult.value : [],
+        localities: localitiesResult.status === "fulfilled" ? localitiesResult.value : [],
+      });
+      const failedResources = [
+        pagesResult.status === "rejected" ? "page links" : "",
+        citiesResult.status === "rejected" ? "city links" : "",
+        localitiesResult.status === "rejected" ? "locality links" : "",
+      ].filter(Boolean);
+
+      setResourceNotice(
+        failedResources.length
+          ? `Some FAQ link options could not be loaded: ${failedResources.join(", ")}. Existing FAQs can still be reviewed and edited.`
+          : "",
+      );
       setLoadingResources(false);
     }
 
@@ -38,10 +54,6 @@ function FaqsPage() {
       mounted = false;
     };
   }, []);
-
-  if (loadingResources) {
-    return <LoadingPanel label="Loading FAQ resources..." />;
-  }
 
   return (
     <AdminCollectionPage
@@ -93,13 +105,22 @@ function FaqsPage() {
       ]}
       getItemLabel={(item) => item.question || "FAQ"}
       renderForm={({ draftItem, setDraftItem }) => (
-        <FaqForm
-          draftItem={draftItem}
-          setDraftItem={setDraftItem}
-          pageOptions={resources.pages}
-          cityOptions={resources.cities}
-          localityOptions={resources.localities}
-        />
+        <>
+          {loadingResources || resourceNotice ? (
+            <div className="mb-5 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm leading-6 text-blue-900">
+              {loadingResources
+                ? "FAQ link options are loading in the background. You can write the FAQ now and link it after the options appear."
+                : resourceNotice}
+            </div>
+          ) : null}
+          <FaqForm
+            draftItem={draftItem}
+            setDraftItem={setDraftItem}
+            pageOptions={resources.pages}
+            cityOptions={resources.cities}
+            localityOptions={resources.localities}
+          />
+        </>
       )}
     />
   );

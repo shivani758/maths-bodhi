@@ -1,26 +1,33 @@
 import { apiRequest } from "./apiClient";
+import {
+  MATHS_BODHI_ADDRESS,
+  MATHS_BODHI_PHONE_DISPLAY,
+  MATHS_BODHI_WHATSAPP_NUMBER,
+} from "../constants/contact";
 
 const EVENT_NAME = "maths-bodhi-public-site-change";
 
 const DEFAULT_SETTINGS = {
   siteName: "Maths Bodhi",
   supportEmail: "support@mathsbodhi.in",
-  whatsappNumber: "919896825986",
-  phoneDisplay: "+91 9896825986",
+  whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
+  phoneDisplay: MATHS_BODHI_PHONE_DISPLAY,
   footerLinks: [],
   contact: {
-    phoneDisplay: "+91 9896825986",
-    whatsappNumber: "919896825986",
+    phoneDisplay: MATHS_BODHI_PHONE_DISPLAY,
+    whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
     email: "support@mathsbodhi.in",
     supportHours: "Mon to Sat, 9 AM to 8 PM",
-    city: "Gurugram",
+    address: MATHS_BODHI_ADDRESS,
+    streetAddress: "1st Floor, 497 Housing Board Colony",
+    city: "Gurgaon",
     state: "Haryana",
     country: "India",
   },
   socialLinks: {},
   analyticsIds: {},
   branding: {
-    logoMark: "/favicon.svg",
+    logoMark: "/assets/mathsbodhi-logo.png",
     defaultHeroImage: "/images/hero-maths-home.svg",
   },
   seo: {

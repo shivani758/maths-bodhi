@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Seo from "../../components/Seo";
+import BrandLogo from "../../components/BrandLogo";
 import { getAdminBreadcrumbs, adminNavigationGroups, getAdminNavLabel } from "../navigation";
 import { useAdminAuth } from "../providers/AdminAuthContext";
 
@@ -23,17 +24,12 @@ function AdminLayout() {
         <div className="grid min-h-screen lg:grid-cols-[280px_1fr]">
           <aside className="border-r border-slate-200 bg-slate-950 px-5 py-6 text-slate-100">
             <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-sm font-bold text-white">
-                  MB
-                </div>
-                <div>
-                  <p className="text-lg font-bold">Maths Bodhi</p>
-                  <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Admin</p>
-                </div>
+              <div>
+                <BrandLogo className="h-12 max-w-[210px]" />
+                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">Admin</p>
               </div>
               <p className="mt-4 text-sm leading-6 text-slate-300">
-                Secure dashboard for managing tutors, blogs, reviews, and results.
+                Manage Maths Bodhi tutors, enquiries, content, reviews, results, and local SEO pages from one workspace.
               </p>
               <Link
                 to="/"

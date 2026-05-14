@@ -1,4 +1,9 @@
 import { cloneValue, createId } from "./clientDataUtils";
+import {
+  MATHS_BODHI_ADDRESS,
+  MATHS_BODHI_PHONE_DISPLAY,
+  MATHS_BODHI_WHATSAPP_NUMBER,
+} from "../constants/contact";
 
 const STORAGE_KEY = "maths-bodhi-admin-mock-store:v2";
 const EVENT_NAME = "maths-bodhi-admin-store-change";
@@ -6,22 +11,24 @@ const EVENT_NAME = "maths-bodhi-admin-store-change";
 const DEFAULT_SETTINGS = {
   siteName: "Maths Bodhi",
   supportEmail: "support@mathsbodhi.in",
-  whatsappNumber: "919896825986",
-  phoneDisplay: "+91 9896825986",
+  whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
+  phoneDisplay: MATHS_BODHI_PHONE_DISPLAY,
   footerLinks: [],
   contact: {
-    phoneDisplay: "+91 9896825986",
-    whatsappNumber: "919896825986",
+    phoneDisplay: MATHS_BODHI_PHONE_DISPLAY,
+    whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
     email: "support@mathsbodhi.in",
     supportHours: "Mon to Sat, 9 AM to 8 PM",
-    city: "Gurugram",
+    address: MATHS_BODHI_ADDRESS,
+    streetAddress: "1st Floor, 497 Housing Board Colony",
+    city: "Gurgaon",
     state: "Haryana",
     country: "India",
   },
   socialLinks: {},
   analyticsIds: {},
   branding: {
-    logoMark: "/favicon.svg",
+    logoMark: "/assets/mathsbodhi-logo.png",
     defaultHeroImage: "/images/hero-maths-home.svg",
   },
   seo: {
@@ -35,7 +42,7 @@ const DEFAULT_SETTINGS = {
   homepage: {
     eyebrow: "Maths Home Tuition",
     heroTitle: "Find the right maths tutor",
-    heroSubtitle: "Tutors, reviews, and location content load from the backend when available.",
+    heroSubtitle: "Compare tutor profiles, reviews, and location details prepared for Gurugram families.",
     keywordChips: [],
     stats: [],
     serviceBullets: [],
@@ -191,7 +198,7 @@ export function createActivityEntry(activity = {}) {
     action: activity.action ?? "Updated item",
     entityId: activity.entityId ?? "",
     entityLabel: activity.entityLabel ?? "",
-    actorName: activity.actorName ?? "Frontend Demo Admin",
+    actorName: activity.actorName ?? "Maths Bodhi Admin",
     createdAt: new Date().toISOString(),
   };
 }

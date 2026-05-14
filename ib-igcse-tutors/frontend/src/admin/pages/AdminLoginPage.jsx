@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import BrandLogo from "../../components/BrandLogo";
 import Seo from "../../components/Seo";
 import { useAdminAuth } from "../providers/AdminAuthContext";
 import { LoadingPanel } from "../components/primitives";
@@ -34,6 +35,10 @@ function AdminLoginPage() {
       <div className="min-h-screen bg-slate-100 px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-2xl">
+            <div className="mb-6">
+              <BrandLogo className="h-14 max-w-[240px]" />
+              <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">Admin</p>
+            </div>
             <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-cyan-300">
               Admin Workspace
             </span>
@@ -47,7 +52,7 @@ function AdminLoginPage() {
                 Use your admin credentials to continue.
               </p>
               <p className="mt-3">
-                Secure dashboard for managing tutors, blogs, reviews, and results.
+                Manage Maths Bodhi tutors, enquiries, content, reviews, results, and local SEO pages from one workspace.
               </p>
             </div>
             <Link

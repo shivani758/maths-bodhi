@@ -200,7 +200,7 @@ function AdminCollectionPage({
       <ModalDialog
         open={isDialogOpen}
         title={draftItem?.id ? `Edit ${getItemLabel(draftItem)}` : createLabel}
-        description="This CRUD flow now keeps API validation visible in place so fixes are faster during admin entry."
+        description="Review the details, fix highlighted fields, and save when the entry is ready."
         onClose={() => {
           setIsDialogOpen(false);
           setDraftItem(null);
