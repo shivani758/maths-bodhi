@@ -1,27 +1,19 @@
 import { connectDatabase, disconnectDatabase } from "../config/db.js";
 import { env } from "../config/env.js";
+import { applyPostgresSchema } from "../db/migrate.js";
 import { ensureSeedAdmin } from "../services/authService.js";
+import { importFrontendSeeds } from "./importFrontendSeeds.js";
+import { loadFrontendStaticSeedStore } from "./frontendStaticSeeds.js";
 
 function getErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : "Unknown seed error.";
 }
 
-function createEmptySeedStore() {
-  return {
-    tutors: [],
-    tutorProfiles: [],
-    blogs: [],
-    reviews: [],
-    results: [],
-    pages: [],
-    faqs: [],
-  };
-}
-
 async function runSeed() {
   await connectDatabase();
+  await applyPostgresSchema();
 
-  const seedStore = createEmptySeedStore();
+  const seedStore = await loadFrontendStaticSeedStore();
 
   await ensureSeedAdmin({
     name: env.ADMIN_SEED_NAME,
@@ -29,16 +21,17 @@ async function runSeed() {
     password: env.ADMIN_SEED_PASSWORD,
     role: "super_admin",
   });
+  const importSummary = await importFrontendSeeds(seedStore);
 
   console.log("Maths Bodhi seed completed successfully.");
   console.log(
     JSON.stringify(
       {
-        tutors: seedStore.tutors.length,
-        blogs: seedStore.blogs.length,
-        reviews: seedStore.reviews.length,
-        results: seedStore.results.length,
-        pages: seedStore.pages.length,
+        tutors: importSummary.tutors,
+        blogs: importSummary.blogs,
+        reviews: importSummary.reviews,
+        results: importSummary.results,
+        pages: importSummary.pages,
         adminUserEnsured: true,
       },
       null,

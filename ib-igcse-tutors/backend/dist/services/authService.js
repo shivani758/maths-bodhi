@@ -32,10 +32,17 @@ export async function getUserSessionById(userId) {
 export async function ensureSeedAdmin(input) {
     const normalizedEmail = input.email.trim().toLowerCase();
     const existing = await findUserByEmail(normalizedEmail);
-    if (existing) {
-        return existing;
-    }
     const passwordHash = await hashPassword(input.password);
+    if (existing) {
+        const updated = await updateUser(existing.id, {
+            name: input.name,
+            email: normalizedEmail,
+            passwordHash,
+            role: input.role ?? existing.role,
+            active: true,
+        });
+        return updated ?? existing;
+    }
     return createUser({
         name: input.name,
         email: normalizedEmail,

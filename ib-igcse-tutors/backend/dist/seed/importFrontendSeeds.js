@@ -25,6 +25,13 @@ function deriveRelatedBoards(value) {
 export async function importFrontendSeeds(store) {
     const tutorProfilesByTutorId = new Map((store.tutorProfiles ?? []).map((profile) => [profile.tutorId, profile]));
     const faqById = new Map((store.faqs ?? []).map((faq) => [faq.id, faq]));
+    const summary = {
+        tutors: 0,
+        blogs: 0,
+        reviews: 0,
+        results: 0,
+        pages: 0,
+    };
     const persistedTutorMap = new Map();
     const persistedReviewMap = new Map();
     for (const tutor of store.tutors ?? []) {
@@ -65,6 +72,7 @@ export async function importFrontendSeeds(store) {
             featuredOn: tutor.featuredOn ?? [],
         });
         persistedTutorMap.set(tutor.id, persistedTutor.id);
+        summary.tutors += 1;
     }
     for (const blog of store.blogs ?? []) {
         await upsertBlogBySourceId({
@@ -85,6 +93,7 @@ export async function importFrontendSeeds(store) {
             faqItems: blog.faqItems ?? [],
             seo: blog.seo ?? {},
         });
+        summary.blogs += 1;
     }
     for (const review of store.reviews ?? []) {
         const persistedReview = await upsertReviewBySourceId({
@@ -106,6 +115,7 @@ export async function importFrontendSeeds(store) {
             order: review.order ?? 99,
         });
         persistedReviewMap.set(review.id, persistedReview.id);
+        summary.reviews += 1;
     }
     for (const result of store.results ?? []) {
         const { board, classLevel } = splitClassBoard(result.classBoard ?? "");
@@ -125,9 +135,17 @@ export async function importFrontendSeeds(store) {
             beforeResult: result.beforeResult ?? "",
             afterResult: result.afterResult ?? "",
         });
+        summary.results += 1;
     }
     for (const page of store.pages ?? []) {
-        const faqItems = (page.faqIds ?? [])
+        const directFaqItems = Array.isArray(page.faqItems)
+            ? page.faqItems.map((faq, index) => ({
+                id: faq.id || `faq-${index + 1}`,
+                question: faq.question ?? "",
+                answer: faq.answer ?? "",
+            }))
+            : [];
+        const linkedFaqItems = (page.faqIds ?? [])
             .map((faqId) => faqById.get(faqId))
             .filter(Boolean)
             .map((faq, index) => ({
@@ -135,6 +153,7 @@ export async function importFrontendSeeds(store) {
             question: faq.question ?? "",
             answer: faq.answer ?? "",
         }));
+        const faqItems = directFaqItems.length ? directFaqItems : linkedFaqItems;
         await upsertPageBySourceId({
             sourceId: page.id,
             pageType: page.pageType ?? "board",
@@ -182,6 +201,8 @@ export async function importFrontendSeeds(store) {
             parentChecklist: page.parentChecklist ?? [],
             seo: page.seo ?? {},
         });
+        summary.pages += 1;
     }
+    return summary;
 }
 //# sourceMappingURL=importFrontendSeeds.js.map

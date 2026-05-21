@@ -14,6 +14,14 @@ type FrontendStore = {
   faqs: Array<Record<string, any>>;
 };
 
+type ImportSummary = {
+  tutors: number;
+  blogs: number;
+  reviews: number;
+  results: number;
+  pages: number;
+};
+
 function parseExperienceYears(value: unknown) {
   const text = String(value ?? "");
   const match = text.match(/\d+/);
@@ -43,6 +51,13 @@ export async function importFrontendSeeds(store: FrontendStore) {
     (store.tutorProfiles ?? []).map((profile) => [profile.tutorId, profile]),
   );
   const faqById = new Map((store.faqs ?? []).map((faq) => [faq.id, faq]));
+  const summary: ImportSummary = {
+    tutors: 0,
+    blogs: 0,
+    reviews: 0,
+    results: 0,
+    pages: 0,
+  };
 
   const persistedTutorMap = new Map<string, string>();
   const persistedReviewMap = new Map<string, string>();
@@ -86,6 +101,7 @@ export async function importFrontendSeeds(store: FrontendStore) {
     });
 
     persistedTutorMap.set(tutor.id, persistedTutor.id);
+    summary.tutors += 1;
   }
 
   for (const blog of store.blogs ?? []) {
@@ -107,6 +123,7 @@ export async function importFrontendSeeds(store: FrontendStore) {
       faqItems: blog.faqItems ?? [],
       seo: blog.seo ?? {},
     });
+    summary.blogs += 1;
   }
 
   for (const review of store.reviews ?? []) {
@@ -130,6 +147,7 @@ export async function importFrontendSeeds(store: FrontendStore) {
     });
 
     persistedReviewMap.set(review.id, persistedReview.id);
+    summary.reviews += 1;
   }
 
   for (const result of store.results ?? []) {
@@ -151,10 +169,18 @@ export async function importFrontendSeeds(store: FrontendStore) {
       beforeResult: result.beforeResult ?? "",
       afterResult: result.afterResult ?? "",
     });
+    summary.results += 1;
   }
 
   for (const page of store.pages ?? []) {
-    const faqItems = (page.faqIds ?? [])
+    const directFaqItems = Array.isArray(page.faqItems)
+      ? page.faqItems.map((faq: any, index: number) => ({
+          id: faq.id || `faq-${index + 1}`,
+          question: faq.question ?? "",
+          answer: faq.answer ?? "",
+        }))
+      : [];
+    const linkedFaqItems = (page.faqIds ?? [])
       .map((faqId: string) => faqById.get(faqId))
       .filter(Boolean)
       .map((faq: any, index: number) => ({
@@ -162,6 +188,7 @@ export async function importFrontendSeeds(store: FrontendStore) {
         question: faq.question ?? "",
         answer: faq.answer ?? "",
       }));
+    const faqItems = directFaqItems.length ? directFaqItems : linkedFaqItems;
 
     await upsertPageBySourceId({
       sourceId: page.id,
@@ -210,5 +237,8 @@ export async function importFrontendSeeds(store: FrontendStore) {
       parentChecklist: page.parentChecklist ?? [],
       seo: page.seo ?? {},
     });
+    summary.pages += 1;
   }
+
+  return summary;
 }
