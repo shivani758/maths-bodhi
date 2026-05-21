@@ -6,16 +6,24 @@ import {
   updateUser,
   type UserRecord,
 } from "../repositories/postgres/userRepository.js";
-import type { SessionUser } from "../types/auth.js";
+import { ADMIN_USER_ROLES, type AdminUserRole, type SessionUser } from "../types/auth.js";
 import { ApiError } from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 
+function isAdminRole(role: string): role is AdminUserRole {
+  return (ADMIN_USER_ROLES as readonly string[]).includes(role);
+}
+
 function toSessionUser(user: UserRecord) {
+  if (!isAdminRole(user.role)) {
+    throw new ApiError(403, "Admin access is required.", { code: "FORBIDDEN" });
+  }
+
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role as SessionUser["role"],
+    role: user.role,
   } satisfies SessionUser;
 }
 
@@ -41,7 +49,7 @@ export async function authenticateAdmin(identifier: string, password: string) {
 export async function getUserSessionById(userId: string) {
   const user = await findUserById(userId);
 
-  if (!user || !user.active) {
+  if (!user || !user.active || !isAdminRole(user.role)) {
     return null;
   }
 

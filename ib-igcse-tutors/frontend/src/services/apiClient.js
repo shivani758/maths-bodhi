@@ -1,13 +1,7 @@
-const DEFAULT_API_URL = "https://maths-nxtutors-backend.onrender.com";
-
-const API_URL = String(import.meta.env.VITE_API_URL || DEFAULT_API_URL).replace(/\/$/, "");
+const API_URL = import.meta.env.VITE_API_URL || "";
 
 function buildUrl(path) {
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  return `${API_URL}${path.startsWith("/") ? path : `/${path}`}`;
+  return `${API_URL}${path}`;
 }
 
 export class ApiClientError extends Error {

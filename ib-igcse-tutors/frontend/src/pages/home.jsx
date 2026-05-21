@@ -115,7 +115,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Aravali and Golf Course Road corridor",
     school: "The Shri Ram School Aravali",
     support:
-      "Families searching around this corridor often ask for steady worksheet follow-through, clearer written method, and a weekly maths rhythm that fits school routines.",
+      "Families around this corridor often look for premium maths home tutors who can support board expectations, regular worksheets, strong written methods, and consistent revision. Maths Bodhi helps match students with experienced tutors for CBSE, ICSE, IGCSE, IB, and advanced maths goals.",
     chips: ["School corridor", "Board fit", "Weekly practice"],
   },
   {
@@ -123,7 +123,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Sector 62 and Golf Course Extension",
     school: "Heritage Xperiential",
     support:
-      "Useful context when parents want maths support that respects project work, school pace, and regular doubt clearing without making unsupported school claims.",
+      "Parents in this area often need maths support that respects project work, conceptual learning, school pace, and regular doubt clearing. Maths Bodhi focuses on personal attention, confidence building, and curriculum-aware tutoring without making unsupported school affiliation claims.",
     chips: ["Extension Road", "Concept clarity", "Doubt clearing"],
   },
   {
@@ -131,7 +131,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Golf Course Extension Road",
     school: "Shiv Nadar School",
     support:
-      "Parents commonly compare locality convenience, school timing, and whether the tutor can help with deeper problem-solving and consistent revision.",
+      "Families commonly compare locality convenience, school timing, and whether the tutor can guide deeper problem-solving, Olympiad-style thinking, and regular revision. Maths Bodhi supports students who need both school maths clarity and higher-order mathematical reasoning.",
     chips: ["School timing", "Revision", "Problem solving"],
   },
   {
@@ -139,7 +139,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Sector 45 and South City",
     school: "DPS Sector 45",
     support:
-      "A practical reference for families asking about school-paced maths, homework correction, test preparation, and board-year routines.",
+      "A practical reference for families asking about CBSE maths home tuition, homework correction, chapter tests, pre-board preparation, and board-year routines. Maths Bodhi helps students move from doubt-solving to structured marks improvement.",
     chips: ["Sector 45", "Homework", "Tests"],
   },
   {
@@ -147,7 +147,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Sector 57 and Sushant Lok",
     school: "Scottish High",
     support:
-      "Helpful context for families comparing international-school pace, written method, class level, and home-tuition convenience.",
+      "Helpful for families comparing international-school pace, written method, class level, and home-tuition convenience. Maths Bodhi can support IGCSE, IB MYP, IB DP, and board-aligned mathematics with experienced tutors.",
     chips: ["Sushant Lok", "Method clarity", "Home tuition"],
   },
   {
@@ -155,7 +155,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Sector 50 and South City 2",
     school: "Lotus Valley",
     support:
-      "Parents around this corridor often want a tutor who can keep classwork, worksheets, and exam practice moving together.",
+      "Parents around this corridor often want a maths tutor who can keep school classwork, worksheets, exam practice, and revision moving together. Maths Bodhi focuses on regularity, personal attention, and measurable improvement.",
     chips: ["Sector 50", "Worksheets", "Exam practice"],
   },
   {
@@ -163,7 +163,7 @@ const SCHOOL_CONTEXT_EXAMPLES = [
     locality: "Sohna Road and Golf Course Extension",
     school: "GD Goenka",
     support:
-      "Useful for families balancing school schedule, travel convenience, and the student's current maths confidence.",
+      "Useful for families balancing school schedule, travel convenience, and the student’s current maths confidence. Maths Bodhi helps match tutors for regular maths tuition, board support, crash courses, and advanced preparation.",
     chips: ["Sohna Road", "Schedule", "Confidence"],
   },
 ];
@@ -174,7 +174,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/sector-54",
     sectorLabel: "Sector 54",
-    subtitle: "Golf Course Road access with strong relevance for premium-school and board-aware maths support.",
+    subtitle:
+      "Golf Course Road access with strong relevance for CBSE, IB, IGCSE, JEE, and premium-school maths home tuition support from verified experienced tutors.",
     landmarks: ["Golf Course Road", "DLF Phase 5"],
     nearbySchools: ["The Shri Ram School Aravali", "Scottish High"],
   },
@@ -183,7 +184,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/sector-56",
     sectorLabel: "Sector 56",
-    subtitle: "A mixed-demand Gurugram pocket for CBSE, IB, IGCSE, and JEE maths home tuition searches.",
+    subtitle:
+      "A high-demand Gurugram pocket for maths home tutors, female maths tutors, IB support, IGCSE support, CBSE board preparation, and JEE foundation learning.",
     landmarks: ["Golf Course Extension", "Sector 55"],
     nearbySchools: ["Scottish High", "Shiv Nadar School"],
   },
@@ -192,7 +194,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/sector-57",
     sectorLabel: "Sector 57",
-    subtitle: "Useful for weekday home-tuition planning around Sushant Lok 3, Mayfield Garden, and Extension Road access.",
+    subtitle:
+      "Useful for weekday maths home tuition around Sushant Lok 3, Mayfield Garden, and Extension Road, especially for board exams, Olympiad maths, and personal attention.",
     landmarks: ["Sushant Lok 3", "Mayfield Garden"],
     nearbySchools: ["Scottish High", "Lotus Valley"],
   },
@@ -201,7 +204,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/golf-course-road",
     sectorLabel: "Golf Course Road",
-    subtitle: "A corridor route for families comparing premium-school access, board fit, and maths tutor availability.",
+    subtitle:
+      "A premium Gurugram corridor for families comparing experienced maths tutors, senior faculty, IB and IGCSE maths experts, JEE maths support, and verified home tuition.",
     landmarks: ["DLF Phase 1", "Sector 54"],
     nearbySchools: ["The Shri Ram School Aravali", "Scottish High"],
   },
@@ -210,7 +214,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/sohna-road",
     sectorLabel: "Sohna Road",
-    subtitle: "A practical corridor for school-paced maths support, board preparation, and regular after-school routines.",
+    subtitle:
+      "A practical corridor for school-paced maths support, CBSE and ICSE board preparation, regular after-school routines, and crash courses for mathematics.",
     landmarks: ["South City 2", "Sector 49"],
     nearbySchools: ["GD Goenka", "Lotus Valley"],
   },
@@ -219,7 +224,8 @@ const HOME_FALLBACK_SECTOR_PAGES = [
     citySlug: "gurugram",
     route: "/gurugram/dlf-phase-4",
     sectorLabel: "DLF Phase 4",
-    subtitle: "A central Gurugram route for families who want locality convenience and board-aware maths support together.",
+    subtitle:
+      "A central Gurugram route for families who want locality convenience, board-aware maths tutoring, personal attention, and experienced home tuition support.",
     landmarks: ["Galleria", "Sushant Lok"],
     nearbySchools: ["The Shri Ram School Aravali", "DPS Sector 45"],
   },
@@ -227,60 +233,65 @@ const HOME_FALLBACK_SECTOR_PAGES = [
 
 const INTENT_SECTIONS = [
   {
-    title: "Board-based matching",
+    title: "Board-specialised maths tutor matching",
     description:
-      "Families can begin with CBSE, IGCSE, IB, or JEE so the shortlist reflects how maths is taught, assessed, and revised.",
+      "Maths Bodhi helps Gurugram families begin with the student’s exact curriculum: CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced, or Maths Olympiad. This keeps the tutor shortlist aligned with the way mathematics is taught, assessed, revised, and practised for that academic route.",
   },
   {
-    title: "Class-based support",
+    title: "Personalised support for Class 6 to 12 and JEE",
     description:
-      "A Class 6 learner, a Class 10 board student, and a Class 12 student all need different pacing, explanation style, and weekly maths structure.",
+      "A Class 6 learner, a Class 10 board student, an IB DP student, and a JEE Advanced aspirant need very different pacing, depth, worksheets, and problem-solving practice. Maths Bodhi focuses on personal attention, concept clarity, marks improvement, and confidence-building rather than one-size-fits-all maths tuition.",
   },
   {
-    title: "Local tutor availability",
+    title: "Verified local maths tutors across Gurugram",
     description:
-      "Once board and class are clear, Maths Bodhi narrows the shortlist by Gurugram sector, school corridor, and whether the family wants home or online support.",
+      "Once the board and class are clear, Maths Bodhi narrows the shortlist by Gurugram sector, school corridor, home or online preference, and tutor profile. Families can request verified, highly experienced, senior, female, top-university, IIT, or PhD-level maths tutors depending on the student’s comfort and goal.",
   },
 ];
 
 const NEXT_STEP_POINTS = [
   {
-    title: "Start with the current maths pressure",
+    title: "Start with the student’s maths goal",
     description:
-      "The first conversation should cover recent scores, the chapters causing the most friction, and what kind of improvement the family expects.",
+      "The first discussion should cover current marks, weak chapters, school board, upcoming tests, and whether the goal is confidence building, 95%+ performance, JEE readiness, Olympiad preparation, or a crash course before exams.",
   },
   {
-    title: "Choose the right support format",
+    title: "Choose the right tutor profile",
     description:
-      "Parents can decide between home tuition, online support, or a flexible mix that fits school timings and after-school commitments.",
+      "Parents can request a maths home tutor, online maths tutor, female maths tutor, senior faculty member, JEE maths expert, IB or IGCSE specialist, or a patient tutor for special learning needs and personal attention.",
   },
   {
-    title: "Book the first useful session",
+    title: "Build a practical improvement plan",
     description:
-      "Once the tutor fit looks right, the next step is a practical demo or planning call rather than another vague shortlist.",
+      "After the first matching conversation, Maths Bodhi helps create a clear plan for concept clarity, regular doubt solving, worksheet practice, test revision, crash-course preparation, and measurable marks improvement.",
   },
 ];
 
 const homepageFaqs = [
   {
-    question: "How do I choose the right maths tutor for my child's class and board?",
+    question: "How do I choose the right maths home tutor in Gurugram?",
     answer:
-      "Start with class, then narrow by board, sector, and teaching mode. A Class 8 learner usually needs confidence and concept repair, while a Class 10, IB, IGCSE, or JEE learner often needs sharper exam structure and topic strategy.",
+      "Start with the student’s class, board, current marks, weak topics, and learning style. A Class 8 learner may need confidence and foundation repair, while a Class 10, Class 12, IB, IGCSE, or JEE student usually needs sharper exam planning and topic strategy. Maths Bodhi helps match students with verified maths tutors according to board, class, Gurugram locality, teaching mode, and academic goal.",
   },
   {
-    question: "Do you provide maths home tutors for premium schools in Gurugram?",
+    question: "Which boards and exams does Maths Bodhi support?",
     answer:
-      "Yes. The premium school section is for families who want tutors already familiar with the pace and expectations of schools near Golf Course Road, Golf Course Extension Road, and other major Gurugram corridors.",
+      "Maths Bodhi provides specialised maths tuition for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, IIT JEE Main, IIT JEE Advanced, and Maths Olympiad preparation. Students can get support for school maths, board exams, international curriculum mathematics, competitive exam problem-solving, and crash courses for Class 6 to 12 and JEE maths.",
   },
   {
-    question: "Can I request home tuition only in my sector?",
+    question: "Can I request a female, senior, or highly experienced maths tutor?",
     answer:
-      "Yes. The sector cards are meant to help parents check locality relevance quickly before moving into a demo or WhatsApp enquiry.",
+      "Yes. Parents can request verified maths home tutors, female maths tutors, senior faculty, highly experienced educators, tutors from top universities, IIT-background tutors, and PhD-level mathematics experts depending on the student’s comfort, academic pressure, and long-term goal.",
   },
   {
-    question: "What happens after I submit a student or tutor form?",
+    question: "Do you help students who need special attention in maths?",
     answer:
-      "The dashboard creates a structured WhatsApp handoff to the Maths Bodhi number, so the next conversation can start quickly without extra portal friction.",
+      "Yes. Maths Bodhi supports students who need patient explanation, slower pacing, repeated concept reinforcement, confidence building, or personalised maths learning. The goal is to reduce fear of mathematics, improve understanding, and create a safe one-to-one environment where the student can ask doubts freely.",
+  },
+  {
+    question: "Do you provide maths crash courses in Gurugram?",
+    answer:
+      "Yes. Maths Bodhi provides maths crash courses for Class 6 to 12, CBSE, ICSE, ISC, IGCSE, IB, IIT JEE Main, and IIT JEE Advanced. Crash courses are useful for board exams, pre-boards, school tests, last-minute revision, JEE revision phases, and focused improvement before important assessments.",
   },
 ];
 
@@ -403,7 +414,7 @@ function buildPopularSearchGroups(sectorPages) {
   return [
     {
       title: "Boards",
-      description: "Open board pages directly where Maths Bodhi already has matching routes.",
+      description: "Open CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, and JEE Advanced maths pages where Maths Bodhi already has matching routes.",
       badge: "Popular",
       icon: "📘",
       accentClassName: "from-blue-600 to-cyan-500",
@@ -412,7 +423,7 @@ function buildPopularSearchGroups(sectorPages) {
     },
     {
       title: "Classes 6 to 12",
-      description: "Use these quick picks to narrow the tutor list by class level.",
+      description: "Use these quick picks to narrow the tutor list by class level, from middle-school maths foundations to Class 10, Class 12, IB, IGCSE, and JEE preparation.",
       badge: "Parent picks",
       icon: "🎓",
       accentClassName: "from-emerald-500 to-teal-500",
@@ -421,7 +432,7 @@ function buildPopularSearchGroups(sectorPages) {
     },
     {
       title: "Local Areas",
-      description: "See the Gurugram sectors and school corridors families often search first.",
+      description: "See the Gurugram sectors, premium school corridors, and residential areas where parents commonly search for maths home tutors.",
       badge: "Quick picks",
       icon: "📍",
       accentClassName: "from-amber-500 to-orange-500",
@@ -430,7 +441,7 @@ function buildPopularSearchGroups(sectorPages) {
     },
     {
       title: "Service Types",
-      description: "Useful phrases parents use when the support format matters as much as the board.",
+      description: "Useful phrases parents use when they need home tuition, online maths support, one-to-one attention, board revision, crash courses, or JEE maths practice.",
       badge: "Quick picks",
       icon: "🏠",
       accentClassName: "from-violet-500 to-fuchsia-500",
@@ -439,7 +450,7 @@ function buildPopularSearchGroups(sectorPages) {
     },
     {
       title: "Topics",
-      description: "Quickly spotlight tutors around the maths area that needs more attention.",
+      description: "Quickly spotlight tutors around algebra, geometry, trigonometry, calculus, statistics, probability, coordinate geometry, and advanced problem-solving.",
       badge: "Popular",
       icon: "📊",
       accentClassName: "from-rose-500 to-pink-500",
@@ -823,7 +834,12 @@ function Home() {
               </h1>
 
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
-                {home.heroSubtitle}
+                Maths Bodhi is a specialised maths home tuition platform in Gurugram for CBSE,
+                ICSE, ISC, IGCSE, IB MYP, IB DP, IIT JEE Main, IIT JEE Advanced, and Maths
+                Olympiad learners. We connect families with verified, highly experienced,
+                senior, female, top-university, IIT, and PhD-level maths tutors for personal
+                attention, concept clarity, marks improvement, crash courses, and confident
+                problem-solving from Class 6 to Class 12 and beyond.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -921,8 +937,9 @@ function Home() {
                   Popular maths searches on this page
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Explore {totalPopularSearches}+ grouped search ideas below to open board pages
-                  or narrow the tutor list by class, locality, support type, and topic.
+                  Explore {totalPopularSearches}+ grouped search ideas for CBSE, ICSE, ISC,
+                  IGCSE, IB, JEE, Olympiad maths, class-wise tutoring, Gurugram localities,
+                  crash courses, female maths tutors, and personal one-to-one support.
                 </p>
               </div>
             </div>
@@ -939,11 +956,12 @@ function Home() {
 
               <div className="mt-5 rounded-[24px] bg-slate-50 p-6">
                 <h2 className="text-2xl font-bold text-slate-950">
-                  Find the right maths tutor faster
+                  Find a verified maths home tutor faster
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Start with class, then narrow by board, sector, and mode so the shortlist feels
-                  relevant from the first click.
+                  Start with class, board, Gurugram sector, and teaching mode so the shortlist
+                  matches the student’s maths level, exam pressure, learning style, and need for
+                  personal attention.
                 </p>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -1040,8 +1058,8 @@ function Home() {
             <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
               <SectionTitle
                 badge="Popular Maths Searches"
-                title="Useful maths search paths parents commonly use before choosing a tutor"
-                subtitle="Board pages open directly where a route already exists, while the other chips safely narrow the homepage tutor shortlist."
+                title="Useful maths search paths parents use before choosing a tutor in Gurugram"
+                subtitle="Parents can begin with CBSE, ICSE, ISC, IGCSE, IB, JEE, Olympiad maths, class level, locality, tutor profile, or crash-course requirement before requesting a personalised match."
                 align="left"
               />
               <div className="max-w-sm rounded-[24px] border border-blue-100 bg-white/80 p-5 shadow-lg shadow-blue-100/50 backdrop-blur">
@@ -1049,7 +1067,8 @@ function Home() {
                   Parent shortcut panel
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Use these links as navigation filters, not tutor result claims.
+                  Use these links to explore board-specific, class-specific, topic-specific, and
+                  locality-specific maths support without changing the page experience.
                 </p>
               </div>
             </div>
@@ -1140,7 +1159,7 @@ function Home() {
                   Filtered Tutor Results
                 </span>
                 <h2 className="mt-4 text-3xl font-bold text-slate-950 md:text-4xl">
-                  Compare tutors that match your current filters
+                  Compare verified maths tutors for your board, class, sector, and goal
                 </h2>
                 <p
                   className="mt-3 max-w-3xl text-base leading-7 text-slate-600 md:text-lg"
@@ -1153,7 +1172,7 @@ function Home() {
                       } for ${
                         activeTutorFilters.length
                           ? activeTutorFilters.join(", ")
-                          : "all classes, boards, local areas, support types, and topics"
+                          : "all maths classes, boards, Gurugram localities, teaching modes, and topics"
                       }.`}
                 </p>
               </div>
@@ -1258,10 +1277,11 @@ function Home() {
               </>
             ) : (
               <div className="mt-8 rounded-[28px] border border-slate-200 bg-slate-50 p-8 text-center shadow-sm">
-                <h3 className="text-xl font-bold text-slate-950">No tutors matched these filters yet</h3>
+                <h3 className="text-xl font-bold text-slate-950">No maths tutors matched these filters yet</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  These dropdowns include useful Gurugram search defaults, but tutor cards only
-                  appear when a real profile matches the selected filters.
+                  These dropdowns include useful Gurugram search defaults for CBSE, ICSE, ISC,
+                  IGCSE, IB, JEE, Olympiad maths, local sectors, and learning modes. Tutor cards
+                  only appear when a real profile matches the selected filters.
                 </p>
                 <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
                   <button
@@ -1295,8 +1315,8 @@ function Home() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Browse Maths by Board"
-              title="Choose the maths board or programme that matches the student's academic route"
-              subtitle="Start with the curriculum first, then move into the exact maths page that fits the student's level more cleanly."
+              title="Choose the maths board, curriculum, or exam path that matches the student"
+              subtitle="Maths Bodhi supports CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced, and Maths Olympiad preparation with curriculum-aware tutors."
               align="left"
             />
 
@@ -1346,11 +1366,12 @@ function Home() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="School and Local Context"
-              title="Commonly requested maths support across Gurugram school corridors and local clusters"
-              subtitle="These cards stay practical: they highlight areas and school clusters families often ask about when planning maths support."
+              title="Maths home tuition across Gurugram school corridors and local clusters"
+              subtitle="These cards highlight areas, school corridors, and residential pockets where families commonly ask for verified maths home tutors, board support, JEE maths guidance, and personal attention."
             />
             <p className="mx-auto mt-4 max-w-3xl text-center text-xs leading-6 text-slate-500">
-              School names are included only as local planning context. Maths Bodhi is not officially affiliated with these schools.
+              School names are included only as local planning context. Maths Bodhi is not
+              officially affiliated with these schools and does not claim school endorsement.
             </p>
 
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1405,12 +1426,13 @@ function Home() {
                 How Maths Bodhi Matches Tutors
               </span>
               <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-950 md:text-4xl">
-                Maths home tuition in Gurugram, simplified
+                Maths home tuition in Gurugram with personal attention and clear goals
               </h2>
               <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
-                Maths Bodhi helps families move from a broad search into a clearer shortlist by
-                matching board, class level, and locality before the first conversation even
-                begins.
+                Maths Bodhi helps families move from a broad search into a focused shortlist by
+                matching board, class level, Gurugram locality, tutor profile, and learning goal.
+                The aim is not only tuition, but concept clarity, confidence, marks improvement,
+                exam readiness, and stronger problem-solving habits.
               </p>
 
               <div className="mt-8 space-y-4">
@@ -1439,15 +1461,15 @@ function Home() {
                 {[
                   {
                     label: "Board",
-                    text: "Start with CBSE, IGCSE, IB, or JEE so the tutor shortlist fits the curriculum.",
+                    text: "Start with CBSE, ICSE, ISC, IGCSE, IB, JEE, or Olympiad maths so the tutor shortlist fits the exact curriculum.",
                   },
                   {
                     label: "Class",
-                    text: "Match the tutor to the student's level, pace, and revision needs.",
+                    text: "Match the tutor to the student’s class, pace, weak chapters, confidence level, and revision needs.",
                   },
                   {
                     label: "Location",
-                    text: "Shortlist by sector, school corridor, and home or online preference.",
+                    text: "Shortlist by Gurugram sector, school corridor, home tuition, online support, or flexible maths learning preference.",
                   },
                 ].map((step) => (
                   <div key={step.label} className="rounded-2xl border border-slate-200 bg-white p-4">
@@ -1475,15 +1497,15 @@ function Home() {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[24px] bg-slate-50 p-5">
-                  <h3 className="text-xl font-bold text-slate-950">Practical shortlisting</h3>
+                  <h3 className="text-xl font-bold text-slate-950">Tutor fit before commitment</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Families can compare tutor fit, timing, and teaching mode before committing to the next step.
+                    Families can compare experience, board fit, timing, gender preference, and teaching mode before booking a demo.
                   </p>
                 </div>
                 <div className="rounded-[24px] bg-slate-50 p-5">
-                  <h3 className="text-xl font-bold text-slate-950">Clear first conversation</h3>
+                  <h3 className="text-xl font-bold text-slate-950">Clear improvement plan</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
-                    The first discussion stays focused on class needs, current chapters, and the right demo plan.
+                    The first discussion stays focused on current marks, weak topics, target percentage, and the right maths demo plan.
                   </p>
                 </div>
               </div>
@@ -1492,8 +1514,8 @@ function Home() {
             <div className="order-1 lg:order-2">
               <SectionTitle
                 badge="After You Shortlist"
-                title="A clearer next step for parents, students, and weekly schedules"
-                subtitle="Once the tutor fit looks right, the next conversation becomes practical rather than vague."
+                title="A practical next step for marks improvement, confidence, and exam readiness"
+                subtitle="Once the tutor fit looks right, the next conversation becomes focused on the student’s current maths level, target score, weak chapters, and weekly learning plan."
                 align="left"
               />
 
@@ -1516,8 +1538,8 @@ function Home() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Find Tutors Near You"
-              title="Browse local Gurugram sectors where maths home tuition demand is strongest"
-              subtitle="A more professional locality view for parents who want fast sector-level clarity before booking a demo."
+              title="Browse Gurugram sectors for maths home tuition near you"
+              subtitle="Parents can explore sector-level maths tutor availability for CBSE, ICSE, ISC, IGCSE, IB, JEE, Olympiad maths, crash courses, and one-to-one personal attention."
             />
 
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -1561,7 +1583,7 @@ function Home() {
 
                     <div className="mt-6 flex flex-col gap-2 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
                       <p className="text-sm font-medium text-slate-600">
-                        Home tuition and online support
+                        Maths home tuition and online support
                       </p>
                       <p className="text-sm font-semibold text-blue-700 transition group-hover:translate-x-1">
                         Explore sector
@@ -1601,10 +1623,10 @@ function Home() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="What Gurugram Parents Say"
-              title="Real-looking parent feedback from Gurugram sectors with more honest rating spread"
+              title="Parent feedback from Gurugram families choosing focused maths support"
               subtitle={
                 reviews.length
-                  ? `Showing ${Math.min(visibleReviews, reviews.length)} of ${reviews.length} review cards. Ratings are intentionally mixed instead of repeating a flat 5.0 on every card.`
+                  ? `Showing ${Math.min(visibleReviews, reviews.length)} of ${reviews.length} review cards from families comparing maths tutor fit, board support, personal attention, and progress.`
                   : "Parent feedback will appear here once public reviews are available."
               }
             />
@@ -1674,8 +1696,8 @@ function Home() {
             <div className="rounded-[32px] border border-slate-200 bg-slate-50 p-8 shadow-sm">
               <SectionTitle
                 badge="Questions Parents Ask"
-                title="Questions parents usually click on before choosing a maths tutor"
-                subtitle="The answers stay hidden until the parent opens the question, which keeps the section easier to scan."
+                title="Questions parents ask before choosing a maths home tutor in Gurugram"
+                subtitle="These answers help parents compare tutor experience, board support, crash courses, special attention, female tutor requests, and personalised maths learning."
                 align="left"
               />
 
@@ -1718,10 +1740,12 @@ function Home() {
                 Clear Next Step
               </p>
               <h2 className="mt-4 text-3xl font-bold md:text-4xl">
-                Start with the path that matches your role and your maths need
+                Start with the maths support path that fits your student’s goal
               </h2>
               <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
-                Book a demo, open the student dashboard, onboard as a tutor, or message the team directly.
+                Book a demo for CBSE, ICSE, ISC, IGCSE, IB, JEE, Olympiad maths, crash-course
+                revision, special attention, female tutor support, or personalised maths home
+                tuition in Gurugram.
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">

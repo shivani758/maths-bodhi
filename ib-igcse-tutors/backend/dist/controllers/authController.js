@@ -1,4 +1,5 @@
 import { env } from "../config/env.js";
+import { getSessionCookieOptions } from "../auth/session.js";
 import { authenticateAdmin, getUserSessionById } from "../services/authService.js";
 import { loginSchema } from "../validators/authValidators.js";
 import { sendOk } from "../utils/response.js";
@@ -50,7 +51,7 @@ export async function logoutController(req, res) {
             resolve();
         });
     });
-    res.clearCookie(env.SESSION_COOKIE_NAME);
+    res.clearCookie(env.SESSION_COOKIE_NAME, getSessionCookieOptions());
     res.setHeader("Cache-Control", "no-store");
     return sendOk(res, { authenticated: false });
 }

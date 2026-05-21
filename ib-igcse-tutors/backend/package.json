@@ -8,20 +8,22 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "seed": "tsx src/seed/runSeed.ts",
+<<<<<<< HEAD
     "db:migrate": "tsx src/scripts/migratePostgres.ts",
     "db:permissions": "tsx src/scripts/repairPostgresPermissions.ts",
+=======
+    "db:init": "tsx src/scripts/initPostgresSchema.ts",
+>>>>>>> b9dfe44 (changes before santosh)
     "db:check": "tsx src/scripts/checkPostgres.ts",
     "reset:admin-password": "tsx src/scripts/resetAdminPassword.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
-    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "express-session": "^1.18.2",
-    "mongoose": "^8.19.3",
     "morgan": "^1.10.1",
     "pg": "^8.20.0",
     "zod": "^3.25.76"
