@@ -32,11 +32,4 @@ export function zodErrorToDetails(error) {
     }
     return details;
 }
-export function mongooseValidationErrorToDetails(error) {
-    const details = createValidationDetails();
-    for (const issue of Object.values(error.errors)) {
-        pushFieldError(details, issue.path, issue.message);
-    }
-    return details;
-}
 //# sourceMappingURL=validationDetails.js.map

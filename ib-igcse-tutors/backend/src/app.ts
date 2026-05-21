@@ -1,8 +1,9 @@
-import cors from "cors";
+import cors, { type CorsOptions } from "cors";
 import express from "express";
 import morgan from "morgan";
 import { createSessionMiddleware } from "./auth/session.js";
-import { requireAuth, requireRole } from "./auth/accessControl.js";
+import { requireRole } from "./auth/accessControl.js";
+import { ADMIN_PANEL_ROLES } from "./auth/roles.js";
 import { env } from "./config/env.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFoundHandler } from "./middleware/notFound.js";
@@ -24,32 +25,32 @@ import { asyncHandler } from "./utils/asyncHandler.js";
 
 export function createApp() {
   const app = express();
-  const allowedOrigins = new Set([
-    "http://localhost:5173",
-    "https://maths-nxtutors.vercel.app",
-    ...env.FRONTEND_ORIGINS,
-  ]);
+  const allowedOrigins = new Set(env.FRONTEND_ORIGINS);
+  const corsOptions: CorsOptions = {
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, false);
+    },
+    credentials: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+  };
+  const corsMiddleware = cors(corsOptions);
 
   if (env.NODE_ENV !== "production") {
+    allowedOrigins.add("http://localhost:5173");
     allowedOrigins.add("http://127.0.0.1:5173");
     allowedOrigins.add("http://localhost:4173");
     allowedOrigins.add("http://127.0.0.1:4173");
   }
 
   app.set("trust proxy", 1);
-  app.use(
-    cors({
-      origin(origin, callback) {
-        if (!origin || allowedOrigins.has(origin)) {
-          callback(null, true);
-          return;
-        }
-
-        callback(null, false);
-      },
-      credentials: true,
-    }),
-  );
+  app.options("/api/auth/login", corsMiddleware);
+  app.use(corsMiddleware);
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
@@ -65,12 +66,12 @@ export function createApp() {
   app.get("/api/tutors", asyncHandler(listPublicTutorsController));
   app.get("/api/blogs", asyncHandler(listPublicBlogsController));
   app.get("/api/reviews", asyncHandler(listPublicReviewsController));
-  app.use("/api/admin/dashboard", requireAuth, dashboardRoutes);
-  app.use("/api/admin/tutors", requireRole(["super_admin", "admin", "editor"]), tutorRoutes);
-  app.use("/api/admin/blogs", requireRole(["super_admin", "admin", "editor"]), blogRoutes);
-  app.use("/api/admin/pages", requireRole(["super_admin", "admin", "editor"]), pageRoutes);
-  app.use("/api/admin/reviews", requireRole(["super_admin", "admin", "editor"]), reviewRoutes);
-  app.use("/api/admin/results", requireRole(["super_admin", "admin", "editor"]), studentResultRoutes);
+  app.use("/api/admin/dashboard", requireRole(ADMIN_PANEL_ROLES), dashboardRoutes);
+  app.use("/api/admin/tutors", requireRole(ADMIN_PANEL_ROLES), tutorRoutes);
+  app.use("/api/admin/blogs", requireRole(ADMIN_PANEL_ROLES), blogRoutes);
+  app.use("/api/admin/pages", requireRole(ADMIN_PANEL_ROLES), pageRoutes);
+  app.use("/api/admin/reviews", requireRole(ADMIN_PANEL_ROLES), reviewRoutes);
+  app.use("/api/admin/results", requireRole(ADMIN_PANEL_ROLES), studentResultRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

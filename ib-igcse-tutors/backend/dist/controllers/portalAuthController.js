@@ -1,4 +1,5 @@
 import { env } from "../config/env.js";
+import { getSessionCookieOptions } from "../auth/session.js";
 import { authenticatePortalUser, getPortalSessionById, registerPortalAccount, resendPortalVerification, updatePortalProfile, verifyPortalEmail, } from "../services/portalAuthService.js";
 import { parsePortalProfileUpdatePayload, parsePortalSignupPayload, portalLoginPayloadSchema, portalVerificationTokenSchema, } from "../validators/portalAuthValidators.js";
 import { sendOk } from "../utils/response.js";
@@ -69,7 +70,7 @@ export async function portalLogoutController(req, res) {
             resolve();
         });
     });
-    res.clearCookie(env.SESSION_COOKIE_NAME);
+    res.clearCookie(env.SESSION_COOKIE_NAME, getSessionCookieOptions());
     res.setHeader("Cache-Control", "no-store");
     return sendOk(res, { authenticated: false });
 }

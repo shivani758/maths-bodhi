@@ -1,7 +1,14 @@
 import { createUser, findAdminUserByIdentifier, findUserByEmail, findUserById, updateUser, } from "../repositories/postgres/userRepository.js";
+import { ADMIN_USER_ROLES } from "../types/auth.js";
 import { ApiError } from "../utils/ApiError.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
+function isAdminRole(role) {
+    return ADMIN_USER_ROLES.includes(role);
+}
 function toSessionUser(user) {
+    if (!isAdminRole(user.role)) {
+        throw new ApiError(403, "Admin access is required.", { code: "FORBIDDEN" });
+    }
     return {
         id: user.id,
         name: user.name,
@@ -24,7 +31,7 @@ export async function authenticateAdmin(identifier, password) {
 }
 export async function getUserSessionById(userId) {
     const user = await findUserById(userId);
-    if (!user || !user.active) {
+    if (!user || !user.active || !isAdminRole(user.role)) {
         return null;
     }
     return toSessionUser(user);

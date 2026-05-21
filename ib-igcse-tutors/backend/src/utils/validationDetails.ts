@@ -1,4 +1,3 @@
-import type mongoose from "mongoose";
 import type { ZodError } from "zod";
 
 export type ValidationDetails = {
@@ -49,14 +48,3 @@ export function zodErrorToDetails(error: ZodError): ValidationDetails {
   return details;
 }
 
-export function mongooseValidationErrorToDetails(
-  error: mongoose.Error.ValidationError,
-): ValidationDetails {
-  const details = createValidationDetails();
-
-  for (const issue of Object.values(error.errors)) {
-    pushFieldError(details, issue.path, issue.message);
-  }
-
-  return details;
-}

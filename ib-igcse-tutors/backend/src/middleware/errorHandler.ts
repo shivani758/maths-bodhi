@@ -1,11 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 import { ZodError } from "zod";
 import { ApiError } from "../utils/ApiError.js";
-import {
-  mongooseValidationErrorToDetails,
-  zodErrorToDetails,
-} from "../utils/validationDetails.js";
+import { zodErrorToDetails } from "../utils/validationDetails.js";
 import { isProduction } from "../config/env.js";
 
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {
@@ -27,27 +23,6 @@ export function errorHandler(error: unknown, _req: Request, res: Response, _next
         message: "Validation failed.",
         code: "VALIDATION_ERROR",
         details: zodErrorToDetails(error),
-      },
-    });
-  }
-
-  if (error instanceof mongoose.Error.ValidationError) {
-    return res.status(400).json({
-      success: false,
-      error: {
-        message: "Validation failed.",
-        code: "MONGOOSE_VALIDATION_ERROR",
-        details: mongooseValidationErrorToDetails(error),
-      },
-    });
-  }
-
-  if (error instanceof mongoose.Error.CastError) {
-    return res.status(400).json({
-      success: false,
-      error: {
-        message: "Invalid identifier provided.",
-        code: "INVALID_ID",
       },
     });
   }

@@ -43,7 +43,6 @@ Set these in CloudPanel, not in committed files:
 ```bash
 NODE_ENV=production
 PORT=<cloudpanel-node-port>
-DB_PROVIDER=postgres
 DATABASE_URL=postgresql://<database-user>:<url-encoded-database-password>@<database-host>:5432/mathsbodhi
 DB_HOST=<database-host>
 DB_PORT=5432
@@ -80,7 +79,7 @@ SESSION_COOKIE_SECURE=true
 SESSION_COOKIE_DOMAIN=<optional-cookie-domain>
 ```
 
-`NEXT_PUBLIC_API_URL` is a frontend variable and is not required by this backend. `MONGO_URI` is not used by the current PostgreSQL backend.
+`NEXT_PUBLIC_API_URL` is a frontend variable and is not required by this backend.
 
 ## PostgreSQL Setup
 

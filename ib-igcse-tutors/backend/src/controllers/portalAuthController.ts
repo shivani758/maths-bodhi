@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { env } from "../config/env.js";
+import { getSessionCookieOptions } from "../auth/session.js";
 import {
   authenticatePortalUser,
   getPortalSessionById,
@@ -102,7 +103,7 @@ export async function portalLogoutController(req: Request, res: Response) {
     });
   });
 
-  res.clearCookie(env.SESSION_COOKIE_NAME);
+  res.clearCookie(env.SESSION_COOKIE_NAME, getSessionCookieOptions());
   res.setHeader("Cache-Control", "no-store");
   return sendOk(res, { authenticated: false });
 }
