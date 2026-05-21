@@ -8,12 +8,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "seed": "tsx src/seed/runSeed.ts",
-<<<<<<< HEAD
     "db:migrate": "tsx src/scripts/migratePostgres.ts",
     "db:permissions": "tsx src/scripts/repairPostgresPermissions.ts",
-=======
     "db:init": "tsx src/scripts/initPostgresSchema.ts",
->>>>>>> b9dfe44 (changes before santosh)
     "db:check": "tsx src/scripts/checkPostgres.ts",
     "reset:admin-password": "tsx src/scripts/resetAdminPassword.ts"
   },
