@@ -7,6 +7,7 @@ import {
   PageFeaturedTutorsSection,
   PageHeroSection,
   PageRelatedBlogsSection,
+  PageReviewsSection,
   PageResultsSection,
   PageRouteGroupsSection,
   PageSupportPointsSection,
@@ -30,6 +31,7 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
   const routeGroups = config.sections?.routeGroups ?? [];
   const featuredTutorsSection = config.sections?.featuredTutors ?? {};
   const resultsSection = config.sections?.studentResults ?? {};
+  const reviewsSection = config.sections?.reviews ?? {};
   const blogsSection = config.sections?.relatedBlogs ?? {};
   const faqSection = config.sections?.faqSection ?? {};
 
@@ -97,6 +99,19 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
             }
             results={templateData.studentResults ?? []}
             backgroundClassName={resultsSection.backgroundClassName ?? "bg-white"}
+          />
+        ) : null}
+
+        {isSectionEnabled(config, "reviews") ? (
+          <PageReviewsSection
+            badge={reviewsSection.badge ?? "Parent Reviews"}
+            title={reviewsSection.title ?? `Parent feedback for ${config.title}`}
+            subtitle={
+              reviewsSection.subtitle ??
+              "Approved parent reviews appear here only when they are available in the public content feed."
+            }
+            reviews={templateData.relatedReviews ?? []}
+            backgroundClassName={reviewsSection.backgroundClassName ?? "bg-slate-50"}
           />
         ) : null}
 

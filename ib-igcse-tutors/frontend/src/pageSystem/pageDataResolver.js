@@ -3,9 +3,11 @@ import {
   getFeaturedTutors,
   getRelatedBlogs,
   getStudentResultsByBoard,
+  getTestimonialsByBoard,
   listMathsTutors,
 } from "../services/mathsContentService";
 import {
+  listCanonicalReviewsSnapshot,
   listCanonicalTutorsSnapshot,
   listPublishedBlogsSnapshot,
   listResultsSnapshot,
@@ -93,6 +95,18 @@ function toGuideCard(blog) {
   };
 }
 
+function toReviewCard(review) {
+  return {
+    id: review.id,
+    parent: review.parent ?? review.reviewerName ?? "Maths Bodhi parent",
+    sector: review.sector ?? review.locality ?? "Gurugram",
+    school: review.school ?? "",
+    board: review.board ?? review.relatedBoard ?? "",
+    rating: String(review.rating ?? ""),
+    quote: review.quote ?? review.reviewText ?? "",
+  };
+}
+
 function createTutorLookup() {
   return listCanonicalTutorsSnapshot().reduce((map, tutor) => {
     map[tutor.id] = tutor;
@@ -122,6 +136,21 @@ function sortByDate(items = [], fieldName) {
     (first, second) =>
       new Date(second[fieldName] ?? 0).getTime() - new Date(first[fieldName] ?? 0).getTime(),
   );
+}
+
+function sortReviews(reviews = []) {
+  return [...reviews].sort((first, second) => {
+    if (Boolean(first.featured) !== Boolean(second.featured)) {
+      return first.featured ? -1 : 1;
+    }
+
+    if ((first.order ?? 999) !== (second.order ?? 999)) {
+      return (first.order ?? 999) - (second.order ?? 999);
+    }
+
+    return new Date(second.updatedAt ?? second.createdAt ?? 0).getTime() -
+      new Date(first.updatedAt ?? first.createdAt ?? 0).getTime();
+  });
 }
 
 function sortResults(results = []) {
@@ -161,6 +190,17 @@ function filterResultsByPredicate(predicate, limit = 3) {
     sortResults(listResultsSnapshot().filter((result) => result.status === "approved").filter(predicate)).map(
       (result) => toResultCard(result, tutorLookup),
     ),
+    limit,
+  );
+}
+
+function filterReviewsByPredicate(predicate, limit = 3) {
+  return limitItems(
+    sortReviews(
+      listCanonicalReviewsSnapshot()
+        .filter(predicate)
+        .filter((review) => String(review.quote ?? review.reviewText ?? "").trim()),
+    ).map((review) => toReviewCard(review)),
     limit,
   );
 }
@@ -363,10 +403,60 @@ function resolveResultQuery(query = {}) {
   }
 }
 
+function resolveReviewQuery(query = {}) {
+  switch (query.kind) {
+    case "board":
+      return getTestimonialsByBoard(query.pageKey, {
+        featuredReviewIds: query.featuredReviewIds,
+        limit: query.limit,
+      }).filter((review) => String(review.quote ?? "").trim());
+    case "city":
+      return filterReviewsByPredicate((review) => {
+        const cityTokens = normalizeValues([query.citySlug, query.cityLabel]);
+        const isGurugram = cityTokens.some((value) => value === "gurugram" || value === "gurgaon");
+
+        if (isGurugram) {
+          return true;
+        }
+
+        return hasNormalizedValue([review.city, review.citySlug], cityTokens);
+      }, query.limit);
+    case "sector":
+      return filterReviewsByPredicate(
+        (review) =>
+          hasNormalizedValue(
+            [review.sector, review.locality, review.linkedLocalitySlug, review.featuredOn],
+            [query.sectorSlug, query.sectorLabel],
+          ),
+        query.limit,
+      );
+    case "tokens":
+      return filterReviewsByPredicate(
+        (review) =>
+          matchesTokens(
+            [
+              review.board,
+              review.relatedBoard,
+              review.sector,
+              review.locality,
+              review.school,
+              review.quote,
+              review.reviewText,
+            ],
+            query.tokens,
+          ),
+        query.limit,
+      );
+    default:
+      return [];
+  }
+}
+
 export function resolveConfigPageData(config) {
   if (!config) {
     return {
       relatedTutors: [],
+      relatedReviews: [],
       relatedBlogs: [],
       studentResults: [],
     };
@@ -374,6 +464,7 @@ export function resolveConfigPageData(config) {
 
   return {
     relatedTutors: resolveTutorQuery(config.relatedTutorQuery),
+    relatedReviews: resolveReviewQuery(config.relatedReviewQuery),
     relatedBlogs: resolveBlogQuery(config.relatedBlogQuery),
     studentResults: resolveResultQuery(config.relatedResultQuery),
   };

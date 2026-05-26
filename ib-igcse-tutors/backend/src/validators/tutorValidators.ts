@@ -20,7 +20,7 @@ const tutorBaseSchema = z.object({
   serviceModes: requiredStringArraySchema("Select at least one service mode."),
   experienceYears: z.coerce.number().min(1, "Experience years is required."),
   experienceLabel: z.string().trim().default(""),
-  rating: z.coerce.number().min(0).max(5).default(4.8),
+  rating: z.coerce.number().min(0).max(5).optional(),
   startingFee: z.string().trim().min(1, "Starting fee is required."),
   featured: z.boolean().default(false),
   featuredInHome: z.boolean().default(false),

@@ -1,8 +1,11 @@
 import {
   TUTOR_BOARD_OPTIONS,
+  TUTOR_CITY_OPTIONS,
   TUTOR_CLASS_OPTIONS,
+  TUTOR_LOCALITY_OPTIONS,
   TUTOR_SERVICE_MODE_OPTIONS,
   TUTOR_STATUS_OPTIONS,
+  TUTOR_TOPIC_OPTIONS,
 } from "../contentOptions";
 import { slugifyValue } from "../utils/formValidation";
 import {
@@ -41,6 +44,62 @@ function mergeOptions(primary = [], secondary = []) {
   return [...new Set([...(primary ?? []), ...(secondary ?? [])].filter(Boolean))];
 }
 
+function formatOptionLabel(value) {
+  return String(value ?? "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function toggleValue(values = [], value) {
+  return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
+}
+
+function ChecklistField({
+  label,
+  helpText,
+  error,
+  required = false,
+  options,
+  value = [],
+  onChange,
+  columns = "sm:grid-cols-2",
+  maxHeightClassName = "max-h-56",
+}) {
+  return (
+    <div>
+      <span className="mb-2 block text-sm font-semibold text-slate-700">
+        {label}
+        {required ? <span className="ml-1 text-rose-600">*</span> : null}
+      </span>
+      <div
+        className={`${maxHeightClassName} overflow-y-auto rounded-2xl border bg-white p-3 ${
+          error ? "border-rose-300 bg-rose-50" : "border-slate-200"
+        }`}
+      >
+        <div className={`grid gap-2 ${columns}`}>
+          {options.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => onChange(toggleValue(value, item))}
+              className={`rounded-xl border px-3 py-2 text-left text-xs font-semibold transition ${
+                value.includes(item)
+                  ? "border-blue-200 bg-blue-50 text-blue-700"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:text-blue-700"
+              }`}
+              aria-pressed={value.includes(item)}
+            >
+              {formatOptionLabel(item)}
+            </button>
+          ))}
+        </div>
+      </div>
+      {error ? <span className="mt-2 block text-xs leading-5 text-rose-600">{error}</span> : null}
+      {helpText ? <span className="mt-2 block text-xs leading-5 text-slate-500">{helpText}</span> : null}
+    </div>
+  );
+}
+
 function TutorForm({
   draftItem,
   setDraftItem,
@@ -56,13 +115,22 @@ function TutorForm({
   const profile = draftItem.profile;
   const boardOptions = mergeOptions(TUTOR_BOARD_OPTIONS, tutor.boards);
   const classOptions = mergeOptions(TUTOR_CLASS_OPTIONS, tutor.classesSupported);
+  const topicOptions = mergeOptions(TUTOR_TOPIC_OPTIONS, tutor.topics);
   const serviceModeOptions = mergeOptions(TUTOR_SERVICE_MODE_OPTIONS, tutor.serviceModes);
   const cityValueOptions = mergeOptions(
+    TUTOR_CITY_OPTIONS,
     cityOptions.map((city) => city.slug),
+  );
+  const cityOptionsWithSavedValues = mergeOptions(
+    cityValueOptions,
     tutor.cities,
   );
   const localityValueOptions = mergeOptions(
+    TUTOR_LOCALITY_OPTIONS,
     localityOptions.map((locality) => locality.sectorLabel),
+  );
+  const localityOptionsWithSavedValues = mergeOptions(
+    localityValueOptions,
     tutor.localities,
   );
 
@@ -155,9 +223,15 @@ function TutorForm({
           />
         </FieldGroup>
 
-        <FieldGroup label="Starting Fee" required error={errors.startingFee}>
+        <FieldGroup
+          label="Starting Fee"
+          required
+          error={errors.startingFee}
+          helpText="Use a public-friendly format, e.g. Rs 1,500 per class or Shared on enquiry."
+        >
           <input
             value={tutor.startingFee}
+            placeholder="Rs 1,500 per class"
             onChange={(event) =>
               setDraftItem((current) => updateTutor(current, { startingFee: event.target.value }))
             }
@@ -165,7 +239,7 @@ function TutorForm({
           />
         </FieldGroup>
 
-        <FieldGroup label="Rating" error={errors.rating}>
+        <FieldGroup label="Rating" error={errors.rating} helpText="Use values like 4.8. Do not enter fake ratings.">
           <input
             type="number"
             min="0"
@@ -173,13 +247,21 @@ function TutorForm({
             step="0.1"
             value={tutor.rating}
             onChange={(event) =>
-              setDraftItem((current) => updateTutor(current, { rating: Number(event.target.value) }))
+              setDraftItem((current) =>
+                updateTutor(current, {
+                  rating: event.target.value === "" ? "" : Number(event.target.value),
+                }),
+              )
             }
             className={getFieldControlClass(errors.rating)}
           />
         </FieldGroup>
 
-        <FieldGroup label="Display Order" error={errors.displayOrder}>
+        <FieldGroup
+          label="Display Order"
+          error={errors.displayOrder}
+          helpText="Lower number appears earlier. Use 1 for top priority, 99 for normal listing."
+        >
           <input
             type="number"
             min="0"
@@ -196,129 +278,72 @@ function TutorForm({
         title="Teaching Fit"
         description="Select the main boards, classes, and service types that should be visible on tutor discovery pages."
       >
-        <FieldGroup label="Boards" required error={errors.boards}>
-          <select
-            multiple
-            value={tutor.boards}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  boards: Array.from(event.target.selectedOptions, (option) => option.value),
-                  boardTags: Array.from(event.target.selectedOptions, (option) => option.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.boards, "h-32")}
-          >
-            {boardOptions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+        <ChecklistField
+          label="Boards"
+          required
+          error={errors.boards}
+          options={boardOptions}
+          value={tutor.boards}
+          onChange={(values) =>
+            setDraftItem((current) => updateTutor(current, { boards: values, boardTags: values }))
+          }
+        />
 
-        <FieldGroup label="Classes Supported" required error={errors.classesSupported}>
-          <select
-            multiple
-            value={tutor.classesSupported}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  classesSupported: Array.from(event.target.selectedOptions, (option) => option.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.classesSupported, "h-32")}
-          >
-            {classOptions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+        <ChecklistField
+          label="Classes Supported"
+          required
+          error={errors.classesSupported}
+          options={classOptions}
+          value={tutor.classesSupported}
+          onChange={(values) =>
+            setDraftItem((current) => updateTutor(current, { classesSupported: values }))
+          }
+        />
 
-        <FieldGroup label="Topics" required helpText="One topic per line." error={errors.topics}>
-          <textarea
-            rows={5}
-            value={formatLineList(tutor.topics)}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  topics: parseLineList(event.target.value),
-                  topicTags: parseLineList(event.target.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.topics)}
-          />
-        </FieldGroup>
+        <ChecklistField
+          label="Topics"
+          required
+          error={errors.topics}
+          helpText="Select the visible maths topics for this tutor."
+          options={topicOptions}
+          value={tutor.topics}
+          onChange={(values) =>
+            setDraftItem((current) => updateTutor(current, { topics: values, topicTags: values }))
+          }
+        />
 
-        <FieldGroup label="Service Modes" required error={errors.serviceModes}>
-          <select
-            multiple
-            value={tutor.serviceModes}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  serviceModes: Array.from(event.target.selectedOptions, (option) => option.value),
-                  serviceModeTags: Array.from(event.target.selectedOptions, (option) => option.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.serviceModes, "h-32")}
-          >
-            {serviceModeOptions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+        <ChecklistField
+          label="Service Modes"
+          required
+          error={errors.serviceModes}
+          options={serviceModeOptions}
+          value={tutor.serviceModes}
+          onChange={(values) =>
+            setDraftItem((current) =>
+              updateTutor(current, { serviceModes: values, serviceModeTags: values }),
+            )
+          }
+        />
 
-        <FieldGroup label="Cities" error={errors.cities}>
-          <select
-            multiple
-            value={tutor.cities}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  cities: Array.from(event.target.selectedOptions, (option) => option.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.cities, "h-32")}
-          >
-            {cityValueOptions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+        <ChecklistField
+          label="Cities"
+          error={errors.cities}
+          options={cityOptionsWithSavedValues}
+          value={tutor.cities}
+          onChange={(values) => setDraftItem((current) => updateTutor(current, { cities: values }))}
+          maxHeightClassName="max-h-40"
+        />
 
-        <FieldGroup label="Localities" error={errors.localities}>
-          <select
-            multiple
-            value={tutor.localities}
-            onChange={(event) =>
-              setDraftItem((current) =>
-                updateTutor(current, {
-                  localities: Array.from(event.target.selectedOptions, (option) => option.value),
-                  localityTags: Array.from(event.target.selectedOptions, (option) => option.value),
-                }),
-              )
-            }
-            className={getFieldControlClass(errors.localities, "h-32")}
-          >
-            {localityValueOptions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </FieldGroup>
+        <ChecklistField
+          label="Localities"
+          error={errors.localities}
+          options={localityOptionsWithSavedValues}
+          value={tutor.localities}
+          onChange={(values) =>
+            setDraftItem((current) => updateTutor(current, { localities: values, localityTags: values }))
+          }
+          maxHeightClassName="max-h-64"
+        />
 
         <FieldGroup label="Badges / Chips" helpText="One badge per line." error={errors.badges}>
           <textarea

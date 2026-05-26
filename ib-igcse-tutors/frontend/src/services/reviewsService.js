@@ -6,13 +6,8 @@ function uniqueValues(values = []) {
 }
 
 export async function listReviews() {
-  try {
-    const items = await apiRequest("/api/admin/reviews");
-    return Array.isArray(items) ? items : [];
-  } catch (error) {
-    console.error("Reviews API failed:", error);
-    return [];
-  }
+  const items = await apiRequest("/api/admin/reviews");
+  return Array.isArray(items) ? items : [];
 }
 
 export async function getReviewById(id) {

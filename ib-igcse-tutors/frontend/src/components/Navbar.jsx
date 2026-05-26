@@ -194,10 +194,11 @@ function Navbar() {
         href={callbackUrl}
         target="_blank"
         rel="noreferrer"
-        className="fixed inset-x-4 bottom-4 z-40 mx-auto max-w-[320px] rounded-full bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white shadow-xl shadow-blue-200 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-0.5 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:mx-0 sm:max-w-none sm:px-5"
-        aria-label="Request a callback from Maths Bodhi"
+        className="fixed inset-x-4 bottom-4 z-40 mx-auto inline-flex max-w-[320px] items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-center text-sm font-semibold text-white shadow-xl shadow-emerald-200 transition duration-200 hover:bg-[#1ebe5d] motion-safe:hover:-translate-y-0.5 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:mx-0 sm:max-w-none sm:px-5"
+        aria-label="WhatsApp Maths Bodhi to request a callback"
       >
-        Request a callback
+        <img src="/assets/whatsapp.svg" alt="" className="h-5 w-5 shrink-0" aria-hidden="true" />
+        <span>WhatsApp us</span>
       </a>
     </>
   );

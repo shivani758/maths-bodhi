@@ -74,12 +74,13 @@ function TutorCard({
 }) {
   const { siteData } = useSiteData();
   const displaySummary =
-    summary || "Open the profile to compare teaching fit, board coverage, and availability.";
-  const displayBoard = board || "Maths";
-  const displayClassLevel = classLevel || "Flexible support";
-  const displayExperience = experience || "Experience shared on enquiry";
-  const displayPrice = price || "Shared on enquiry";
-  const ratingLabel = rating ? `${rating}/5 rated` : "New profile";
+    summary ||
+    "View this verified Maths Bodhi tutor profile to compare board fit, class level, teaching approach, locality coverage, and availability.";
+  const displayBoard = board || "Board and exam fit on enquiry";
+  const displayClassLevel = classLevel || "Class and goal fit shared on enquiry";
+  const displayExperience = experience || "Verified experience shared on enquiry";
+  const displayPrice = price || "Fee shared after tutor fit check";
+  const ratingLabel = rating ? `${rating}/5 rated` : "Verified profile";
   const displayImage = image || "/images/hero-maths-home.svg";
   const displayImageAlt = imageAlt || `${name} maths tutor profile`;
   const boardPath = getBoardPath(displayBoard);
@@ -177,7 +178,7 @@ function TutorCard({
           </div>
         ) : (
           <p className="mt-4 text-xs font-medium leading-5 text-slate-500">
-            Topic focus can be confirmed before booking.
+            Board, topic, and exam focus can be confirmed before booking.
           </p>
         )}
       </div>
@@ -205,7 +206,7 @@ function TutorCard({
           })
         ) : (
           <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
-            Local fit on enquiry
+            Gurugram locality fit on enquiry
           </span>
         )}
         <div className="flex flex-wrap gap-2">
@@ -220,7 +221,7 @@ function TutorCard({
             ))
           ) : (
             <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              Mode shared on enquiry
+              Home or online mode shared on enquiry
             </span>
           )}
         </div>
@@ -232,7 +233,7 @@ function TutorCard({
           aria-label={`View ${name}'s tutor profile`}
           className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:flex-1"
         >
-          View Profile
+          View Tutor Profile
         </Link>
 
         <a
@@ -242,7 +243,7 @@ function TutorCard({
           aria-label={`Ask Maths Bodhi about ${name} on WhatsApp`}
           className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:flex-1"
         >
-          Ask on WhatsApp
+          Ask Maths Bodhi
         </a>
       </div>
     </article>

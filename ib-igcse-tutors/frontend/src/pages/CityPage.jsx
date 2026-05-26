@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
+import MathsReviewCard from "../components/maths/MathsReviewCard";
 import TutorCard from "../components/TutorCard";
 import {
   BOARD_OPTIONS,
@@ -21,7 +22,17 @@ import NotFound from "./NotFound";
 
 const GURUGRAM_CITY_ALIASES = ["gurugram", "gurgaon"];
 const FALLBACK_GURUGRAM_SECTORS = stripAllFilterOption(SECTOR_OPTIONS);
-const FALLBACK_GURUGRAM_BOARDS = ["CBSE", "ICSE", "ISC", "IB", "IGCSE", "Cambridge", "JEE"];
+const FALLBACK_GURUGRAM_BOARDS = [
+  "CBSE",
+  "ICSE",
+  "ISC",
+  "IB MYP",
+  "IB DP",
+  "IGCSE",
+  "JEE Main",
+  "JEE Advanced",
+  "Maths Olympiad",
+];
 const CITY_TUTOR_LIMIT = 6;
 const INITIAL_VISIBLE_SECTORS = 6;
 const SECTOR_LOAD_STEP = 6;
@@ -30,22 +41,26 @@ const BOARD_ROUTE_LINKS = [
   {
     label: "Maths by Board",
     to: mathsRouteMap.hub,
-    description: "Compare the main maths board routes before narrowing by class or sector.",
+    description:
+      "Compare CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP and competitive maths pathways before selecting class or locality.",
   },
   {
     label: "CBSE",
     to: "/cbse-maths-tuition",
-    description: "School-paced maths support for worksheets, tests, and board readiness.",
+    description:
+      "NCERT-focused maths support for school tests, board preparation, marks improvement and 95%+ score planning.",
   },
   {
     label: "IB",
     to: mathsRouteMap.ib,
-    description: "Pathway-aware maths support for MYP and Diploma learners.",
+    description:
+      "Concept-led maths support for IB MYP and IB DP students who need application, reasoning and personal mentoring.",
   },
   {
     label: "IGCSE",
     to: mathsRouteMap.igcse,
-    description: "Core and Extended support with clearer method and paper practice.",
+    description:
+      "Cambridge-style maths preparation for Core, Extended and Additional Mathematics with structured paper practice.",
   },
 ];
 
@@ -53,12 +68,14 @@ const CLASS_ROUTE_LINKS = [
   {
     label: "Class 10",
     to: "/class-10-maths-tutor",
-    description: "Chapter clarity, worksheet correction, and board-style revision support.",
+    description:
+      "Board-focused maths support for chapter clarity, worksheet correction, exam practice and confident revision.",
   },
   {
     label: "Class 12",
     to: "/class-12-maths-tutor",
-    description: "Senior-school maths support for exam structure and steadier problem solving.",
+    description:
+      "Senior maths mentoring for calculus, algebra, probability, board exams, JEE readiness and high-score planning.",
   },
 ];
 
@@ -85,7 +102,7 @@ function toFallbackSector(label) {
   return {
     slug: toSectorSlug(label),
     label,
-    summary: `Use ${label} to narrow the Gurugram tutor shortlist by locality before booking a demo.`,
+    summary: `Explore ${label} for verified maths home tutors in Gurugram who can support CBSE, ICSE, ISC, IGCSE, IB, JEE and Olympiad learning goals with personal attention.`,
   };
 }
 
@@ -104,7 +121,7 @@ function normalizeSectorEntry(sector) {
     summary:
       sector?.summary ??
       sector?.subtitle ??
-      `Use ${label} to narrow the Gurugram tutor shortlist by locality before booking a demo.`,
+      `Explore ${label} for verified maths home tutors in Gurugram who can support CBSE, ICSE, ISC, IGCSE, IB, JEE and Olympiad learning goals with personal attention.`,
   };
 }
 
@@ -113,16 +130,16 @@ function createFallbackGurugramPage() {
     slug: "gurugram",
     aliases: ["gurgaon"],
     label: "Gurugram",
-    headline: "Maths Tutor in Gurugram",
+    headline: "Maths Home Tutor in Gurugram",
     subtitle:
-      "Find board-aware maths tutor support across Gurugram by class, board, and sector. Tutor results below come only from real published profiles.",
+      "Find verified and highly experienced maths home tutors in Gurugram for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced and Maths Olympiad preparation. Maths Bodhi helps families shortlist senior, female, PhD-level and top-university maths tutors for personal attention, marks improvement, special child support, crash courses and 95%+ academic goals.",
     coverageAreas: FALLBACK_GURUGRAM_SECTORS,
     servedBoards: FALLBACK_GURUGRAM_BOARDS,
     topSectors: FALLBACK_GURUGRAM_SECTORS.map(toFallbackSector),
     cta: {
       label: "Book Free Demo",
       description:
-        "Share the class, board, sector, and current maths concern so Maths Bodhi can guide the next step.",
+        "Share the class, board, sector, current maths concern and target score so Maths Bodhi can suggest the right tutor path.",
     },
     isFallback: true,
   };
@@ -136,10 +153,10 @@ function normalizeCityPage(page) {
     slug: page.slug || "gurugram",
     aliases: getList(page.aliases),
     label: page.label || "Gurugram",
-    headline: page.headline || "Maths Tutor in Gurugram",
+    headline: page.headline || "Maths Home Tutor in Gurugram",
     subtitle:
       page.subtitle ||
-      "Find board-aware maths tutor support across Gurugram by class, board, and sector.",
+      "Find verified maths home tutors in Gurugram for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced and Maths Olympiad preparation with personal attention, marks improvement planning and board-specific guidance.",
     coverageAreas: getList(page.coverageAreas).length
       ? getList(page.coverageAreas)
       : FALLBACK_GURUGRAM_SECTORS,
@@ -151,7 +168,7 @@ function normalizeCityPage(page) {
       label: page.cta?.label || "Book Free Demo",
       description:
         page.cta?.description ||
-        "Share the class, board, sector, and current maths concern so Maths Bodhi can guide the next step.",
+        "Share the class, board, sector, current maths concern and target score so Maths Bodhi can suggest the right tutor path.",
     },
     isFallback: Boolean(page.isFallback),
   };
@@ -232,7 +249,7 @@ function getSupportedSectorPath(siteData, page, sector) {
 function toCityTutorCard(tutor) {
   return {
     ...tutor,
-    title: tutor.title ?? "Math Tutor",
+    title: tutor.title ?? "Maths Tutor",
     rating: String(tutor.rating ?? "0"),
     experience: tutor.experience ?? tutor.experienceLabel ?? "Experience shared on enquiry",
     board: tutor.board ?? getTutorBoards(tutor)[0] ?? "Maths",
@@ -243,7 +260,7 @@ function toCityTutorCard(tutor) {
     mode: getList(tutor.mode?.length ? tutor.mode : tutor.serviceModes),
     schoolFocus: getList(tutor.schoolFocus),
     image: tutor.image || "/images/hero-maths-home.svg",
-    imageAlt: tutor.imageAlt || `${tutor.name} maths tutor profile`,
+    imageAlt: tutor.imageAlt || `${tutor.name} Maths Bodhi maths tutor profile`,
     summary: tutor.summary ?? tutor.shortBio ?? "",
   };
 }
@@ -261,7 +278,7 @@ function CityPage() {
         .map(normalizeSlug)
         .some((value) => GURUGRAM_CITY_ALIASES.includes(value))
     : false;
-  const h1 = isGurugramPage ? "Maths Tutor in Gurugram" : page?.headline;
+  const h1 = isGurugramPage ? "Maths Home Tutor in Gurugram" : page?.headline;
 
   const cityClassOptions = useMemo(
     () =>
@@ -319,6 +336,24 @@ function CityPage() {
     () => filteredTutors.slice(0, CITY_TUTOR_LIMIT).map(toCityTutorCard),
     [filteredTutors],
   );
+  const cityReviews = useMemo(() => {
+    if (!page) {
+      return [];
+    }
+
+    const pageSectorLabels = page.topSectors.map((sector) => normalizeText(sector.label));
+
+    return siteData.reviews
+      .filter((review) => {
+        if (isGurugramPage) {
+          return true;
+        }
+
+        const reviewSector = normalizeText(review.sector ?? review.locality);
+        return pageSectorLabels.some((sectorLabel) => reviewSector.includes(sectorLabel));
+      })
+      .slice(0, 3);
+  }, [isGurugramPage, page, siteData.reviews]);
   const visibleSectors = useMemo(
     () => (page?.topSectors ?? []).slice(0, visibleSectorCount),
     [page?.topSectors, visibleSectorCount],
@@ -333,9 +368,9 @@ function CityPage() {
     () =>
       buildWhatsAppUrl(
         siteData.contact.whatsappNumber,
-        `Hello Maths Bodhi, I am looking for a maths tutor in ${
+        `Hello Maths Bodhi, I am looking for a verified maths home tutor in ${
           page?.label ?? "Gurugram"
-        }. Class: ${selectedClass}. Board: ${selectedBoard}. Sector: ${selectedSector}.`,
+        }. Class: ${selectedClass}. Board: ${selectedBoard}. Sector: ${selectedSector}. Goal: marks improvement, personal attention, board preparation, JEE maths, Olympiad or special learning support.`,
       ),
     [page?.label, selectedBoard, selectedClass, selectedSector, siteData.contact.whatsappNumber],
   );
@@ -363,13 +398,20 @@ function CityPage() {
   return (
     <MainLayout>
       <Seo
-        title={`Maths Tutor in ${page.label} | ${siteData.brandName}`}
+        title={`Maths Home Tutor in ${page.label} | ${siteData.brandName}`}
         description={page.subtitle}
         canonicalPath={`/city/${page.slug}`}
         keywords={[
-          `maths tutor in ${page.label.toLowerCase()}`,
           `maths home tutor in ${page.label.toLowerCase()}`,
-          "gurugram maths tutor",
+          `verified maths tutor in ${page.label.toLowerCase()}`,
+          `female maths tutor in ${page.label.toLowerCase()}`,
+          `JEE maths tutor in ${page.label.toLowerCase()}`,
+          `IB maths tutor in ${page.label.toLowerCase()}`,
+          `IGCSE maths tutor in ${page.label.toLowerCase()}`,
+          "CBSE maths tutor Gurugram",
+          "ICSE maths tutor Gurugram",
+          "ISC maths tutor Gurugram",
+          "Maths Olympiad tutor Gurugram",
           ...page.coverageAreas,
         ]}
       />
@@ -388,13 +430,27 @@ function CityPage() {
             <div className="mt-8 grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
               <div>
                 <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-semibold text-blue-700">
-                  Gurugram city page
+                  Verified maths home tutors in Gurugram
                 </span>
                 <h1 className="mt-6 max-w-4xl text-4xl font-bold text-neutral-950 md:text-5xl">
                   {h1}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
                   {page.subtitle}
+                </p>
+                <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600">
+                  Maths Bodhi is built for families who want focused mathematics support at home,
+                  not random tutor discovery. We help students prepare for school boards,
+                  international curricula and advanced maths goals through verified, experienced
+                  tutors who understand concept clarity, exam pressure, confidence building and
+                  personal attention.
+                </p>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                  Whether your child needs a CBSE maths tutor, ICSE or ISC board support, IGCSE
+                  paper practice, IB MYP or IB DP guidance, JEE Main and Advanced maths mentoring,
+                  Maths Olympiad preparation, a senior faculty member, a female maths tutor or a
+                  patient teacher for special learning needs, this city page helps you start from
+                  the right board, class and locality.
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-4">
@@ -462,11 +518,13 @@ function CityPage() {
 
               <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
                 <h2 className="text-2xl font-bold text-neutral-950">
-                  Find a tutor in {page.label}
+                  Find a maths tutor in {page.label}
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  Use the same class, board, and sector options as the homepage. Results only show
-                  matching published tutor profiles.
+                  Choose class, board and locality to shortlist relevant maths tutors. Maths Bodhi
+                  focuses on verified, experienced, senior, female and specialist tutors for
+                  personal attention, marks improvement, 95%+ goals, crash courses and advanced
+                  maths preparation.
                 </p>
 
                 <div className="mt-6 grid gap-4">
@@ -548,7 +606,7 @@ function CityPage() {
             <SectionTitle
               badge="Boards"
               title={isGurugramPage ? "Find maths tutors by board in Gurugram" : `Find maths tutors by board in ${page.label}`}
-              subtitle="Start with the board route when curriculum, paper style, and exam timing matter more than locality."
+              subtitle="Choose the right board route for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE maths or Olympiad support. Curriculum fit matters because every board expects a different style of reasoning, practice and exam presentation."
               align="left"
             />
 
@@ -585,8 +643,8 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Classes"
-              title="Choose maths support by class"
-              subtitle="Use class level to keep the shortlist practical for school pace, board year needs, or senior exam pressure."
+              title="Choose maths support by class and goal"
+              subtitle="Use class level to keep the shortlist practical for school pace, board-year pressure, foundation repair, crash revision, competitive maths or 95%+ score planning."
               align="left"
             />
 
@@ -607,9 +665,9 @@ function CityPage() {
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {stripAllFilterOption(cityClassOptions).map((classOption) => (
+              {stripAllFilterOption(cityClassOptions).map((classOption, index) => (
                 <button
-                  key={classOption}
+                  key={`${classOption}-${index}`}
                   type="button"
                   onClick={() => {
                     setSelectedClass(classOption);
@@ -629,7 +687,7 @@ function CityPage() {
             <SectionTitle
               badge="Sectors"
               title="Find maths home tutors by Gurugram sector or society"
-              subtitle="Choose your area to explore relevant home tuition support nearby."
+              subtitle="Choose your area to explore relevant home tuition support nearby. Locality matching helps families find a practical tutor route for regular classes, crash courses, special attention and exam preparation."
               align="left"
             />
 
@@ -700,17 +758,17 @@ function CityPage() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               badge="Tutor Matches"
-              title="Available tutor matches"
-              subtitle="See available Gurugram tutor profiles when the selected class, board, and sector have a match."
+              title="Available verified maths tutor matches"
+              subtitle="See available Gurugram tutor profiles when the selected class, board and sector have a match. If no profile appears, Maths Bodhi can still check availability for senior, female, PhD-level, JEE, Olympiad or special learning support through the demo request."
               align="left"
             />
 
             <div className="mt-6 flex flex-wrap gap-3">
               {[selectedClass, selectedBoard, selectedSector]
                 .filter((item) => !String(item).startsWith("All "))
-                .map((item) => (
+                .map((item, index) => (
                   <span
-                    key={item}
+                    key={`${item}-${index}`}
                     className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700"
                   >
                     {item}
@@ -720,8 +778,8 @@ function CityPage() {
 
             {visibleTutors.length ? (
               <div className="mt-8 grid gap-5 xl:grid-cols-2">
-                {visibleTutors.map((tutor) => (
-                  <TutorCard key={tutor.id || tutor.slug || tutor.name} {...tutor} />
+                {visibleTutors.map((tutor, index) => (
+                  <TutorCard key={tutor.id || tutor.slug || `${tutor.name}-${index}`} {...tutor} />
                 ))}
               </div>
             ) : (
@@ -730,8 +788,10 @@ function CityPage() {
                   No matching tutors are published for this selection yet
                 </h3>
                 <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-                  Try a broader class, board, or sector. Maths Bodhi can still confirm availability
-                  through the demo or WhatsApp flow while this page only shows published profiles.
+                  Try a broader class, board or sector. Maths Bodhi can still confirm availability
+                  for verified maths home tutors, female maths tutors, JEE mentors, Olympiad
+                  preparation, crash courses and personal-attention learning support through the
+                  demo or WhatsApp flow.
                 </p>
                 <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                   <button
@@ -764,6 +824,28 @@ function CityPage() {
             )}
           </div>
         </section>
+
+        {cityReviews.length ? (
+          <section className="bg-slate-50 px-6 py-14">
+            <div className="mx-auto max-w-7xl">
+              <SectionTitle
+                badge="Parent Reviews"
+                title={`Parent feedback from ${page.label} families`}
+                subtitle="Approved public reviews appear here when they match this city route."
+                align="left"
+              />
+
+              <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {cityReviews.map((review, index) => (
+                  <MathsReviewCard
+                    key={review.id ?? `${review.parent}-${review.sector}-${index}`}
+                    {...review}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
       </div>
     </MainLayout>
   );

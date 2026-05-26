@@ -36,17 +36,17 @@ const boardHubFaqs = [
   {
     question: "Should parents choose the board first or the area first?",
     answer:
-      "Choose the board first. Once the curriculum is clear, it becomes much easier to judge the right tutor style, class fit, and Gurugram locality convenience.",
+      "Choose the board or exam path first. A CBSE board-year learner, an IB DP student, and a JEE aspirant need different maths depth, so locality works best as the second filter.",
   },
   {
     question: "What if we are comparing more than one maths board?",
     answer:
-      "Use the board cards as the starting point. Each section explains the maths pressure, class range, and tutoring style that usually fits best across CBSE, ICSE and ISC, IGCSE, IB, or JEE maths.",
+      "Use the board cards to compare the learning pressure first. Maths Bodhi can then help families shortlist verified Gurugram maths tutors for CBSE, ICSE, ISC, IGCSE, IB, JEE, or Olympiad-style goals.",
   },
   {
     question: "Do families still compare sectors after choosing a board?",
     answer:
-      "Yes. Once the academic fit is clearer, locality cards help families judge home-tuition convenience and school-corridor relevance.",
+      "Yes. Once the academic fit is clear, sector and school-corridor context helps families judge home-tuition convenience, schedule fit, and the right level of personal attention.",
   },
 ];
 
@@ -54,17 +54,17 @@ const cbseFaqs = [
   {
     question: "Is this suitable for both junior and senior CBSE students?",
     answer:
-      "Yes. The CBSE page covers Class 6 to 12, with separate support focus for foundation classes, board years, and senior-school maths.",
+      "Yes. CBSE support covers Class 6 to 12, from foundation repair and confidence-building to Class 10 and 12 board planning with verified maths home tutors.",
   },
   {
     question: "Can one tutor support worksheets and board preparation together?",
     answer:
-      "Yes. Good CBSE maths support should connect homework, school tests, pre-boards, and revision rather than treating them as separate problems.",
+      "Yes. A strong CBSE maths tutor can connect homework, worksheets, school tests, pre-boards, and revision so marks improvement is planned week by week.",
   },
   {
     question: "Can parents compare Gurugram areas from this page?",
     answer:
-      "Yes. The CBSE page keeps local sector cards visible so families can compare school rhythm with tutor travel and home-tuition convenience.",
+      "Yes. The CBSE page keeps Gurugram sector context visible so families can balance school rhythm, tutor travel, female tutor preferences, and home-tuition convenience.",
   },
 ];
 
@@ -72,17 +72,17 @@ const icseIscFaqs = [
   {
     question: "Is this page useful for both ICSE and ISC maths students?",
     answer:
-      "Yes. It keeps junior and senior-school maths needs together, while still showing where written method, structured support, and senior-school depth matter most.",
+      "Yes. It supports ICSE and ISC families together while still separating written-method discipline, board-year preparation, and senior-school depth where they matter most.",
   },
   {
     question: "What usually matters most in ICSE or ISC maths support?",
     answer:
-      "Families often want clearer written presentation, steadier school follow-through, and a tutor who can keep weekly chapter work connected to longer-term exam goals.",
+      "Parents usually need cleaner written presentation, steadier school follow-through, and an experienced maths tutor who can connect weekly chapters with board and 95%+ score planning.",
   },
   {
     question: "Can this still help if the student mainly needs school support right now?",
     answer:
-      "Yes. Many ICSE and ISC families begin with day-to-day school maths support and then widen the plan only when tests, pre-boards, or board papers start to matter more.",
+      "Yes. Many families begin with school support, doubt clearing, or confidence repair and then widen the plan when tests, pre-boards, or ISC board papers become the priority.",
   },
 ];
 
@@ -90,17 +90,17 @@ const igcseFaqs = [
   {
     question: "Is this useful for both Core and Extended learners?",
     answer:
-      "Yes. The IGCSE page helps families compare level fit, written method, and exam pressure without mixing all learners into one generic explanation.",
+      "Yes. The IGCSE page helps families compare Core and Extended needs, written method, and exam pressure before choosing a verified maths tutor in Gurugram.",
   },
   {
     question: "Can the same tutor handle school work and exam papers?",
     answer:
-      "Yes. Strong IGCSE maths support should connect class understanding, written method, and paper familiarity in one steady plan.",
+      "Yes, when the tutor has the right international-curriculum experience. The plan should connect school work, written method, past-paper review, and target-score preparation.",
   },
   {
     question: "Does locality still matter for international-school families?",
     answer:
-      "Yes. Travel convenience, school corridor, and timetable fit still matter, especially for after-school home tuition in Gurugram.",
+      "Yes. Travel convenience, school corridor, and timetable fit still matter for international-school families, especially when after-school home tuition must be sustained calmly.",
   },
 ];
 
@@ -108,17 +108,17 @@ const ibFaqs = [
   {
     question: "Why are PYP, MYP, and DP separated on the IB page?",
     answer:
-      "Because the maths language, parent concerns, and tutoring style change a lot across these stages. The support needs are not the same.",
+      "Because IB maths changes sharply by stage. MYP needs reasoning and structure, while DP needs course-specific depth for AA, AI, HL, and SL decisions.",
   },
   {
     question: "Should we start with the main IB page or go straight to a pathway?",
     answer:
-      "If the stage is already clear, open that pathway. If the family wants a broader IB view first, start with the main IB page.",
+      "If the stage or DP course is already clear, open that pathway. If the family is still comparing options, start with the main IB page and then shortlist a suitable mentor.",
   },
   {
     question: "Are DP courses shown separately inside IB?",
     answer:
-      "Yes. Diploma students can compare AA HL, AA SL, AI HL, and AI SL after opening the main IB maths page.",
+      "Yes. Diploma students can compare AA HL, AA SL, AI HL, and AI SL so tutor fit, paper style, and topic depth are discussed before the demo.",
   },
 ];
 
@@ -126,17 +126,17 @@ const jeeFaqs = [
   {
     question: "Does this page work for students balancing school and entrance preparation?",
     answer:
-      "Yes. The JEE page is designed for families who want stronger maths depth without losing discipline across school work and exam preparation.",
+      "Yes. The JEE page is for families who want IIT JEE maths depth while keeping Class 11 or 12 school work, weekly practice, and revision discipline under control.",
   },
   {
     question: "Should we choose JEE Main or JEE Advanced first?",
     answer:
-      "Choose the one that best matches the current target. Main and Advanced need different paper habits, pace, and problem-solving depth.",
+      "Choose the current target first. JEE Main needs speed and coverage, while JEE Advanced needs deeper reasoning, stronger judgement, and senior mentor-style problem solving.",
   },
   {
     question: "Can parents still compare Gurugram localities from the JEE page?",
     answer:
-      "Yes. Locality cards help families compare study fit with home-tuition convenience after the exam path is clearer.",
+      "Yes. Locality cards help families compare study fit, tutor travel, and home-tuition timing after the exam path and academic intensity are clear.",
   },
 ];
 
@@ -359,19 +359,19 @@ export const mathsBoardConfig = {
     label: "Maths by Board",
     navLabel: "Maths by Board",
     badge: "Maths by Board",
-    title: "Maths Tutors by Board",
+    title: "Maths Home Tutors in Gurugram by Board and Exam",
     subtitle:
-      "Choose the board first, then move into maths support that fits the student's class level, school setting, and the kind of maths help they need right now.",
-    metaTitle: "Maths Tutors by Board in Gurugram | CBSE, ICSE, IGCSE, IB, JEE | Maths Bodhi",
+      "Choose verified Maths Bodhi support for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced, and Olympiad maths with personal attention matched to the student's level.",
+    metaTitle: "Maths Home Tutors in Gurugram by Board and Exam | Maths Bodhi",
     metaDescription:
-      "Explore Maths Bodhi's maths-by-board hub for Gurugram with CBSE, ICSE and ISC, IGCSE, IB, and JEE maths support.",
+      "Explore verified maths home tutors in Gurugram for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced, and Maths Olympiad planning.",
     keywords: [
-      "maths tutor by board gurugram",
-      "cbse maths tutor gurugram",
-      "icse maths tutor gurugram",
-      "igcse maths tutor gurugram",
-      "ib maths tutor gurugram",
-      "jee maths tutor gurugram",
+      "verified maths home tutor gurugram",
+      "cbse maths home tutor gurugram",
+      "icse isc maths tutor gurugram",
+      "igcse maths home tutor gurugram",
+      "ib myp dp maths tutor gurugram",
+      "jee main advanced maths tutor gurugram",
     ],
     chips: ["CBSE", "ICSE / ISC", "IGCSE", "IB", "JEE"],
     stats: [
@@ -380,54 +380,54 @@ export const mathsBoardConfig = {
       { value: "3", label: "Shortlisting steps" },
     ],
     supportPanel: {
-      title: "Start with the right maths board",
+      title: "Start with the right board, exam, and tutor fit",
       text:
-        "Parents usually shortlist better once the curriculum is clear. After that, class fit, tutor style, and Gurugram locality become much easier to judge.",
+        "Parents shortlist better when curriculum, target score, and learning need are clear first. After that, Maths Bodhi can match verified senior, female, or specialist maths tutors around Gurugram schedule fit.",
       bullets: [
-        "Choose the board or exam path first",
-        "Then compare class level and tutor fit",
-        "Then shortlist by school corridor and locality",
+        "Choose the board, exam, or Olympiad goal first",
+        "Plan marks improvement, 95%+ targets, or confidence repair",
+        "Then shortlist by tutor expertise, attention needs, and locality",
       ],
     },
     overview: {
       badge: "Board Support",
-      title: "How maths support changes from one board to another",
+      title: "How Maths Bodhi plans support across boards and exams",
       subtitle:
-        "The pace, written method, paper pressure, and parent expectations all shift with the board or exam path.",
+        "The right tutor plan changes with board pace, paper style, target marks, and the student's confidence with maths.",
       cards: [
         card({
           eyebrow: "CBSE Maths",
           title: "School pace, worksheets, and board rhythm",
           description:
-            "A good fit for families who want chapter clarity, regular homework discipline, and stronger board-year structure.",
+            "For families who want verified home tuition around chapter clarity, worksheet follow-through, board-year planning, and steady marks improvement.",
           tags: ["Class 6 to 12", "School tests"],
         }),
         card({
           eyebrow: "ICSE / ISC Maths",
           title: "Written method, structured support, and senior-school continuity",
           description:
-            "Useful for families who want clearer presentation, steadier school support, and a smoother move into senior-school maths.",
+            "For students who need cleaner written presentation, structured school support, and senior maths guidance as ICSE moves into ISC depth.",
           tags: ["ICSE", "ISC"],
         }),
         card({
           eyebrow: "IGCSE Maths",
           title: "Written method and paper confidence",
           description:
-            "Useful for Core and Extended learners who need cleaner working, stronger problem solving, and steadier exam technique.",
+            "For Core and Extended learners who need international-curriculum clarity, stronger problem solving, and calmer exam-paper technique.",
           tags: ["Core and Extended", "Exam writing"],
         }),
         card({
           eyebrow: "IB Maths",
           title: "Pathway-specific maths support from PYP to DP",
           description:
-            "IB needs the right stage and course path chosen first so maths support can match the student's actual pathway.",
+            "For IB MYP and DP families who need stage-aware tutoring, AA or AI course clarity, and personal attention from experienced mentors.",
           tags: ["PYP to DP", "AA and AI"],
         }),
         card({
           eyebrow: "JEE Maths",
           title: "Exam-oriented problem solving and weekly discipline",
           description:
-            "JEE students usually need the right exam target, sharper question handling, and better speed-plus-accuracy routines.",
+            "For IIT JEE Main and Advanced aspirants who need senior maths mentorship, problem-solving depth, and disciplined weekly practice.",
           tags: ["JEE Main", "JEE Advanced"],
         }),
       ],
@@ -437,14 +437,14 @@ export const mathsBoardConfig = {
       {
         title: "How families usually use the maths hub",
         paragraphs: [
-          "Most parents already know whether the student is in CBSE, ICSE or ISC, IGCSE, IB, or preparing for JEE. What they need next is a quicker way to move into the right maths support style without extra confusion.",
-          "That is why this hub stays focused on clear board choices, tutor fit, and Gurugram relevance rather than crowding all pathways into one long page.",
+          "Most parents already know whether the student is in CBSE, ICSE, ISC, IGCSE, IB, or preparing for JEE or Maths Olympiad. What they need next is a clear way to choose the right tutor depth, weekly plan, and level of personal attention.",
+          "That is why this hub keeps board choices, verified tutor fit, score planning, and Gurugram locality context separate enough for families to compare calmly.",
         ],
       },
       {
         title: "When to open a dedicated board page",
         paragraphs: [
-          "Once the curriculum is clear, the next step is usually to open the dedicated board page and compare tutors, support points, and school context that actually match the student's situation.",
+          "Once the curriculum is clear, open the dedicated page to compare the support style, tutor background, and local home-tuition fit that best match the student's class, exam timeline, and maths confidence.",
         ],
       },
     ],
@@ -495,7 +495,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book a maths consultation",
       description:
-        "Share the board, class or exam target, school, and the maths chapters causing the most friction. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the board, class, target exam, school area, current marks, and chapters causing the most friction. Maths Bodhi can guide the right verified maths tutor route on WhatsApp.",
     },
   },
   cbse: {
@@ -506,13 +506,13 @@ export const mathsBoardConfig = {
     label: "CBSE Maths",
     navLabel: "CBSE",
     badge: "CBSE Maths",
-    title: "CBSE maths home tuition in Gurugram for Class 6 to 12",
+    title: "Verified CBSE maths home tuition in Gurugram for Class 6 to 12",
     subtitle:
-      "CBSE maths support for chapter clarity, worksheets, school tests, and stronger board preparation from middle school to Class 12.",
-    metaTitle: "CBSE Maths Tutors in Gurugram | Class 6 to 12 | Maths Bodhi",
+      "CBSE maths support for K-12 foundations, Class 10 and 12 board planning, worksheet discipline, and marks improvement with personal home tutoring.",
+    metaTitle: "Verified CBSE Maths Home Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore CBSE maths home tuition in Gurugram for Class 6 to 12 with board-year support, school-fit guidance, and Gurugram locality relevance.",
-    keywords: ["cbse maths tutor gurugram", "class 10 maths tutor gurugram", "class 12 maths tuition gurugram"],
+      "Find verified CBSE maths home tutors in Gurugram for Class 6 to 12, board exams, crash courses, 95%+ score planning, and personal attention.",
+    keywords: ["verified cbse maths tutor gurugram", "class 10 maths home tutor gurugram", "class 12 cbse maths tuition gurugram"],
     chips: ["Class 6 to 8", "Class 9 and 10", "Class 11 and 12"],
     stats: [
       { value: "3", label: "Class bands" },
@@ -520,40 +520,40 @@ export const mathsBoardConfig = {
       { value: "3", label: "Popular local areas" },
     ],
     supportPanel: {
-      title: "CBSE maths changes clearly with class level",
+      title: "CBSE maths needs a class-wise improvement plan",
       text:
-        "A Class 6 learner, a Class 10 board student, and a Class 12 student all need different pace, written method, and revision support.",
+        "A Class 6 learner, a Class 10 board student, and a Class 12 student need different tutor pace, revision control, and practice depth. Maths Bodhi keeps that plan personal.",
       bullets: [
-        "Foundation classes need habit and confidence",
-        "Board classes need cleaner written work",
-        "Senior school needs stronger revision control",
+        "Foundation classes need habit, confidence, and patience",
+        "Board classes need written method and 95%+ planning",
+        "Senior school needs stronger revision and problem practice",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What CBSE maths students usually need help with",
+      title: "What CBSE maths students usually need from a home tutor",
       subtitle:
-        "The biggest differences appear between foundation classes, board years, and senior-school maths.",
+        "The strongest plans separate foundation repair, board-year focus, senior-school depth, and crash-course urgency.",
       cards: [
         card({
           eyebrow: "Class 6 to 8",
           title: "Concept repair and steadier homework habits",
           description:
-            "Useful for students who need cleaner basics, more repetition, and a calmer transition into algebra and mensuration.",
+            "Useful for students who need cleaner basics, patient repetition, special child maths support, or a calmer transition into algebra and mensuration.",
           tags: ["Confidence", "Homework rhythm"],
         }),
         card({
           eyebrow: "Class 9 and 10",
           title: "School pace and board preparation",
           description:
-            "Best for families who want better written steps, chapter planning, and less last-minute pressure before boards.",
+            "Best for families who want better written steps, chapter planning, pre-board review, and a realistic marks-improvement path before boards.",
           tags: ["Board years", "Pre-boards"],
         }),
         card({
           eyebrow: "Class 11 and 12",
           title: "Senior-school maths and revision discipline",
           description:
-            "Important for functions, calculus, matrices, and longer revision blocks across the term.",
+            "Important for functions, calculus, matrices, board papers, and longer revision blocks guided by experienced senior maths tutors.",
           tags: ["Senior school", "Calculus"],
         }),
       ],
@@ -563,8 +563,8 @@ export const mathsBoardConfig = {
       {
         title: "Where good CBSE maths tutoring usually helps most",
         paragraphs: [
-          "For many CBSE students, the biggest change comes when maths stops feeling rushed and starts feeling structured. That usually means stronger chapter sequencing, cleaner written method, and a steadier test routine.",
-          "Parents often notice the difference first in homework discipline and school confidence, then later in test and board performance.",
+          "For many CBSE students, the biggest change comes when maths stops feeling rushed and starts feeling structured. That usually means stronger chapter sequencing, cleaner written method, and a weekly test routine built around the student's actual gaps.",
+          "Parents often notice improvement first in homework discipline and confidence, then in school tests, pre-boards, and board-exam readiness when the plan is sustained.",
         ],
       },
     ],
@@ -592,7 +592,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book a CBSE maths demo",
       description:
-        "Share the student's class, school, recent test performance, and the chapters that feel weakest. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the student's class, school area, recent marks, target score, and weakest chapters. Maths Bodhi can suggest the right verified CBSE maths tutor route on WhatsApp.",
     },
   },
   "icse-isc": {
@@ -603,13 +603,13 @@ export const mathsBoardConfig = {
     label: "ICSE / ISC Maths",
     navLabel: "ICSE / ISC",
     badge: "ICSE / ISC Maths",
-    title: "ICSE and ISC maths tuition in Gurugram for structured school support",
+    title: "ICSE and ISC maths home tuition in Gurugram for structured improvement",
     subtitle:
-      "ICSE and ISC maths support for clearer written method, stronger school follow-through, and steadier senior-school preparation where needed.",
-    metaTitle: "ICSE and ISC Maths Tutors in Gurugram | Maths Bodhi",
+      "Premium ICSE and ISC maths support for written method, school follow-through, senior maths depth, board readiness, and personal attention at home.",
+    metaTitle: "ICSE and ISC Maths Home Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore ICSE and ISC maths tuition in Gurugram with written-method support, school-fit guidance, and senior-school maths help.",
-    keywords: ["icse maths tutor gurugram", "isc maths tutor gurugram", "icse home tuition gurugram"],
+      "Explore verified ICSE and ISC maths tutors in Gurugram for written-method support, board exams, senior-school maths, and focused home tuition.",
+    keywords: ["verified icse maths tutor gurugram", "isc maths home tutor gurugram", "icse isc maths tuition gurugram"],
     chips: ["Class 7 to 10", "ISC senior school", "Written method"],
     stats: [
       { value: "2", label: "Main school stages" },
@@ -617,40 +617,40 @@ export const mathsBoardConfig = {
       { value: "3", label: "Popular local areas" },
     ],
     supportPanel: {
-      title: "ICSE and ISC maths usually improve with structure",
+      title: "ICSE and ISC maths improve with structure and depth",
       text:
-        "Families often want stronger written presentation, steadier school support, and a tutoring rhythm that keeps chapter learning connected across the term.",
+        "Families often want stronger written presentation, steadier school support, and an experienced tutor who can carry chapter learning into board and senior-school expectations.",
       bullets: [
-        "Younger classes often need calmer written discipline",
-        "Senior-school maths needs better sequencing and revision",
-        "One-to-one support works best when school rhythm is understood",
+        "Younger classes need calm written discipline",
+        "ISC learners need sequencing, revision, and depth",
+        "One-to-one support works best with school rhythm understood",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What ICSE and ISC maths students usually need help with",
+      title: "What ICSE and ISC maths students usually need from tutoring",
       subtitle:
-        "The strongest support plans keep school expectations, written method, and topic confidence moving together.",
+        "The strongest plans connect school expectations, written method, topic confidence, and board-score planning.",
       cards: [
         card({
           eyebrow: "ICSE classes",
           title: "Written method and school-paper confidence",
           description:
-            "Useful for students who need cleaner steps, steadier notebooks, and more reliable chapter performance before school tests begin to slip.",
+            "Useful for students who need cleaner steps, steadier notebooks, and more reliable chapter performance before school tests or board practice begin to slip.",
           tags: ["Class 7 to 10", "Written method"],
         }),
         card({
           eyebrow: "ISC senior school",
           title: "Senior-school maths with more consistent revision",
           description:
-            "Helpful when the student needs stronger structure across calculus, algebra, and longer written questions.",
+            "Helpful when the student needs senior maths structure across calculus, algebra, longer written questions, and ISC revision pressure.",
           tags: ["Class 11 and 12", "Revision"],
         }),
         card({
           eyebrow: "School support",
           title: "Regular one-to-one maths guidance that stays practical",
           description:
-            "A good fit for families who want better weekly continuity rather than last-minute maths rescue near exams.",
+            "A good fit for families who want personal attention from a verified tutor instead of last-minute rescue work near exams.",
           tags: ["One-to-one", "School rhythm"],
         }),
       ],
@@ -660,8 +660,8 @@ export const mathsBoardConfig = {
       {
         title: "Why ICSE and ISC families often want structured maths support",
         paragraphs: [
-          "For many families, the real issue is not one weak chapter. It is that maths starts to feel uneven across notebooks, school tests, homework, and revision. Clearer structure often helps first.",
-          "That is why ICSE and ISC maths support usually works best when the tutor can connect written method, school expectations, and a calmer weekly routine.",
+          "For many families, the real issue is not one weak chapter. Maths starts to feel uneven across notebooks, school tests, homework, and revision. Clear structure and careful correction usually help first.",
+          "That is why ICSE and ISC maths support works best when the tutor connects written method, school expectations, board goals, and a calmer weekly routine.",
         ],
       },
     ],
@@ -685,7 +685,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book an ICSE / ISC maths demo",
       description:
-        "Share the student's class, school, current test pattern, and the maths chapters that feel least steady. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the student's class, school area, current test pattern, target marks, and least steady chapters. Maths Bodhi can guide the right ICSE or ISC tutor fit on WhatsApp.",
     },
   },
   igcse: {
@@ -696,13 +696,13 @@ export const mathsBoardConfig = {
     label: "IGCSE Maths",
     navLabel: "IGCSE",
     badge: "IGCSE Maths",
-    title: "IGCSE maths tuition in Gurugram for Core and Extended learners",
+    title: "IGCSE maths home tuition in Gurugram for Core and Extended learners",
     subtitle:
-      "IGCSE maths support for Core and Extended learners building written method confidence, problem solving, and stronger paper performance.",
-    metaTitle: "IGCSE Maths Tutors in Gurugram | Core and Extended Support | Maths Bodhi",
+      "IGCSE maths support for Core and Extended learners who need clearer method, stronger problem solving, and premium one-to-one paper preparation.",
+    metaTitle: "IGCSE Maths Home Tutor in Gurugram | Core and Extended | Maths Bodhi",
     metaDescription:
-      "Explore IGCSE maths tuition in Gurugram with Core and Extended support, school-fit guidance, and international-school maths mentoring.",
-    keywords: ["igcse maths tutor gurugram", "extended maths tutor gurugram", "cambridge maths tutor gurugram"],
+      "Find verified IGCSE maths tutors in Gurugram for Core and Extended support, international-school maths mentoring, past papers, and score planning.",
+    keywords: ["verified igcse maths tutor gurugram", "extended maths home tutor gurugram", "cambridge maths tutor gurugram"],
     chips: ["Core", "Extended", "Exam technique"],
     stats: [
       { value: "2", label: "Main levels" },
@@ -710,40 +710,40 @@ export const mathsBoardConfig = {
       { value: "3", label: "Local corridors" },
     ],
     supportPanel: {
-      title: "IGCSE maths often comes down to clarity and written method",
+      title: "IGCSE maths needs clarity, method, and paper judgement",
       text:
-        "Families usually want to know whether the student needs concept rebuilding, clearer steps, or steadier paper familiarity.",
+        "Families usually want to know whether the student needs concept rebuilding, cleaner written steps, stronger Extended depth, or steadier exam-paper familiarity.",
       bullets: [
-        "Core and Extended expectations differ",
-        "Written accuracy matters a lot",
-        "Past-paper familiarity builds confidence",
+        "Core and Extended expectations differ sharply",
+        "Written accuracy and method marks matter",
+        "Past-paper review should build calm confidence",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What IGCSE maths students usually need help with",
+      title: "What IGCSE maths students usually need from a tutor",
       subtitle:
-        "The strongest support plans improve topic clarity, written working, and exam confidence together.",
+        "The strongest support improves topic clarity, written working, exam confidence, and international-curriculum discipline together.",
       cards: [
         card({
           eyebrow: "Core maths",
           title: "Steadier step-by-step understanding",
           description:
-            "Useful when the student needs more guided correction, better basic structure, and calmer chapter control before exams.",
+            "Useful when the student needs guided correction, better structure, patient concept repair, and calmer chapter control before exams.",
           tags: ["Core maths", "Topic control"],
         }),
         card({
           eyebrow: "Extended maths",
           title: "Higher-rigor problem solving",
           description:
-            "Best for learners who need more control over algebra, graph work, and multi-step questions.",
+            "Best for learners who need experienced support with algebra, graph work, functions, and multi-step Extended questions.",
           tags: ["Extended", "Problem solving"],
         }),
         card({
           eyebrow: "Exam preparation",
           title: "Cleaner written work and paper confidence",
           description:
-            "Important when marks are lost through incomplete method, rushed solving, or weaker timed practice.",
+            "Important when marks are lost through incomplete method, rushed solving, weak timed practice, or poor past-paper review.",
           tags: ["Written method", "Timed papers"],
         }),
       ],
@@ -753,8 +753,8 @@ export const mathsBoardConfig = {
       {
         title: "Why families often choose one-to-one IGCSE maths support",
         paragraphs: [
-          "Many students understand the idea in class but still struggle to turn that understanding into clear, mark-worthy working. That is where focused maths tutoring often helps most.",
-          "Parents usually value support more when it builds written control and exam confidence together, not only topic familiarity.",
+          "Many IGCSE students understand the idea in class but still struggle to turn that understanding into clear, mark-worthy working. Focused home tutoring helps when correction is precise and repeated.",
+          "Parents usually value support most when it builds written control, exam confidence, and a realistic score plan together, not only topic familiarity.",
         ],
       },
     ],
@@ -782,7 +782,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book an IGCSE maths demo",
       description:
-        "Share the grade, school, current level, and the question types that feel least stable. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the grade, school area, Core or Extended level, target score, and question types that feel least stable. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   ib: {
@@ -793,13 +793,13 @@ export const mathsBoardConfig = {
     label: "IB Maths",
     navLabel: "IB",
     badge: "IB Maths",
-    title: "IB maths tutoring in Gurugram across PYP, MYP, and DP",
+    title: "IB maths home tutoring in Gurugram for MYP and DP pathways",
     subtitle:
-      "IB maths support across PYP, MYP, and Diploma pathways, with clearer guidance on stage fit, course choice, and school-specific expectations.",
-    metaTitle: "IB Maths Tutors in Gurugram | PYP, MYP, DP | Maths Bodhi",
+      "IB maths support across PYP, MYP, and Diploma pathways, with verified tutors for stage fit, AA or AI course choice, and personal academic attention.",
+    metaTitle: "IB Maths Home Tutor in Gurugram | MYP and DP | Maths Bodhi",
     metaDescription:
-      "Explore IB maths tutoring in Gurugram across PYP, MYP, and DP, including AA HL, AA SL, AI HL, and AI SL pathways.",
-    keywords: ["ib maths tutor gurugram", "ib pyp maths tutor gurugram", "ib dp maths tutor gurugram"],
+      "Explore IB maths home tutors in Gurugram for MYP, DP, AA HL, AA SL, AI HL, AI SL, course planning, and international-school maths support.",
+    keywords: ["verified ib maths tutor gurugram", "ib myp maths tutor gurugram", "ib dp maths home tutor gurugram"],
     chips: ["PYP", "MYP", "DP", "AA and AI"],
     stats: [
       { value: "3", label: "IB stages" },
@@ -807,40 +807,40 @@ export const mathsBoardConfig = {
       { value: "6", label: "Featured tutors" },
     ],
     supportPanel: {
-      title: "IB maths changes a lot across the years",
+      title: "IB maths needs stage-aware tutor matching",
       text:
-        "A primary learner, a middle-years student, and a Diploma student do not need the same maths language, pace, or support style.",
+        "A primary learner, an MYP student, and a Diploma student need different maths language, reasoning depth, and mentor style. Maths Bodhi keeps the pathway clear before shortlisting.",
       bullets: [
-        "PYP focuses on numeracy and confidence",
-        "MYP builds structure and reasoning",
-        "DP needs the right course chosen early",
+        "PYP focuses on numeracy, confidence, and patience",
+        "MYP builds reasoning, notation, and structure",
+        "DP needs AA or AI course clarity early",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What IB maths families usually need help with",
+      title: "What IB maths families usually need from a tutor",
       subtitle:
-        "The best IB tutoring stays faithful to the student's stage first, then moves into the right level of depth.",
+        "The best IB tutoring stays faithful to the student's stage first, then builds the right depth, method, and score plan.",
       cards: [
         card({
           eyebrow: "PYP",
           title: "Numeracy confidence and clear maths language",
           description:
-            "Useful for younger learners who need number sense, patterns, and a more confident relationship with maths.",
+            "Useful for younger maths dreamers who need number sense, patterns, patience, and a more confident relationship with maths.",
           tags: ["PYP", "Confidence"],
         }),
         card({
           eyebrow: "MYP",
           title: "Reasoning, notation, and progression",
           description:
-            "Best for students who need stronger structure, cleaner method, and better preparation for later IB maths.",
+            "Best for MYP students who need stronger reasoning, cleaner notation, and better preparation for later IB maths depth.",
           tags: ["MYP", "Reasoning"],
         }),
         card({
           eyebrow: "DP",
           title: "Course fit, paper style, and topic depth",
           description:
-            "Important when families need clarity on AA versus AI and stronger support for course-specific papers.",
+            "Important when DP families need clarity on AA versus AI, HL versus SL, and course-specific paper performance.",
           tags: ["Diploma", "AA and AI"],
         }),
       ],
@@ -895,8 +895,8 @@ export const mathsBoardConfig = {
       {
         title: "Why stage fit matters so much in IB maths",
         paragraphs: [
-          "IB families often find it easier to choose once the page is organised by pathway. PYP needs confidence and numeracy, MYP needs stronger structure, and DP needs course-specific clarity.",
-          "That stage-first approach usually leads to a better tutor match and a more realistic support plan.",
+          "IB families often find it easier to choose once the support is organised by pathway. PYP needs confidence and numeracy, MYP needs stronger structure, and DP needs course-specific clarity.",
+          "That stage-first approach usually leads to a better verified tutor match, more personal attention, and a more realistic support plan.",
         ],
       },
     ],
@@ -924,7 +924,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book an IB maths demo",
       description:
-        "Share the student's IB stage, school, pathway if known, and the areas where maths feels least stable. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the student's IB stage, school area, pathway if known, target score, and areas where maths feels least stable. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/pyp": {
@@ -937,48 +937,48 @@ export const mathsBoardConfig = {
     badge: "IB PYP Maths",
     title: "IB PYP maths tutoring in Gurugram for numeracy and confidence",
     subtitle:
-      "PYP maths support for younger learners who need stronger number sense, better maths language, and calmer confidence in the early years.",
+      "Gentle PYP maths support for younger learners who need stronger number sense, better maths language, patient practice, and calmer confidence.",
     metaTitle: "IB PYP Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB PYP maths tutoring in Gurugram for number sense, confidence building, and strong early-years numeracy support.",
-    keywords: ["ib pyp maths tutor gurugram", "pyp numeracy tutor gurugram"],
+      "Explore IB PYP maths tutoring in Gurugram for number sense, confidence building, patient numeracy support, and early maths foundations.",
+    keywords: ["ib pyp maths tutor gurugram", "pyp numeracy tutor gurugram", "early maths tutor gurugram"],
     chips: ["Numeracy", "Confidence", "Foundations"],
     stats: [
       { value: "3", label: "Main support goals" },
       { value: "6", label: "Featured tutors" },
     ],
     supportPanel: {
-      title: "PYP maths should feel clear and confidence-building",
+      title: "PYP maths should feel clear, patient, and confidence-building",
       text:
-        "Families often want stronger number sense, calmer practice, and a tutor who can explain maths in language the child can actually use.",
+        "Families often want stronger number sense, calmer practice, and a tutor who can explain maths in language the child can actually use without adding pressure.",
       bullets: [
         "Build numeracy before pressure grows",
-        "Use visual explanation and repetition",
-        "Keep lessons positive and structured",
+        "Use visual explanation and steady repetition",
+        "Keep lessons positive, structured, and personal",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What PYP maths tutoring usually focuses on",
+      title: "What PYP maths tutoring should gently strengthen",
       subtitle:
-        "The strongest support usually improves understanding, maths language, and willingness to try.",
+        "The strongest support improves understanding, maths language, willingness to try, and early confidence.",
       cards: [
         card({
           eyebrow: "Numeracy",
           title: "Number sense and confidence",
-          description: "Useful for place value, number bonds, operations, and steady early accuracy.",
+          description: "Useful for place value, number bonds, operations, steady early accuracy, and a more relaxed attitude toward maths.",
           tags: ["Number sense", "Confidence"],
         }),
         card({
           eyebrow: "Thinking",
           title: "Patterns and early problem solving",
-          description: "Important when the child needs help reading simple maths situations and responding calmly.",
+          description: "Important when the child needs patient help reading simple maths situations and responding calmly.",
           tags: ["Patterns", "Problem solving"],
         }),
         card({
           eyebrow: "Language",
           title: "Clearer maths vocabulary",
-          description: "Helpful when a learner understands part of the idea but cannot express it clearly yet.",
+          description: "Helpful when a learner understands part of the idea but cannot yet express the method or reasoning clearly.",
           tags: ["Vocabulary", "Understanding"],
         }),
       ],
@@ -988,7 +988,7 @@ export const mathsBoardConfig = {
       {
         title: "Why PYP maths support should stay gentle but structured",
         paragraphs: [
-          "Younger learners usually grow faster when lessons feel clear, encouraging, and repeatable. The aim is to make maths feel understandable, not heavy.",
+          "Younger learners usually grow faster when lessons feel clear, encouraging, and repeatable. The aim is to make maths feel understandable, not heavy, while still giving parents a dependable routine.",
         ],
       },
     ],
@@ -1012,18 +1012,18 @@ export const mathsBoardConfig = {
       {
         question: "Is PYP maths tutoring mainly for students who are weak?",
         answer:
-          "No. Many families use PYP tutoring to build confidence, stronger numeracy habits, and better maths language early.",
+          "No. Many families use PYP tutoring to build confidence, stronger numeracy habits, and better maths language before pressure grows.",
       },
       {
         question: "Should PYP maths lessons feel formal?",
         answer:
-          "They should feel structured, but the teaching style still needs to stay clear, calm, and age-appropriate.",
+          "They should feel structured, but the teaching style should stay calm, age-appropriate, and personal to the child's attention span.",
       },
     ],
     cta: {
       label: "Book a PYP maths demo",
       description:
-        "Share the school, the learner's age, and the maths areas that feel least confident right now. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, learner's age, attention needs, and maths areas that feel least confident. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/myp": {
@@ -1034,50 +1034,50 @@ export const mathsBoardConfig = {
     label: "IB MYP Maths",
     navLabel: "MYP",
     badge: "IB MYP Maths",
-    title: "IB MYP maths tutoring in Gurugram for reasoning and progression",
+    title: "IB MYP maths home tutoring in Gurugram for reasoning and progression",
     subtitle:
-      "MYP maths support for reasoning, notation, structure, and a smoother progression toward Diploma expectations.",
+      "MYP maths support for reasoning, notation, structured written work, and a smoother progression toward Diploma expectations.",
     metaTitle: "IB MYP Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB MYP maths tutoring in Gurugram for reasoning, notation, and stronger progression into later IB maths.",
-    keywords: ["ib myp maths tutor gurugram", "myp maths tutor gurugram"],
+      "Explore verified IB MYP maths tutors in Gurugram for reasoning, notation, written method, confidence, and DP readiness.",
+    keywords: ["verified ib myp maths tutor gurugram", "myp maths home tutor gurugram"],
     chips: ["Reasoning", "Notation", "Progression"],
     stats: [
       { value: "3", label: "Main support goals" },
       { value: "6", label: "Featured tutors" },
     ],
     supportPanel: {
-      title: "MYP maths needs structure and better reasoning",
+      title: "MYP maths needs structure, reasoning, and steady correction",
       text:
-        "Families often want clearer notation, steadier written method, and a better bridge into more abstract maths.",
+        "Families often want clearer notation, steadier written method, and a better bridge into abstract maths before DP pressure begins.",
       bullets: [
         "Strengthen notation and written logic",
         "Build confidence with abstract ideas",
-        "Prepare for later IB maths without rushing",
+        "Prepare for DP maths without rushing",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What MYP maths students usually need help with",
+      title: "What MYP maths students usually need from a tutor",
       subtitle:
-        "The strongest support makes reasoning cleaner, written work steadier, and progression into later years less stressful.",
+        "The strongest support makes reasoning cleaner, written work steadier, and progression into later IB maths less stressful.",
       cards: [
         card({
           eyebrow: "Reasoning",
           title: "Clearer mathematical thinking",
-          description: "Useful when the student understands parts of the idea but cannot explain or structure it well.",
+          description: "Useful when the student understands parts of the idea but cannot yet explain, sequence, or structure it well.",
           tags: ["Reasoning", "Structure"],
         }),
         card({
           eyebrow: "Method",
           title: "Cleaner written steps",
-          description: "Important when method marks are being lost through incomplete or unclear working.",
+          description: "Important when marks are lost through incomplete working, unclear notation, or rushed written logic.",
           tags: ["Written method", "Accuracy"],
         }),
         card({
           eyebrow: "Progression",
           title: "Smoother movement into DP",
-          description: "Helpful for students who need better discipline before the pressure of Diploma mathematics grows.",
+          description: "Helpful for students who need better habits and confidence before the pressure of Diploma mathematics grows.",
           tags: ["DP readiness", "Progression"],
         }),
       ],
@@ -1087,7 +1087,7 @@ export const mathsBoardConfig = {
       {
         title: "Why MYP tutoring often focuses on structure",
         paragraphs: [
-          "Many MYP learners are capable, but still inconsistent with notation, explanation, and written flow. That is why tutoring at this stage often works best when it improves structure as much as understanding.",
+          "Many MYP learners are capable, but still inconsistent with notation, explanation, and written flow. Tutoring at this stage works best when it improves structure as much as understanding.",
         ],
       },
     ],
@@ -1116,13 +1116,13 @@ export const mathsBoardConfig = {
       {
         question: "Can MYP tutoring help with later DP readiness?",
         answer:
-          "Yes. Better habits in MYP often make the transition into Diploma maths much smoother later.",
+          "Yes. Better habits in MYP often make the transition into Diploma maths smoother, especially when reasoning and written method are corrected early.",
       },
     ],
     cta: {
       label: "Book an MYP maths demo",
       description:
-        "Share the school, grade, and the areas where notation, reasoning, or confidence are currently weakest. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, grade, current marks, and areas where notation, reasoning, or confidence are weakest. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/dp": {
@@ -1133,53 +1133,53 @@ export const mathsBoardConfig = {
     label: "IB DP Maths",
     navLabel: "DP",
     badge: "IB DP Maths",
-    title: "IB DP maths tutoring in Gurugram for AA and AI pathway decisions",
+    title: "IB DP maths home tutoring in Gurugram for AA and AI pathway decisions",
     subtitle:
-      "Diploma maths support for students comparing AA and AI, choosing HL or SL, and building steadier paper performance.",
-    metaTitle: "IB DP Maths Tutor in Gurugram | AA and AI Support | Maths Bodhi",
+      "Diploma maths support for AA and AI course fit, HL or SL decisions, topic depth, IA confidence, and steadier paper performance.",
+    metaTitle: "IB DP Maths Home Tutor in Gurugram | AA and AI | Maths Bodhi",
     metaDescription:
-      "Explore IB DP maths tutoring in Gurugram for AA HL, AA SL, AI HL, and AI SL pathway guidance and course-specific support.",
-    keywords: ["ib dp maths tutor gurugram", "aa hl tutor gurugram", "ai sl tutor gurugram"],
+      "Find verified IB DP maths tutors in Gurugram for AA HL, AA SL, AI HL, AI SL, course planning, topic depth, and score improvement.",
+    keywords: ["verified ib dp maths tutor gurugram", "aa hl maths tutor gurugram", "ai sl maths tutor gurugram"],
     chips: ["AA HL", "AA SL", "AI HL", "AI SL"],
     stats: [
       { value: "4", label: "DP course options" },
       { value: "6", label: "Featured tutors" },
     ],
     supportPanel: {
-      title: "DP maths works best when the course fit is clear",
+      title: "DP maths works best when course fit is clear early",
       text:
-        "Families often need help deciding whether the real issue is level, course style, paper control, or topic depth.",
+        "Families often need help deciding whether the real issue is course choice, HL or SL level, paper control, IA confidence, or topic depth.",
       bullets: [
         "Choose AA or AI carefully",
         "Then decide HL or SL fit",
-        "Then build course-specific paper discipline",
+        "Then build course-specific score planning",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What DP maths students usually need help with",
+      title: "What DP maths students usually need from a mentor",
       subtitle:
-        "The course choice matters early because AA and AI ask for different strengths and paper habits.",
+        "Course choice matters early because AA and AI ask for different strengths, paper habits, and revision depth.",
       cards: [
         card({
           eyebrow: "Course choice",
           title: "AA versus AI clarity",
           description:
-            "Useful for families who want to compare the style of mathematics before jumping into chapters.",
+            "Useful for families who want to compare mathematical style, university goals, and workload before jumping into chapters.",
           tags: ["Course fit", "Academic direction"],
         }),
         card({
           eyebrow: "Level choice",
           title: "HL versus SL expectations",
           description:
-            "Important when the real pressure is level fit rather than only topic difficulty.",
+            "Important when the real pressure is level fit, workload, or score planning rather than only topic difficulty.",
           tags: ["HL and SL", "Workload"],
         }),
         card({
           eyebrow: "Paper performance",
           title: "Course-specific written control",
           description:
-            "Best for learners who need steadier working, revision, and paper familiarity in the chosen course.",
+            "Best for learners who need steadier written working, revision blocks, mock review, and paper familiarity in the chosen course.",
           tags: ["Papers", "Revision"],
         }),
       ],
@@ -1226,7 +1226,7 @@ export const mathsBoardConfig = {
       {
         title: "Why DP maths decisions feel heavy for families",
         paragraphs: [
-          "For many IB families, the hardest part is not one chapter. It is deciding the right course and understanding what that choice will mean for workload, paper style, and long-term confidence.",
+          "For many IB families, the hardest part is not one chapter. It is deciding the right course and understanding what that choice will mean for workload, paper style, predicted grades, and long-term confidence.",
         ],
       },
     ],
@@ -1250,18 +1250,18 @@ export const mathsBoardConfig = {
       {
         question: "Should we decide AA or AI before looking at tutors?",
         answer:
-          "Yes. The support style changes a lot with the course, so the tutor choice is usually better once AA or AI is clear.",
+          "Yes. The support style changes with the course, so tutor choice is usually stronger once AA or AI, HL or SL, and current score goals are clear.",
       },
       {
         question: "Can a tutor help with both course fit and papers?",
         answer:
-          "Yes. Good DP maths support should help with the course decision as well as ongoing chapter and paper performance.",
+          "Yes. Good DP maths support should help with course fit, chapter depth, mock-paper review, and a realistic improvement plan.",
       },
     ],
     cta: {
       label: "Book a DP maths demo",
       description:
-        "Share the school, likely course, current level, and the areas where DP maths feels least stable. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, likely course, current level, target score, and areas where DP maths feels least stable. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/dp/aa-hl": {
@@ -1274,44 +1274,44 @@ export const mathsBoardConfig = {
     badge: "IB DP AA HL",
     title: "IB DP AA HL maths tutoring in Gurugram for calculus depth and higher-rigor papers",
     subtitle:
-      "AA HL support for students who need stronger calculus control, proof-oriented discipline, and more reliable Higher Level paper performance.",
+      "AA HL support for students who need stronger calculus control, proof-oriented discipline, senior mentor guidance, and reliable Higher Level paper performance.",
     metaTitle: "IB DP AA HL Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB DP AA HL maths tutoring in Gurugram for calculus depth, theoretical rigour, and Higher Level paper preparation.",
-    keywords: ["aa hl maths tutor gurugram", "ib aa hl tutor gurugram"],
+      "Explore verified IB DP AA HL maths tutors in Gurugram for calculus depth, theoretical rigour, HL papers, and course-specific score planning.",
+    keywords: ["aa hl maths tutor gurugram", "ib aa hl tutor gurugram", "verified ib dp tutor gurugram"],
     chips: ["AA HL", "Calculus", "Higher-rigor papers"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
-      title: "AA HL needs depth, clarity, and stronger written control",
+      title: "AA HL needs depth, clarity, and senior-level correction",
       text:
-        "Families usually want better topic depth, calmer handling of harder questions, and more dependable Higher Level paper performance.",
+        "Families usually want better topic depth, calmer handling of harder questions, and more dependable Higher Level paper performance without vague practice.",
       bullets: [
-        "Calculus depth matters",
-        "Proof and method both matter",
-        "Higher Level pacing needs discipline",
+        "Calculus depth and algebra control matter",
+        "Proof, method, and presentation all count",
+        "Higher Level pacing needs disciplined review",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What AA HL students usually need help with",
-      subtitle: "The course usually improves when topic depth and written control improve together.",
+      title: "What AA HL students usually need from a mentor",
+      subtitle: "The course usually improves when topic depth, written control, and paper judgement improve together.",
       cards: [
         card({
           eyebrow: "Depth",
           title: "Calculus and algebra control",
-          description: "Useful when harder questions still feel unstable or rushed.",
+          description: "Useful when harder calculus, algebra, and mixed-topic questions still feel unstable or rushed.",
           tags: ["Calculus", "Algebra"],
         }),
         card({
           eyebrow: "Method",
           title: "Cleaner higher-level working",
-          description: "Important when incomplete steps or presentation keep cutting marks.",
+          description: "Important when incomplete steps, weak justification, or presentation keep cutting marks.",
           tags: ["Written precision", "Method"],
         }),
         card({
           eyebrow: "Papers",
           title: "Steadier paper discipline",
-          description: "Helpful when the student needs more control over pacing and paper choice.",
+          description: "Helpful when the student needs more control over pacing, revision blocks, and HL paper choice.",
           tags: ["Papers", "Pacing"],
         }),
       ],
@@ -1338,18 +1338,18 @@ export const mathsBoardConfig = {
       {
         question: "Is AA HL tutoring only for students who are struggling badly?",
         answer:
-          "No. Many capable students use AA HL tutoring to improve consistency, written precision, and confidence with harder papers.",
+          "No. Many capable students use AA HL tutoring to improve consistency, written precision, and confidence with harder papers or higher target scores.",
       },
       {
         question: "Can AA HL tutoring still focus on one weak topic first?",
         answer:
-          "Yes. Many students begin with calculus, algebra, or one recurring paper weakness before widening the support plan.",
+          "Yes. Many students begin with calculus, algebra, proof, or one recurring paper weakness before widening the support plan.",
       },
     ],
     cta: {
       label: "Book an AA HL maths demo",
       description:
-        "Share the school, predicted level, and the AA HL topics or paper situations that feel least stable. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, predicted level, target score, and AA HL topics or paper situations that feel least stable. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/dp/aa-sl": {
@@ -1362,44 +1362,44 @@ export const mathsBoardConfig = {
     badge: "IB DP AA SL",
     title: "IB DP AA SL maths tutoring in Gurugram for written clarity and steadier papers",
     subtitle:
-      "AA SL support for students who need more control over method, stronger confidence, and a smoother Standard Level maths routine.",
+      "AA SL support for students who need more control over method, stronger confidence, and a smoother Standard Level score plan.",
     metaTitle: "IB DP AA SL Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB DP AA SL maths tutoring in Gurugram for written method, steadier papers, and stronger Standard Level confidence.",
-    keywords: ["aa sl maths tutor gurugram", "ib aa sl tutor gurugram"],
+      "Explore verified IB DP AA SL maths tutors in Gurugram for written method, steadier papers, Standard Level confidence, and score planning.",
+    keywords: ["aa sl maths tutor gurugram", "ib aa sl tutor gurugram", "ib dp standard level maths tutor"],
     chips: ["AA SL", "Written method", "Steady papers"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
-      title: "AA SL often needs more consistency than intensity",
+      title: "AA SL often needs consistency, not panic",
       text:
-        "Families usually want the student to feel more accurate, more organised, and less rushed across the course.",
+        "Families usually want the student to feel more accurate, more organised, and less rushed across the course with steady correction from an experienced tutor.",
       bullets: [
-        "Clean up written method",
-        "Build steadier confidence",
+        "Clean up written method and notation",
+        "Build steadier confidence and retention",
         "Improve paper routine without panic",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What AA SL students usually need help with",
-      subtitle: "The main goal is often to improve reliability, not just harder-question speed.",
+      title: "What AA SL students usually need from a tutor",
+      subtitle: "The main goal is often to improve reliability, confidence, and score consistency.",
       cards: [
         card({
           eyebrow: "Method",
           title: "Cleaner written work",
-          description: "Useful when the student partly knows the method but still loses marks through messy or incomplete working.",
+          description: "Useful when the student partly knows the method but still loses marks through messy, incomplete, or rushed working.",
           tags: ["Method", "Accuracy"],
         }),
         card({
           eyebrow: "Confidence",
           title: "Stronger topic confidence",
-          description: "Helpful when the chapter feels fine in class but unstable in independent work.",
+          description: "Helpful when the chapter feels fine in class but unstable in independent practice or mock review.",
           tags: ["Confidence", "Retention"],
         }),
         card({
           eyebrow: "Papers",
           title: "Steady Standard Level paper routine",
-          description: "Important when revision and papers feel too inconsistent across the term.",
+          description: "Important when revision and papers feel inconsistent across the term and need a calmer score plan.",
           tags: ["Papers", "Revision"],
         }),
       ],
@@ -1426,18 +1426,18 @@ export const mathsBoardConfig = {
       {
         question: "Is AA SL tutoring mostly for students who are very weak?",
         answer:
-          "No. Many students use AA SL tutoring to improve consistency, written precision, and calm paper performance.",
+          "No. Many students use AA SL tutoring to improve consistency, written precision, and calm paper performance for stronger predicted grades.",
       },
       {
         question: "Can AA SL tutoring still involve proper paper preparation?",
         answer:
-          "Yes. Standard Level still benefits from mock review, revision structure, and steadier paper familiarity.",
+          "Yes. Standard Level still benefits from mock review, revision structure, and steady paper familiarity with personal feedback.",
       },
     ],
     cta: {
       label: "Book an AA SL maths demo",
       description:
-        "Share the school, current performance, and the areas where the student feels least consistent. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, current performance, target score, and areas where the student feels least consistent. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/dp/ai-hl": {
@@ -1450,44 +1450,44 @@ export const mathsBoardConfig = {
     badge: "IB DP AI HL",
     title: "IB DP AI HL maths tutoring in Gurugram for modelling and interpretation",
     subtitle:
-      "AI HL support for students who need stronger modelling, interpretation, and better control over Higher Level applications-style papers.",
+      "AI HL support for students who need stronger modelling, interpretation, data handling, and better control over Higher Level applications-style papers.",
     metaTitle: "IB DP AI HL Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB DP AI HL maths tutoring in Gurugram for modelling, interpretation, and Higher Level applications-style papers.",
-    keywords: ["ai hl maths tutor gurugram", "ib ai hl tutor gurugram"],
+      "Explore verified IB DP AI HL maths tutors in Gurugram for modelling, interpretation, data-led questions, and Higher Level applications papers.",
+    keywords: ["ai hl maths tutor gurugram", "ib ai hl tutor gurugram", "applications interpretation maths tutor"],
     chips: ["AI HL", "Modelling", "Interpretation"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
-      title: "AI HL needs clarity with applied mathematical thinking",
+      title: "AI HL needs clarity with applied mathematical judgement",
       text:
-        "Families often want to know whether the student needs better interpretation, steadier modelling, or stronger Higher Level paper control.",
+        "Families often want to know whether the student needs better interpretation, steadier modelling, stronger data handling, or tighter Higher Level paper control.",
       bullets: [
-        "Interpretation matters a lot",
+        "Interpretation matters as much as calculation",
         "Modelling needs clearer judgement",
-        "Higher Level pace still matters",
+        "Higher Level pace still needs disciplined review",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What AI HL students usually need help with",
-      subtitle: "The course improves most when interpretation and paper discipline become steadier together.",
+      title: "What AI HL students usually need from a mentor",
+      subtitle: "The course improves most when interpretation, modelling, and paper discipline become steadier together.",
       cards: [
         card({
           eyebrow: "Applications",
           title: "Interpretation and modelling",
-          description: "Useful when the student knows some maths but struggles to read and respond clearly to applied contexts.",
+          description: "Useful when the student knows the maths but struggles to read, model, and respond clearly to applied contexts.",
           tags: ["Interpretation", "Modelling"],
         }),
         card({
           eyebrow: "Papers",
           title: "Higher Level pacing",
-          description: "Important when the student needs more control over time and judgement in tougher papers.",
+          description: "Important when the student needs more control over time, judgement, and strategy in tougher papers.",
           tags: ["HL papers", "Pacing"],
         }),
         card({
           eyebrow: "Correction",
           title: "Steadier review habits",
-          description: "Helpful when interpretation mistakes keep repeating across longer questions.",
+          description: "Helpful when interpretation or modelling mistakes keep repeating across longer questions.",
           tags: ["Review", "Accuracy"],
         }),
       ],
@@ -1514,18 +1514,18 @@ export const mathsBoardConfig = {
       {
         question: "Is AI HL simply lighter than AA HL?",
         answer:
-          "It is different rather than simply lighter. The challenge often appears in modelling, interpretation, and paper judgement.",
+          "It is different rather than simply lighter. The challenge often appears in modelling, interpretation, data handling, and paper judgement.",
       },
       {
         question: "Can AI HL tutoring focus on one repeated weak area first?",
         answer:
-          "Yes. Many students begin with modelling, interpretation, or one recurring paper weakness before widening the plan.",
+          "Yes. Many students begin with modelling, interpretation, statistics, or one recurring paper weakness before widening the plan.",
       },
     ],
     cta: {
       label: "Book an AI HL maths demo",
       description:
-        "Share the school, current paper difficulty, and the areas where interpretation or pacing feel weakest. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, current paper difficulty, target score, and where interpretation or pacing feels weakest. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   "ib/dp/ai-sl": {
@@ -1538,17 +1538,17 @@ export const mathsBoardConfig = {
     badge: "IB DP AI SL",
     title: "IB DP AI SL maths tutoring in Gurugram for confidence and interpretation",
     subtitle:
-      "AI SL support for students who need clearer interpretation, steadier written control, and calmer applications-style paper confidence.",
+      "AI SL support for students who need clearer interpretation, steadier written control, patient correction, and calmer applications-style paper confidence.",
     metaTitle: "IB DP AI SL Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore IB DP AI SL maths tutoring in Gurugram for interpretation, confidence, and applications-style paper support.",
-    keywords: ["ai sl maths tutor gurugram", "ib ai sl tutor gurugram"],
+      "Explore verified IB DP AI SL maths tutors in Gurugram for interpretation, confidence, applications-style papers, and Standard Level score planning.",
+    keywords: ["ai sl maths tutor gurugram", "ib ai sl tutor gurugram", "applications maths tutor gurugram"],
     chips: ["AI SL", "Interpretation", "Confidence"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
-      title: "AI SL often needs steadiness and confidence",
+      title: "AI SL often needs steadiness, confidence, and clear interpretation",
       text:
-        "Families usually want the student to feel calmer with applications-style questions and better able to organise working clearly.",
+        "Families usually want the student to feel calmer with applications-style questions and better able to organise working clearly with regular feedback.",
       bullets: [
         "Interpretation confidence matters",
         "Written structure still matters",
@@ -1557,19 +1557,19 @@ export const mathsBoardConfig = {
     },
     overview: {
       badge: "Who this support is for",
-      title: "What AI SL students usually need help with",
+      title: "What AI SL students usually need from a tutor",
       subtitle: "The goal is often to make the course feel more stable, accurate, and less stressful.",
       cards: [
         card({
           eyebrow: "Interpretation",
           title: "More confidence with applied contexts",
-          description: "Useful when the student feels unsure about reading and translating real-world prompts into maths.",
+          description: "Useful when the student feels unsure about reading and translating applied prompts into clear maths steps.",
           tags: ["Applied questions", "Confidence"],
         }),
         card({
           eyebrow: "Method",
           title: "Cleaner written structure",
-          description: "Important when small presentation or organisation mistakes keep repeating.",
+          description: "Important when small presentation, calculator, or organisation mistakes keep repeating.",
           tags: ["Written method", "Structure"],
         }),
         card({
@@ -1602,18 +1602,18 @@ export const mathsBoardConfig = {
       {
         question: "Is AI SL only for students who are weak in maths?",
         answer:
-          "No. Many capable students still need the right applications-style explanation, clearer interpretation, and a steadier paper routine.",
+          "No. Many capable students still need the right applications-style explanation, clearer interpretation, and a steadier paper routine for better confidence.",
       },
       {
         question: "Can AI SL tutoring still involve proper paper preparation?",
         answer:
-          "Yes. Standard Level still benefits from structured review, practice papers, and a calmer revision rhythm.",
+          "Yes. Standard Level still benefits from structured review, practice papers, and a calmer revision rhythm with personal correction.",
       },
     ],
     cta: {
       label: "Book an AI SL maths demo",
       description:
-        "Share the school, current comfort level, and the kinds of questions that feel most confusing. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the school area, current comfort level, target score, and the kinds of questions that feel most confusing. Maths Bodhi can guide the next tutor step on WhatsApp.",
     },
   },
   jee: {
@@ -1624,13 +1624,13 @@ export const mathsBoardConfig = {
     label: "JEE Maths",
     navLabel: "JEE",
     badge: "JEE Maths",
-    title: "JEE maths tutoring in Gurugram for Main and Advanced preparation",
+    title: "JEE maths home tutoring in Gurugram for Main and Advanced preparation",
     subtitle:
-      "JEE maths support for Main and Advanced preparation, with stronger chapter discipline, problem solving, and school-plus-exam balance.",
-    metaTitle: "JEE Maths Tutor in Gurugram | Main and Advanced Support | Maths Bodhi",
+      "IIT JEE maths support for Main and Advanced preparation with senior mentors, stronger chapter discipline, problem solving, and school-plus-exam balance.",
+    metaTitle: "JEE Maths Home Tutor in Gurugram | Main and Advanced | Maths Bodhi",
     metaDescription:
-      "Explore JEE maths tutoring in Gurugram for Main and Advanced preparation, chapter depth, and focused home tuition support.",
-    keywords: ["jee maths tutor gurugram", "jee main maths tutor gurugram", "jee advanced maths tutor gurugram"],
+      "Explore verified JEE maths home tutors in Gurugram for Main, Advanced, chapter depth, mock review, crash courses, and focused mentor support.",
+    keywords: ["verified jee maths tutor gurugram", "jee main maths home tutor gurugram", "jee advanced maths mentor gurugram"],
     chips: ["JEE Main", "JEE Advanced", "Class 11 and 12"],
     stats: [
       { value: "2", label: "Exam routes" },
@@ -1638,40 +1638,40 @@ export const mathsBoardConfig = {
       { value: "3", label: "Popular areas" },
     ],
     supportPanel: {
-      title: "JEE maths needs the right exam target early",
+      title: "JEE maths needs the right exam target and mentor depth",
       text:
-        "Families usually do better once they decide whether the student needs Main-style speed and coverage or Advanced-style depth and multi-step conditioning.",
+        "Families usually plan better once they decide whether the student needs Main-style speed and coverage, Advanced-style depth, or a balanced school-plus-IIT JEE schedule.",
       bullets: [
-        "Main needs speed, accuracy, and breadth",
-        "Advanced needs deeper reasoning",
-        "Both need better weekly discipline",
+        "Main needs speed, accuracy, and broad coverage",
+        "Advanced needs deeper reasoning and judgement",
+        "Both need disciplined weekly mentor review",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What JEE maths students usually need help with",
+      title: "What JEE maths students usually need from a mentor",
       subtitle:
-        "The strongest support improves chapter depth, problem selection, and a steadier practice routine across the week.",
+        "The strongest support improves chapter depth, problem selection, timed review, and a steadier practice routine across the week.",
       cards: [
         card({
           eyebrow: "School plus exam",
           title: "Balancing Class 11 and 12 with entrance preparation",
           description:
-            "Useful when students need better chapter discipline without letting school maths drift.",
+            "Useful when students need better chapter discipline, board continuity, and JEE practice without letting school maths drift.",
           tags: ["School balance", "Routine"],
         }),
         card({
           eyebrow: "Main",
           title: "Speed, accuracy, and PYQ familiarity",
           description:
-            "Important for students who need more control over broad chapter coverage and timed solving.",
+            "Important for students who need more control over broad chapter coverage, timed solving, and careful error review.",
           tags: ["Speed", "PYQs"],
         }),
         card({
           eyebrow: "Advanced",
           title: "Deeper problem solving and reasoning",
           description:
-            "Best for students who need more comfort with multi-step questions and higher uncertainty.",
+            "Best for students who need senior-level guidance with multi-step questions, mixed topics, and higher uncertainty.",
           tags: ["Reasoning", "Tougher problems"],
         }),
       ],
@@ -1706,7 +1706,7 @@ export const mathsBoardConfig = {
       {
         title: "Why JEE maths support should start with the right exam path",
         paragraphs: [
-          "JEE Main and JEE Advanced ask for different habits. Main usually needs stronger control over speed and wide coverage, while Advanced needs more comfort with harder reasoning and uncertainty.",
+          "JEE Main and JEE Advanced ask for different habits. Main usually needs stronger control over speed and wide coverage, while Advanced needs more comfort with harder reasoning, uncertainty, and multi-step review.",
         ],
       },
     ],
@@ -1734,7 +1734,7 @@ export const mathsBoardConfig = {
     cta: {
       label: "Book a JEE maths demo",
       description:
-        "Share the student's class, current target, school routine, and the chapters that feel least stable. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the student's class, current JEE target, school routine, mock pattern, and chapters that feel least stable. Maths Bodhi can guide the next mentor step on WhatsApp.",
     },
   },
   "jee/main": {
@@ -1745,46 +1745,46 @@ export const mathsBoardConfig = {
     label: "JEE Main Maths",
     navLabel: "JEE Main",
     badge: "JEE Main Maths",
-    title: "JEE Main maths tutoring in Gurugram for speed, accuracy, and PYQ style",
+    title: "JEE Main maths home tutoring in Gurugram for speed, accuracy, and PYQ style",
     subtitle:
-      "JEE Main support for students who need broader syllabus handling, sharper question selection, and steadier timed paper control.",
+      "JEE Main support for students who need broader syllabus handling, sharper question selection, mock review, and steadier timed paper control.",
     metaTitle: "JEE Main Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore JEE Main maths tutoring in Gurugram for speed, accuracy, broad syllabus handling, and PYQ-style preparation.",
-    keywords: ["jee main maths tutor gurugram", "jee main home tuition gurugram"],
+      "Find verified JEE Main maths tutors in Gurugram for speed, accuracy, broad syllabus coverage, PYQ review, and focused home tuition.",
+    keywords: ["jee main maths tutor gurugram", "jee main home tuition gurugram", "verified jee main maths mentor"],
     chips: ["Speed", "Accuracy", "PYQ style"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
-      title: "JEE Main maths needs pace without losing structure",
+      title: "JEE Main maths needs pace without careless gaps",
       text:
-        "Families usually want stronger timing, broader chapter control, and more confidence with Main-style question patterns.",
+        "Families usually want stronger timing, broader chapter control, and more confidence with Main-style question patterns without turning practice into guesswork.",
       bullets: [
         "Build speed without carelessness",
         "Strengthen wide chapter coverage",
-        "Use PYQs with better discipline",
+        "Use PYQs and mock review with discipline",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What JEE Main students usually need help with",
-      subtitle: "The biggest gains usually come from better speed, question handling, and weekly discipline.",
+      title: "What JEE Main students usually need from a tutor",
+      subtitle: "The biggest gains usually come from better speed, question handling, error review, and weekly discipline.",
       cards: [
         card({
           eyebrow: "Timing",
           title: "Speed and accuracy together",
-          description: "Useful when students rush, skip steps mentally, or lose marks through avoidable errors.",
+          description: "Useful when students rush, skip steps mentally, or lose marks through avoidable calculation and reading errors.",
           tags: ["Speed", "Accuracy"],
         }),
         card({
           eyebrow: "Coverage",
           title: "Broader chapter control",
-          description: "Important when the problem is not one chapter, but unstable coverage across the syllabus.",
+          description: "Important when the problem is not one chapter, but unstable coverage across algebra, calculus, coordinate geometry, and probability.",
           tags: ["Coverage", "Routine"],
         }),
         card({
           eyebrow: "Practice",
           title: "Cleaner PYQ review",
-          description: "Helpful when PYQs are being attempted but not reviewed in a way that actually improves performance.",
+          description: "Helpful when PYQs and mocks are attempted but not reviewed in a way that improves the next paper.",
           tags: ["PYQs", "Review"],
         }),
       ],
@@ -1834,18 +1834,18 @@ export const mathsBoardConfig = {
       {
         question: "Is JEE Main tutoring mostly about speed?",
         answer:
-          "Speed matters, but speed without structure usually leads to careless errors. Good support improves both accuracy and timing.",
+          "Speed matters, but speed without structure usually leads to careless errors. Good support improves accuracy, timing, and topic selection together.",
       },
       {
         question: "Should PYQs replace chapter work?",
         answer:
-          "No. PYQs work best once chapter understanding is stable enough for meaningful review.",
+          "No. PYQs work best when chapter understanding is stable enough for meaningful review and when mistakes are tracked properly.",
       },
     ],
     cta: {
       label: "Book a JEE Main demo",
       description:
-        "Share the class, current target, weakest chapters, and how the student is performing in timed practice. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the class, current target, weakest chapters, mock scores, and timed-practice pattern. Maths Bodhi can guide the next mentor step on WhatsApp.",
     },
   },
   "jee/advanced": {
@@ -1856,46 +1856,46 @@ export const mathsBoardConfig = {
     label: "JEE Advanced Maths",
     navLabel: "JEE Advanced",
     badge: "JEE Advanced Maths",
-    title: "JEE Advanced maths tutoring in Gurugram for deeper reasoning and tougher problems",
+    title: "JEE Advanced maths home tutoring in Gurugram for deeper reasoning and tougher problems",
     subtitle:
-      "JEE Advanced support for students who need stronger multi-step reasoning, better judgement, and tougher question conditioning.",
+      "JEE Advanced support for students who need stronger multi-step reasoning, better judgement, senior mentor correction, and tougher question conditioning.",
     metaTitle: "JEE Advanced Maths Tutor in Gurugram | Maths Bodhi",
     metaDescription:
-      "Explore JEE Advanced maths tutoring in Gurugram for deeper problem solving, multi-step reasoning, and tougher exam preparation.",
-    keywords: ["jee advanced maths tutor gurugram", "jee advanced home tuition gurugram"],
+      "Find verified JEE Advanced maths tutors in Gurugram for deeper problem solving, multi-step reasoning, tough paper review, and mentor-led home tuition.",
+    keywords: ["jee advanced maths tutor gurugram", "jee advanced home tuition gurugram", "iit jee advanced maths mentor"],
     chips: ["Deeper reasoning", "Harder problems", "Conditioning"],
     stats: [{ value: "6", label: "Featured tutors" }],
     supportPanel: {
       title: "JEE Advanced maths needs deeper problem conditioning",
       text:
-        "Families usually want better comfort with uncertainty, longer reasoning chains, and tougher mixed-topic questions.",
+        "Families usually want better comfort with uncertainty, longer reasoning chains, and tougher mixed-topic questions guided by someone who can correct thinking, not just answers.",
       bullets: [
         "Handle multi-step problems more calmly",
         "Build judgement as well as method",
-        "Condition the student for harder papers",
+        "Condition the student through harder review",
       ],
     },
     overview: {
       badge: "Who this support is for",
-      title: "What JEE Advanced students usually need help with",
+      title: "What JEE Advanced students usually need from a mentor",
       subtitle: "The biggest difference often comes when deeper reasoning stops feeling chaotic and starts feeling structured.",
       cards: [
         card({
           eyebrow: "Problem solving",
           title: "Longer, less direct questions",
-          description: "Useful when the student is fine with standard practice but struggles once the path is less obvious.",
+          description: "Useful when the student is fine with standard practice but struggles once the solving path is less obvious.",
           tags: ["Longer questions", "Judgement"],
         }),
         card({
           eyebrow: "Depth",
           title: "Multi-step algebra and calculus",
-          description: "Important when topic knowledge exists but the student still loses control across deeper combinations.",
+          description: "Important when topic knowledge exists but the student still loses control across deeper algebra, calculus, and mixed-topic combinations.",
           tags: ["Algebra", "Calculus depth"],
         }),
         card({
           eyebrow: "Conditioning",
           title: "Tougher paper habits",
-          description: "Helpful when the student needs better mental steadiness and review discipline for harder problems.",
+          description: "Helpful when the student needs better mental steadiness, mentor feedback, and review discipline for harder problems.",
           tags: ["Conditioning", "Review"],
         }),
       ],
@@ -1945,18 +1945,18 @@ export const mathsBoardConfig = {
       {
         question: "Is JEE Advanced tutoring just more questions at a harder level?",
         answer:
-          "Not really. The biggest difference is often better reasoning, judgement, and the ability to stay calm through uncertainty.",
+          "Not really. The biggest difference is often better reasoning, judgement, and the ability to stay calm through uncertainty while reviewing mistakes deeply.",
       },
       {
         question: "Can Advanced tutoring still help students who are good but inconsistent?",
         answer:
-          "Yes. Many students use Advanced tutoring to become more stable with deeper problems, not only because they lack basic ability.",
+          "Yes. Many students use Advanced tutoring to become more stable with deeper problems, not because they lack ability.",
       },
     ],
     cta: {
       label: "Book a JEE Advanced demo",
       description:
-        "Share the class, the current target, and the question types where deeper reasoning is breaking down. Maths Bodhi can guide the next step on WhatsApp.",
+        "Share the class, current target, mock pattern, and question types where deeper reasoning is breaking down. Maths Bodhi can guide the next mentor step on WhatsApp.",
     },
   },
 };

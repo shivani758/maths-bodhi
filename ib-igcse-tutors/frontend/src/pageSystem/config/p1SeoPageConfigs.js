@@ -172,26 +172,26 @@ function getPageDescription(path, currentRow) {
   const linked = routeCatalog.get(path);
 
   if (!linked) {
-    return "Continue comparing the most relevant Maths Bodhi route before booking a demo.";
+    return "Continue comparing the most relevant Maths Bodhi route before choosing a verified maths tutor or booking a demo.";
   }
 
   if (path === DEMO_PATH) {
-    return "Share the student's class, board, target chapters, and preferred learning mode before the first conversation.";
+    return "Share the student's class, board, target score, weak chapters, and preferred learning mode before the first conversation.";
   }
 
   if (path === "/") {
-    return "Return to the main Maths Bodhi hub for board, class, and tutor discovery across Gurugram.";
+    return "Return to the main Maths Bodhi hub for verified maths tutor discovery across boards, classes, and Gurugram routes.";
   }
 
   if (path === "/city/gurugram") {
-    return "Compare Gurugram sector context, tutor availability, and local home-tuition fit.";
+    return "Compare Gurugram sector context, verified tutor availability, and local home-tuition fit.";
   }
 
   if (linked.cluster === currentRow.cluster) {
-    return `Stay within the ${linked.cluster} cluster and compare the next best-fit maths route.`;
+    return `Stay within the ${linked.cluster} cluster and compare the next best-fit maths route for the student's goal.`;
   }
 
-  return `Open this ${linked.segment.toLowerCase()} route to compare ${linked.keyword ?? linked.title} with the current page.`;
+  return `Open this ${linked.segment.toLowerCase()} route to compare ${linked.keyword ?? linked.title} with the current Maths Bodhi plan.`;
 }
 
 function routeCard(path, currentRow) {
@@ -237,10 +237,10 @@ function readableAudience(rowData) {
 
 function getHeroIntro(rowData) {
   const audience = readableAudience(rowData);
-  const base = `${rowData.title} is a focused Maths Bodhi landing page for ${audience} comparing ${rowData.keyword} with clear next steps.`;
+  const base = `${rowData.title} is a focused Maths Bodhi page for ${audience} comparing ${rowData.keyword} with verified maths tutor next steps in Gurugram.`;
 
   if (rowData.cluster.includes("JEE")) {
-    return `${base} It keeps the JEE maths conversation practical: target exam, weekly problem-solving rhythm, revision load, and when to book a demo.`;
+    return `${base} It keeps IIT JEE Main or JEE Advanced maths practical: target exam, weekly problem-solving rhythm, revision load, and when to book a demo.`;
   }
 
   if (rowData.cluster.includes("IB") || rowData.cluster.includes("IGCSE") || rowData.cluster.includes("Cambridge") || rowData.cluster.includes("Premium")) {
@@ -248,7 +248,7 @@ function getHeroIntro(rowData) {
   }
 
   if (rowData.pageType === "Class Service") {
-    return `${base} It helps parents compare class level, board expectations, chapter pressure, and the right tutoring format before shortlisting.`;
+    return `${base} It helps parents compare class level, board expectations, chapter pressure, score planning, and the right tutoring format before shortlisting.`;
   }
 
   return `${base} It links the parent hub, related maths routes, and the demo flow so families can move from browsing to a useful first conversation.`;
@@ -257,16 +257,16 @@ function getHeroIntro(rowData) {
 function buildSupportPoints(rowData) {
   return [
     {
-      title: `Personalised maths support for ${readableAudience(rowData)}`,
-      description: `This page narrows the search around ${rowData.keyword}, the student's current level, and the kind of weekly support that would actually help.`,
+      title: `Verified maths support for ${readableAudience(rowData)}`,
+      description: `This page narrows the search around ${rowData.keyword}, the student's current level, and the weekly support needed for marks improvement, 95%+ planning, or 100/100 maths dreamer goals where relevant.`,
     },
     {
       title: `What this ${rowData.pageType.toLowerCase()} covers`,
-      description: `Families can compare board fit, class expectations, practice needs, and whether the next step should be home tuition, online support, or a focused planning call.`,
+      description: `Families can compare board fit, class expectations, practice needs, and whether the next step should be home tuition, online support, crash-course planning, or a focused mentor call.`,
     },
     {
       title: "How Maths Bodhi keeps the first shortlist practical",
-      description: "The route points back to the correct hub, filters related pages, and uses the demo request to capture class, board, topic pressure, locality, and preferred mode.",
+      description: "The route points back to the correct hub, filters related pages, and uses the demo request to capture class, board, topic pressure, locality, target score, and preferred mode.",
     },
   ];
 }
@@ -275,15 +275,15 @@ function buildFaqs(rowData) {
   return [
     {
       question: `Who is ${rowData.title} for?`,
-      answer: `It is for ${readableAudience(rowData)} who are comparing ${rowData.keyword} and want a clear next step before speaking with Maths Bodhi.`,
+      answer: `It is for ${readableAudience(rowData)} who are comparing ${rowData.keyword} and want a clear next step before speaking with Maths Bodhi about verified tutor fit.`,
     },
     {
       question: "What should parents share before booking a demo?",
-      answer: "Share the student's class, board, recent test pattern, chapters causing difficulty, locality or online preference, and the result expected from the first month of support.",
+      answer: "Share the student's class, board, recent test pattern, weak chapters, locality or online preference, target score, and the result expected from the first month of support.",
     },
     {
       question: "Does this page guarantee a specific tutor or result?",
-      answer: "No. Maths Bodhi only shows or recommends available published tutor profiles and uses the demo conversation to check fit, schedule, and academic need.",
+      answer: "No. Parents can share preferences such as female maths tutor, senior tutor, top-university background, PhD-level mentor, or special child maths support; Maths Bodhi then checks fit, schedule, and availability.",
     },
   ];
 }
@@ -352,7 +352,7 @@ function createSeoConfig(rowData) {
       limit: 3,
     },
     seoTitle: rowData.title.includes("Maths Bodhi") ? rowData.title : `${rowData.title} | Maths Bodhi`,
-    seoDescription: `Explore ${rowData.keyword} with Maths Bodhi. Compare the right parent hub, related maths routes, tutor-fit checks, and book a free demo class.`,
+    seoDescription: `Explore ${rowData.keyword} with Maths Bodhi. Compare verified maths tutor fit, related maths routes, Gurugram context, and demo next steps.`,
     canonicalUrl: rowData.path,
     breadcrumbItems: buildBreadcrumbs(rowData),
     schemaType: rowData.pageType === "Curriculum Hub" ? "CollectionPage" : "Service",
@@ -368,8 +368,8 @@ function createSeoConfig(rowData) {
           { value: "Demo", label: "WhatsApp-led next step" },
         ],
         supportPanel: {
-          title: `Start with ${rowData.keyword}, then choose the right next page`,
-          text: `This page is connected to ${getPageLabel(rowData.parent)} and the core demo flow, so the journey stays clear instead of becoming another isolated SEO page.`,
+          title: `Start with ${rowData.keyword}, then choose the right Maths Bodhi route`,
+          text: `This page is connected to ${getPageLabel(rowData.parent)} and the core demo flow, so the journey stays useful for parents instead of becoming another isolated SEO page.`,
           bullets: [
             `Parent hub: ${getPageLabel(rowData.parent)}`,
             `Audience: ${rowData.audience}`,
@@ -390,17 +390,17 @@ function createSeoConfig(rowData) {
           id: `p1-links-${rowData.id}`,
           badge: "Related Maths Bodhi Pages",
           title: "Continue through the most relevant internal links",
-          subtitle: "These links include the parent hub, homepage, Gurugram context, demo flow, and related P1 SEO pages that already work in this phase.",
+          subtitle: "These links include the parent hub, homepage, Gurugram context, demo flow, and related P1 SEO pages for cleaner parent navigation.",
           cards: relatedCards,
         },
       ],
       featuredTutors: {
         badge: "Tutor Profiles",
-        title: `Published tutor profiles for ${rowData.title}`,
-        subtitle: "When matching published tutor profiles are available, they appear here without adding fake tutors, reviews, or results.",
+        title: `Published verified tutor profiles for ${rowData.title}`,
+        subtitle: "When matching published tutor profiles are available, they appear here without adding fake tutors, reviews, or result claims.",
         emptyState: {
           title: "No matching published tutor profile is shown on this page yet",
-          description: "Maths Bodhi will use the demo conversation to check class, board, schedule, and tutor availability before recommending a fit.",
+          description: "Maths Bodhi will use the demo conversation to check class, board, target score, schedule, and tutor availability before recommending a fit.",
           primaryAction: {
             label: "Book a free maths demo class",
             to: DEMO_PATH,
@@ -414,7 +414,7 @@ function createSeoConfig(rowData) {
       faqs: buildFaqs(rowData),
       cta: {
         title: "Book a free maths demo class",
-        description: `Share the student's class, board, current maths concern, and whether ${rowData.keyword} is the main priority. Maths Bodhi can guide the next step on WhatsApp.`,
+        description: `Share the student's class, board, current maths concern, target score, and whether ${rowData.keyword} is the main priority. Maths Bodhi can guide the next step on WhatsApp.`,
         primaryAction: {
           label: "Book a free maths demo class",
           to: DEMO_PATH,
@@ -560,10 +560,10 @@ function buildRecoverySupportPoints(page) {
     return [
       {
         title: `${page.boardLabel} Class ${page.classLevel} support with a real weekly plan`,
-        description: `This page is for families who want ${page.primaryKeyword} with home tuition structure, not a loose list of worksheets or generic practice.`,
+        description: `This page is for families who want ${page.primaryKeyword} with verified home tuition structure, not a loose list of worksheets or generic practice.`,
       },
       {
-        title: "Board, class, and chapter pressure stay connected",
+        title: "Board, class, and score pressure stay connected",
         description: page.focus,
       },
       {
@@ -588,7 +588,7 @@ function buildRecoverySupportPoints(page) {
       {
         title: "Home tuition can focus on the exact error pattern",
         description:
-          "The first conversation should include recent mistakes, current chapter pressure, and whether the student needs concept repair or timed practice.",
+          "The first conversation should include recent mistakes, current chapter pressure, target score, and whether the student needs concept repair or timed practice.",
       },
     ];
   }
@@ -615,17 +615,17 @@ function buildRecoveryFaqs(page) {
   return [
     {
       question: `Who should use the ${page.title} page?`,
-      answer: `It is for ${page.audience} who want ${page.primaryKeyword} with a clear route into board, class, topic, locality, and demo next steps.`,
+      answer: `It is for ${page.audience} who want ${page.primaryKeyword} with a clear route into board, class, topic, locality, verified tutor fit, and demo next steps.`,
     },
     {
       question: "Can this be handled through maths home tuition?",
       answer:
-        "Yes, where tutor availability and schedule fit allow it. Families can also discuss online or hybrid support when that is more practical.",
+        "Yes, where tutor availability and schedule fit allow it. Families can also discuss online, hybrid, female tutor, or senior mentor support when that is more practical.",
     },
     {
       question: "What should parents share before booking?",
       answer:
-        "Share the student's class, board, school area, weak chapters, recent test pattern, preferred locality, and whether home tuition or online support is preferred.",
+        "Share the student's class, board, school area, weak chapters, recent test pattern, target score, preferred locality, and whether home tuition or online support is preferred.",
     },
   ];
 }
@@ -637,14 +637,14 @@ function createRecoveryWhatsAppHref(page, purpose = "maths home tuition") {
 
 function getRecoveryIntro(page) {
   if (page.group === "class-board") {
-    return `${page.title} is a focused home tuition page for families comparing ${page.boardLabel} Class ${page.classLevel} maths support, tutor fit, chapter clarity, and a practical demo next step.`;
+    return `${page.title} is a focused home tuition page for families comparing verified ${page.boardLabel} Class ${page.classLevel} maths support, tutor fit, chapter clarity, and a practical demo next step.`;
   }
 
   if (page.group === "topic-board") {
-    return `${page.title} helps families connect ${page.topicLabel.toLowerCase()} support with ${page.boardLabel} expectations, class pressure, and the right home tuition or online plan.`;
+    return `${page.title} helps families connect ${page.topicLabel.toLowerCase()} support with ${page.boardLabel} expectations, class pressure, target score, and the right home tuition or online plan.`;
   }
 
-  return `${page.title} is a high-intent exam support page for families who need maths revision, problem-solving structure, and a clear way to speak with Maths Bodhi before time is lost.`;
+  return `${page.title} is a high-intent exam support page for families who need maths revision, problem-solving structure, crash-course planning, and a clear way to speak with Maths Bodhi before time is lost.`;
 }
 
 function createRecoveryRootSeoConfig(page) {
@@ -695,8 +695,8 @@ function createRecoveryRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Maths Bodhi`,
-    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare related locality, board, class, topic, WhatsApp, and free demo routes.`,
+    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
+    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare verified tutor fit, related locality, board, class, topic, WhatsApp, and demo routes.`,
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -727,9 +727,9 @@ function createRecoveryRootSeoConfig(page) {
           { value: "Demo", label: "Next-step CTA" },
         ],
         supportPanel: {
-          title: `Start with ${page.primaryKeyword}, then narrow the tutor conversation`,
+          title: `Start with ${page.primaryKeyword}, then narrow the verified tutor conversation`,
           text:
-            "This recovery cluster page connects the Excel hub logic with a cleaner commercial URL so families can move from search intent into a real enquiry.",
+            "This recovery cluster page connects the SEO hub logic with a cleaner commercial URL so families can move from search intent into a real Maths Bodhi enquiry.",
           bullets: [
             `Parent hub: ${getPageLabel(page.parentHubPath)}`,
             "Book demo, WhatsApp, and mentor CTAs are visible",
@@ -769,7 +769,7 @@ function createRecoveryRootSeoConfig(page) {
           badge: "Related Classes",
           title: "Related class pages",
           subtitle:
-            "Use class pages when the student needs support around grade-level pressure, test style, or senior-school rhythm.",
+            "Use class pages when the student needs support around grade-level pressure, test style, score planning, or senior-school rhythm.",
           cards: buildRecoveryCards(getRecoveryClassRelatedPaths(page), currentRow),
         },
         {
@@ -784,13 +784,13 @@ function createRecoveryRootSeoConfig(page) {
       ],
       featuredTutors: {
         badge: "Tutor Profiles",
-        title: `Published tutor profiles related to ${page.title}`,
+        title: `Published verified tutor profiles related to ${page.title}`,
         subtitle:
           "Only real published Maths Bodhi tutor profiles are shown here. If no matching profile exists, the page sends families into a demo or WhatsApp check.",
         emptyState: {
           title: "No matching published tutor profile is shown for this exact page yet",
           description:
-            "Maths Bodhi can still check current fit after the family shares class, board, locality, weak chapters, and preferred learning mode.",
+            "Maths Bodhi can still check current fit after the family shares class, board, locality, weak chapters, target score, and preferred learning mode.",
           primaryAction: {
             label: "Book a free maths demo class",
             to: DEMO_PATH,
@@ -804,7 +804,7 @@ function createRecoveryRootSeoConfig(page) {
       faqs: buildRecoveryFaqs(page),
       cta: {
         title: "Book a free maths demo class",
-        description: `Share the student's class, board, locality, and current maths concern. Maths Bodhi can check whether ${page.primaryKeyword} is best handled through home tuition, online support, or a focused mentor call.`,
+        description: `Share the student's class, board, locality, target score, and current maths concern. Maths Bodhi can check whether ${page.primaryKeyword} is best handled through home tuition, online support, crash course, or a focused mentor call.`,
         primaryAction: {
           label: "Book a free maths demo class",
           to: DEMO_PATH,
@@ -1231,22 +1231,22 @@ function createBatchBWhatsAppHref(page, purpose = "board, class, and exam suppor
 
 function getBatchBIntro(page) {
   if (page.intent?.includes("online")) {
-    return `${page.title} helps families compare online maths support with the same class, board, chapter, and tutor-fit checks used for home tuition.`;
+    return `${page.title} helps families compare online maths support with the same class, board, chapter, target-score, and verified tutor-fit checks used for home tuition.`;
   }
 
   if (page.intent?.includes("doubt")) {
-    return `${page.title} is for students who need regular maths doubt solving tied to their board, class level, weak chapters, and exam calendar.`;
+    return `${page.title} is for students who need regular maths doubt solving tied to their board, class level, weak chapters, target score, and exam calendar.`;
   }
 
   if (page.intent?.includes("worksheet")) {
-    return `${page.title} connects worksheet practice with guided correction, chapter clarity, and the next best board or class route.`;
+    return `${page.title} connects worksheet practice with guided correction, chapter clarity, personal attention, and the next best board or class route.`;
   }
 
   if (page.intent?.includes("revision")) {
-    return `${page.title} gives families a clean revision-intent page for planning paper practice, weak-topic repair, and the right demo conversation.`;
+    return `${page.title} gives families a clean revision-intent page for planning paper practice, weak-topic repair, crash-course timing, and the right demo conversation.`;
   }
 
-  return `${page.title} is a board and exam intent page for families comparing maths preparation, home tuition fit, online continuity, and mentor guidance before booking a demo.`;
+  return `${page.title} is a board and exam intent page for families comparing maths preparation, verified home tuition fit, online continuity, and mentor guidance before booking a demo.`;
 }
 
 function getBatchBLocalityPaths(page) {
@@ -1350,12 +1350,12 @@ function buildBatchBSupportPoints(page) {
       {
         title: "Online support still needs a board-wise plan",
         description:
-          "The page connects online tuition with class level, board pattern, chapter pressure, and the same demo-fit questions used for home tuition.",
+          "The page connects online tuition with class level, board pattern, chapter pressure, target score, and the same demo-fit questions used for home tuition.",
       },
       {
         title: "Students can move between online and home tuition context",
         description:
-          "Internal links keep Gurugram locality pages, class pages, and board hubs close when the family wants a home-tuition shortlist instead.",
+          "Internal links keep Gurugram locality pages, class pages, and board hubs close when the family wants a verified home-tuition shortlist instead.",
       },
       {
         title: "Tutor matches stay based on published data",
@@ -1370,7 +1370,7 @@ function buildBatchBSupportPoints(page) {
       {
         title: "Doubt solving should be regular, not last-minute",
         description:
-          "The page frames doubt solving around weekly correction, weak-topic tracking, board style, and the next demo conversation.",
+          "The page frames doubt solving around weekly correction, weak-topic tracking, board style, personal attention, and the next demo conversation.",
       },
       {
         title: "The route links doubt solving to classes and topics",
@@ -1400,7 +1400,7 @@ function buildBatchBSupportPoints(page) {
       {
         title: "Empty states stay honest",
         description:
-          "If no exact published tutor profile matches this route, the page asks families to share class, board, chapters, and schedule first.",
+          "If no exact published tutor profile matches this route, the page asks families to share class, board, chapters, target score, and schedule first.",
       },
     ];
   }
@@ -1418,7 +1418,7 @@ function buildBatchBSupportPoints(page) {
     {
       title: "The next step is a fit check, not a guarantee",
       description:
-        "Maths Bodhi uses the demo conversation to understand class, board, weak chapters, timeline, and tutor availability before suggesting support.",
+        "Maths Bodhi uses the demo conversation to understand class, board, weak chapters, timeline, target score, and tutor availability before suggesting support.",
     },
   ];
 }
@@ -1427,12 +1427,12 @@ function buildBatchBFaqs(page) {
   return [
     {
       question: `Who should use the ${page.title} page?`,
-      answer: `It is for ${page.audience} comparing ${page.primaryKeyword} and wanting a practical route into class, board, topic, locality, and demo next steps.`,
+      answer: `It is for ${page.audience} comparing ${page.primaryKeyword} and wanting a practical route into class, board, topic, locality, verified tutor fit, and demo next steps.`,
     },
     {
       question: "Can Maths Bodhi support this through home tuition or online tuition?",
       answer:
-        "Families can discuss both options. The useful fit depends on class, board, locality, schedule, weak chapters, and current tutor availability.",
+        "Families can discuss both options. The useful fit depends on class, board, locality, schedule, weak chapters, target score, and current tutor availability.",
     },
     {
       question: "Does this page promise a specific tutor, result, or score?",
@@ -1492,8 +1492,8 @@ function createBatchBRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Maths Bodhi`,
-    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare board, class, topic, locality, home tuition, online support, WhatsApp, and free demo next steps.`,
+    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
+    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare board, class, topic, Gurugram locality, verified tutor fit, online support, WhatsApp, and demo next steps.`,
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -1521,9 +1521,9 @@ function createBatchBRootSeoConfig(page) {
           { value: "Demo", label: "WhatsApp-led next step" },
         ],
         supportPanel: {
-          title: `${page.primaryKeyword} should lead into a clear tutor-fit check`,
+          title: `${page.primaryKeyword} should lead into a clear verified tutor-fit check`,
           text:
-            "This page keeps board, class, topic, locality, and exam planning connected so families can move from search intent to a useful first conversation.",
+            "This page keeps board, class, topic, locality, score planning, and exam planning connected so families can move from search intent to a useful first conversation.",
           bullets: [
             `Parent hub: ${getPageLabel(page.parentHubPath)}`,
             `Audience: ${page.audience}`,
@@ -1563,7 +1563,7 @@ function createBatchBRootSeoConfig(page) {
           badge: "Related Classes",
           title: "Related class pages",
           subtitle:
-            "Use these routes when the class level, board-exam calendar, or homework load is the strongest signal.",
+            "Use these routes when the class level, board-exam calendar, score target, or homework load is the strongest signal.",
           cards: buildRecoveryCards(getBatchBClassPaths(page), currentRow),
         },
         {
@@ -1578,13 +1578,13 @@ function createBatchBRootSeoConfig(page) {
       ],
       featuredTutors: {
         badge: "Tutor Profiles",
-        title: `Published tutor profiles related to ${page.title}`,
+        title: `Published verified tutor profiles related to ${page.title}`,
         subtitle:
           "Only real published Maths Bodhi tutor profiles are shown here. If matching data is limited, the page keeps the enquiry route honest through demo and WhatsApp checks.",
         emptyState: {
           title: "No exact published tutor profile is shown for this route yet",
           description:
-            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, weak chapters, timeline, and schedule.",
+            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, weak chapters, timeline, target score, and schedule.",
           primaryAction: {
             label: "Book a free maths demo class",
             to: DEMO_PATH,
@@ -1598,7 +1598,7 @@ function createBatchBRootSeoConfig(page) {
       faqs: buildBatchBFaqs(page),
       cta: {
         title: "Book a free maths demo class",
-        description: `Share the student's class, board, current chapters, target exam, and whether ${page.primaryKeyword} should be handled through home tuition, online support, or mentor guidance.`,
+        description: `Share the student's class, board, current chapters, target exam, target score, and whether ${page.primaryKeyword} should be handled through home tuition, online support, crash course, or mentor guidance.`,
         primaryAction: {
           label: "Book a free maths demo class",
           to: DEMO_PATH,
@@ -1659,7 +1659,7 @@ function createBatchCWhatsAppHref(page, purpose = "topic mastery and exam suppor
 
 function getBatchCIntro(page) {
   if (page.kind === "topic-mastery") {
-    return `${page.title} is a topic-mastery page for families who want ${page.topicLabel?.toLowerCase()} support connected to board expectations, class pressure, home tuition fit, and demo next steps.`;
+    return `${page.title} is a topic-mastery page for families who want ${page.topicLabel?.toLowerCase()} support connected to board expectations, class pressure, verified home tuition fit, and demo next steps.`;
   }
 
   if (page.kind === "doubt-support") {
@@ -1670,7 +1670,7 @@ function getBatchCIntro(page) {
     return `${page.title} is for homework follow-through, worksheet correction, and method clarity without replacing the student's own problem-solving work.`;
   }
 
-  return `${page.title} connects topic repair with exam preparation, timed practice, related board and class routes, and an honest tutor-fit check before support begins.`;
+  return `${page.title} connects topic repair with exam preparation, timed practice, related board and class routes, and an honest verified tutor-fit check before support begins.`;
 }
 
 function getBatchCLocalityPaths(page) {
@@ -1787,7 +1787,7 @@ function buildBatchCSupportPoints(page) {
       {
         title: "No fake urgency or guaranteed outcomes",
         description:
-          "Maths Bodhi checks class, board, current mistakes, schedule, and tutor availability before recommending any support path.",
+          "Maths Bodhi checks class, board, current mistakes, target score, schedule, and tutor availability before recommending any support path.",
       },
     ];
   }
@@ -1806,7 +1806,7 @@ function buildBatchCSupportPoints(page) {
       {
         title: "Empty states stay transparent",
         description:
-          "If no exact tutor profile matches, the page asks families to share class, board, chapters, and schedule before any shortlist is discussed.",
+          "If no exact tutor profile matches, the page asks families to share class, board, chapters, target score, and schedule before any shortlist is discussed.",
       },
     ];
   }
@@ -1833,12 +1833,12 @@ function buildBatchCFaqs(page) {
   return [
     {
       question: `Who should use the ${page.title} page?`,
-      answer: `It is for ${page.audience} who want ${page.primaryKeyword} connected to class, board, topic, locality, and exam-support next steps.`,
+      answer: `It is for ${page.audience} who want ${page.primaryKeyword} connected to class, board, topic, locality, verified tutor fit, and exam-support next steps.`,
     },
     {
       question: "Can this be handled through home tuition or online support?",
       answer:
-        "Yes, when tutor availability and schedule fit allow it. Families can compare home tuition, online support, or a hybrid plan during the demo conversation.",
+        "Yes, when tutor availability and schedule fit allow it. Families can compare home tuition, online support, female tutor preference, or a hybrid plan during the demo conversation.",
     },
     {
       question: "Does this page guarantee a tutor or exam result?",
@@ -1898,7 +1898,7 @@ function createBatchCRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Maths Bodhi`,
+    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
     seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare topic mastery, exam support, board routes, class routes, Gurugram home tuition, WhatsApp, and demo next steps.`,
     canonicalUrl: page.path,
     breadcrumbItems: [
@@ -1928,9 +1928,9 @@ function createBatchCRootSeoConfig(page) {
           { value: "Demo", label: "Tutor-fit check" },
         ],
         supportPanel: {
-          title: `${page.primaryKeyword} should connect topic clarity with the next practical route`,
+          title: `${page.primaryKeyword} should connect topic clarity with the next practical tutor route`,
           text:
-            "This page keeps topic, class, board, exam, locality, and tutor-fit context together so it does not become a thin standalone SEO page.",
+            "This page keeps topic, class, board, exam, locality, and verified tutor-fit context together so it does not become a thin standalone SEO page.",
           bullets: [
             `Parent hub: ${getPageLabel(page.parentHubPath)}`,
             `Audience: ${page.audience}`,
@@ -1970,7 +1970,7 @@ function createBatchCRootSeoConfig(page) {
           badge: "Related Classes",
           title: "Related class pages",
           subtitle:
-            "Use these routes when class level, board-exam pressure, homework load, or revision timing is the strongest signal.",
+            "Use these routes when class level, board-exam pressure, score target, homework load, or revision timing is the strongest signal.",
           cards: buildRecoveryCards(getBatchCClassPaths(page), currentRow),
         },
         {
@@ -1985,13 +1985,13 @@ function createBatchCRootSeoConfig(page) {
       ],
       featuredTutors: {
         badge: "Tutor Profiles",
-        title: `Published tutor profiles related to ${page.title}`,
+        title: `Published verified tutor profiles related to ${page.title}`,
         subtitle:
           "Only real published Maths Bodhi tutor profiles are shown here. When matching data is limited, the page sends families to a demo or WhatsApp fit check.",
         emptyState: {
           title: "No exact published tutor profile is shown for this route yet",
           description:
-            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, topic gaps, timeline, and schedule.",
+            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, topic gaps, timeline, target score, and schedule.",
           primaryAction: {
             label: "Book a free maths demo class",
             to: DEMO_PATH,
@@ -2005,7 +2005,7 @@ function createBatchCRootSeoConfig(page) {
       faqs: buildBatchCFaqs(page),
       cta: {
         title: "Book a free maths demo class",
-        description: `Share the student's class, board, current topic gaps, exam timeline, and whether ${page.primaryKeyword} should be handled through home tuition, online support, or mentor guidance.`,
+        description: `Share the student's class, board, current topic gaps, exam timeline, target score, and whether ${page.primaryKeyword} should be handled through home tuition, online support, Olympiad practice, or mentor guidance.`,
         primaryAction: {
           label: "Book a free maths demo class",
           to: DEMO_PATH,
@@ -2063,22 +2063,22 @@ function getBatchDIntro(page) {
   }
 
   if (page.kind === "comparison") {
-    return `${page.title} compares support formats through schedule, attention, travel, practice follow-through, board fit, and the questions families should ask before booking a demo.`;
+    return `${page.title} compares support formats through schedule, personal attention, travel, practice follow-through, board fit, and the questions families should ask before booking a demo.`;
   }
 
   if (page.kind === "exam-guide") {
-    return `${page.title} turns exam pressure into a clearer plan for revision, paper practice, weak-topic repair, doubt solving, and mentor guidance.`;
+    return `${page.title} turns exam pressure into a clearer plan for revision, paper practice, weak-topic repair, doubt solving, crash-course timing, and mentor guidance.`;
   }
 
   if (page.kind === "study-support") {
-    return `${page.title} connects worksheets, homework, practice papers, and doubt logs with the right class, board, topic, locality, and demo route.`;
+    return `${page.title} connects worksheets, homework, practice papers, and doubt logs with the right class, board, topic, Gurugram locality, and demo route.`;
   }
 
   if (page.kind === "resource-support") {
-    return `${page.title} gives families a practical decision route before they compare tutors, ask questions, and choose home tuition or online support.`;
+    return `${page.title} gives families a practical decision route before they compare verified tutors, ask questions, and choose home tuition or online support.`;
   }
 
-  return `${page.title} is a commercial-intent support page for families comparing one-to-one attention, weekend timing, board preparation, and tutor-fit next steps.`;
+  return `${page.title} is a commercial-intent support page for families comparing one-to-one attention, weekend timing, board preparation, and verified tutor-fit next steps.`;
 }
 
 function getBatchDLocalityPaths(page) {
@@ -2166,7 +2166,7 @@ function buildBatchDSupportPoints(page) {
       {
         title: `${page.schoolName} context should stay affiliation-safe`,
         description:
-          "The school name is used only for parent search context. The page does not claim official partnership, preferred status, guaranteed results, or access to school records.",
+          "The school name is used only for parent search context. The page does not claim official partnership, preferred status, promised results, or access to school records.",
       },
       {
         title: "Compare the real support format, not just the label",
@@ -2175,7 +2175,7 @@ function buildBatchDSupportPoints(page) {
       {
         title: "The next step is a fit check",
         description:
-          "Families should share class, board, current chapters, school schedule, locality, and whether home tuition or online continuity is more practical.",
+          "Families should share class, board, current chapters, school schedule, locality, target score, and whether home tuition or online continuity is more practical.",
       },
     ];
   }
@@ -2213,7 +2213,7 @@ function buildBatchDSupportPoints(page) {
       {
         title: "Progress claims stay honest",
         description:
-          "The page does not promise marks, ranks, or results. Tutor-fit is checked after the family shares current level, timeline, and weak chapters.",
+          "The page does not promise marks, ranks, or results. Tutor-fit is checked after the family shares current level, timeline, target score, and weak chapters.",
       },
     ];
   }
@@ -2259,17 +2259,17 @@ function buildBatchDFaqs(page) {
   return [
     {
       question: `Who should use the ${page.title} page?`,
-      answer: `It is for ${page.audience} comparing ${page.primaryKeyword} and wanting a practical next step across locality, board, class, topic, and demo routes.`,
+      answer: `It is for ${page.audience} comparing ${page.primaryKeyword} and wanting a practical next step across locality, board, class, topic, verified tutor fit, and demo routes.`,
     },
     {
       question: "Can Maths Bodhi help choose between home tuition, online support, and coaching?",
       answer:
-        "Families can compare those options in the demo conversation. The right fit depends on class, board, locality, schedule, weak chapters, and available tutor profiles.",
+        "Families can compare those options in the demo conversation. The right fit depends on class, board, locality, schedule, weak chapters, target score, and available tutor profiles.",
     },
     {
       question: "Does this page guarantee a tutor, review, score, or result?",
       answer:
-        "No. The page avoids fake tutors, fake reviews, fake counts, and guaranteed-result claims. It uses published data where available and asks for a fit check when needed.",
+        "No. The page avoids fake tutors, fake reviews, fake counts, and promised-result claims. It uses published data where available and asks for a fit check when needed.",
     },
   ];
 }
@@ -2326,8 +2326,8 @@ function createBatchDRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Maths Bodhi`,
-    seoDescription: `Compare ${page.primaryKeyword} with Maths Bodhi. Review support format, board, class, topic, locality, WhatsApp, and free demo next steps without unsupported claims.`,
+    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
+    seoDescription: `Compare ${page.primaryKeyword} with Maths Bodhi. Review support format, board, class, topic, Gurugram locality, WhatsApp, and demo next steps without unsupported claims.`,
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -2358,11 +2358,11 @@ function createBatchDRootSeoConfig(page) {
         supportPanel: {
           title: `${page.primaryKeyword} should lead into a practical decision, not a thin landing page`,
           text:
-            "This page keeps comparison, class, board, topic, locality, and tutor-fit context together so families can choose the next route with less guesswork.",
+            "This page keeps comparison, class, board, topic, locality, and verified tutor-fit context together so families can choose the next route with less guesswork.",
           bullets: [
             `Parent hub: ${getPageLabel(page.parentHubPath)}`,
             `Audience: ${page.audience}`,
-            "No fake tutors, fake reviews, fake counts, or guaranteed-result claims",
+            "No fake tutors, fake reviews, fake counts, or promised-result claims",
           ],
         },
         heroImage: "/images/hero-maths-home.svg",
@@ -2398,7 +2398,7 @@ function createBatchDRootSeoConfig(page) {
           badge: "Related Classes",
           title: "Related class and revision pages",
           subtitle:
-            "Use these routes when class level, board-exam pressure, homework load, or revision timing matters most.",
+            "Use these routes when class level, board-exam pressure, score target, homework load, or revision timing matters most.",
           cards: buildRecoveryCards(getBatchDClassPaths(page), currentRow),
         },
         {
@@ -2413,13 +2413,13 @@ function createBatchDRootSeoConfig(page) {
       ],
       featuredTutors: {
         badge: "Tutor Profiles",
-        title: `Published tutor profiles related to ${page.title}`,
+        title: `Published verified tutor profiles related to ${page.title}`,
         subtitle:
           "Only real published Maths Bodhi tutor profiles are shown here. If matching data is limited, the page keeps the enquiry route honest through demo and WhatsApp checks.",
         emptyState: {
           title: "No exact published tutor profile is shown for this route yet",
           description:
-            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, weak chapters, comparison concern, and schedule.",
+            "Maths Bodhi can still check current fit after the family shares class, board, locality or online preference, weak chapters, comparison concern, target score, and schedule.",
           primaryAction: {
             label: "Book a free maths demo class",
             to: DEMO_PATH,
@@ -2433,7 +2433,7 @@ function createBatchDRootSeoConfig(page) {
       faqs: buildBatchDFaqs(page),
       cta: {
         title: "Book a free maths demo class",
-        description: `Share the student's class, board, current maths concern, and whether ${page.primaryKeyword} is the main decision. Maths Bodhi can guide home tuition, online support, or mentor next steps.`,
+        description: `Share the student's class, board, current maths concern, target score, and whether ${page.primaryKeyword} is the main decision. Maths Bodhi can guide home tuition, online support, crash-course planning, or mentor next steps.`,
         primaryAction: {
           label: "Book a free maths demo class",
           to: DEMO_PATH,

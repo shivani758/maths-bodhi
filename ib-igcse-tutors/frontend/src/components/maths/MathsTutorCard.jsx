@@ -84,7 +84,11 @@ function MathsTutorCard({
   const specializationLabel = boardSpecialization ?? subBoard ?? examType ?? board;
   const classLabel = classesSupported ?? classFocus ?? classLevel;
   const feeLabel = startingFee ?? price;
-  const descriptionText = shortBio ?? description ?? summary;
+  const descriptionText =
+    shortBio ??
+    description ??
+    summary ??
+    "Compare this verified Maths Bodhi tutor for board fit, class level, teaching style, locality coverage, and availability.";
   const serviceTags = unique(
     toArray(serviceModeTags).length ? toArray(serviceModeTags) : [...toArray(serviceModes), ...toArray(mode)],
   );
@@ -131,7 +135,7 @@ function MathsTutorCard({
             </div>
 
             <span className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-              {rating}/5
+              {rating ? `${rating}/5` : "Verified profile"}
             </span>
           </div>
 
@@ -157,9 +161,9 @@ function MathsTutorCard({
       ) : null}
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <TutorStat label="Class fit" value={classLabel ?? "Flexible support"} />
-        <TutorStat label="Experience" value={experienceLabel ?? "Experienced tutor"} />
-        <TutorStat label="Starting fee" value={feeLabel ?? "Shared on request"} />
+        <TutorStat label="Class fit" value={classLabel ?? "Class and goal fit shared on enquiry"} />
+        <TutorStat label="Experience" value={experienceLabel ?? "Verified experience shared on enquiry"} />
+        <TutorStat label="Starting fee" value={feeLabel ?? "Fee shared after tutor fit check"} />
       </div>
 
       {supportingChips.length ? (
@@ -178,7 +182,7 @@ function MathsTutorCard({
             to={profilePath}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
           >
-            View profile
+            View Tutor Profile
           </Link>
         ) : (
           <a
@@ -187,7 +191,7 @@ function MathsTutorCard({
             rel="noreferrer"
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700"
           >
-            Check tutor fit
+            Check Tutor Fit
           </a>
         )}
 
@@ -197,7 +201,7 @@ function MathsTutorCard({
           rel="noreferrer"
           className="rounded-2xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
         >
-          Ask on WhatsApp
+          Ask Maths Bodhi
         </a>
       </div>
     </article>

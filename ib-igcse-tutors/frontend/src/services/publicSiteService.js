@@ -7,7 +7,7 @@ import {
 
 const EVENT_NAME = "maths-bodhi-public-site-change";
 
-const DEFAULT_SETTINGS = {
+  const DEFAULT_SETTINGS = {
   siteName: "Maths Bodhi",
   supportEmail: "support@mathsbodhi.in",
   whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
@@ -30,28 +30,145 @@ const DEFAULT_SETTINGS = {
     logoMark: "/assets/mathsbodhi-logo.png",
     defaultHeroImage: "/images/hero-maths-home.svg",
   },
+
   seo: {
-    title: "Maths Bodhi",
-    description: "Maths Bodhi tutoring support.",
+    title: "Maths Bodhi | Verified Maths Home Tutors in Gurugram",
+    description:
+      "Maths Bodhi provides verified maths home tutors in Gurugram for CBSE, ICSE, ISC, IGCSE, IB MYP, IB DP, JEE Main, JEE Advanced and Maths Olympiad preparation with personalised learning support.",
     canonicalUrl: "",
-    keywords: [],
+    keywords: [
+      "maths home tutor in Gurugram",
+      "verified maths tutor Gurgaon",
+      "CBSE maths tutor",
+      "ICSE maths tutor",
+      "ISC maths tutor",
+      "IGCSE maths tutor",
+      "IB maths tutor",
+      "IB DP maths tutor",
+      "IB MYP maths tutor",
+      "JEE Main maths tutor",
+      "JEE Advanced maths tutor",
+      "Maths Olympiad tutor",
+      "female maths tutor",
+      "PhD maths tutor",
+      "senior maths tutor",
+      "home tuition for maths",
+      "maths tuition Gurugram",
+    ],
     ogImage: "/images/hero-maths-home.svg",
     indexable: true,
   },
+
   homepage: {
-    eyebrow: "Maths Home Tuition",
-    heroTitle: "Find the right maths tutor",
-    heroSubtitle: "Compare real tutor profiles, boards, classes, and lesson modes from the live Maths Bodhi backend.",
-    keywordChips: [],
-    stats: [],
-    serviceBullets: [],
-    intentTitle: "",
-    intentParagraphs: [],
-    goalTitle: "",
-    goalParagraphs: [],
+    eyebrow: "Verified Maths Home Tutors in Gurugram",
+
+    heroTitle:
+      "Find experienced maths home tutors for CBSE, ICSE, ISC, IGCSE, IB and JEE preparation",
+
+    heroSubtitle:
+      "Maths Bodhi helps families in Gurugram connect with verified, highly experienced maths tutors for school maths, competitive exams, concept building, marks improvement and personalised academic mentoring.",
+
+    keywordChips: [
+      "CBSE Maths Tutors",
+      "ICSE Maths Tutors",
+      "ISC Maths Tutors",
+      "IGCSE Maths Tutors",
+      "IB MYP Maths Tutors",
+      "IB DP Maths Tutors",
+      "JEE Main Maths",
+      "JEE Advanced Maths",
+      "Maths Olympiad",
+      "Female Maths Tutors",
+      "Senior Maths Tutors",
+      "Crash Courses",
+      "Special Child Support",
+      "95%+ Score Planning",
+    ],
+
+    stats: [
+      {
+        value: "K-12",
+        label: "School Maths Support",
+        description:
+          "Structured maths tutoring from foundational learning to senior secondary board preparation.",
+      },
+      {
+        value: "95%+",
+        label: "Marks Improvement",
+        description:
+          "Focused planning for students targeting higher confidence and better academic performance.",
+      },
+      {
+        value: "1:1",
+        label: "Personal Attention",
+        description:
+          "Personalised maths learning plans based on board, class, learning pace and exam goals.",
+      },
+      {
+        value: "JEE, Ol",
+        label: "Competitive Preparation",
+        description:
+          "Advanced maths support for JEE Main, JEE Advanced and Maths Olympiad preparation.",
+      },
+    ],
+
+    serviceBullets: [
+      "Verified maths home tutors in Gurugram with real teaching experience.",
+      "Board-specific tutoring for CBSE, ICSE, ISC, IGCSE, IB MYP and IB DP students.",
+      "Experienced maths faculty for JEE Main, JEE Advanced and Olympiad maths preparation.",
+      "Female maths tutors available for students and families preferring female mentors.",
+      "Senior and PhD-level maths tutors from reputed universities and academic backgrounds.",
+      "Personalised learning support for marks improvement and confidence building.",
+      "Special child maths tutoring with patient and structured teaching methods.",
+      "Crash courses for school maths, board exams and competitive maths revision.",
+    ],
+
+    intentTitle:
+      "Why families in Gurugram choose Maths Bodhi for maths home tuition",
+
+    intentParagraphs: [
+      "Maths Bodhi is focused on helping students learn mathematics with confidence, consistency and personal attention. Families searching for maths home tutors in Gurugram often want more than just chapter completion. They want a tutor who understands the board pattern, the student's weak areas, exam pressure and the need for structured guidance. Maths Bodhi connects students with verified maths tutors who specialise in school maths, advanced maths and competitive exam preparation.",
+
+      "We support students across CBSE, ICSE, ISC, IGCSE, IB MYP and IB DP curriculum pathways. Different boards require different teaching styles. CBSE students often need speed, exam discipline and NCERT mastery. ICSE and ISC students need strong conceptual clarity and presentation. IGCSE students need analytical thinking and international curriculum alignment. IB students require inquiry-based understanding, application-focused reasoning and deeper mathematical interpretation. Our tutoring approach respects these differences.",
+
+      "Maths Bodhi is also known for connecting families with experienced maths tutors including senior faculty, female maths tutors, PhD-level mentors and tutors from top academic institutions. Many parents specifically look for tutors who can teach patiently, communicate clearly and build confidence gradually. We focus on teaching quality, subject understanding and long-term academic growth instead of random tutor listings.",
+
+      "For competitive exam preparation, students preparing for JEE Main, JEE Advanced and Maths Olympiad require deeper problem-solving practice, time management and advanced conceptual clarity. Maths Bodhi supports learners who want focused preparation plans, revision structure, mock test analysis and advanced maths guidance. Our platform is designed to support both school excellence and competitive ambition.",
+
+      "A large number of students struggle with maths because of gaps in foundational understanding. Some students lose confidence after repeated mistakes, while others need more personal attention than a classroom can provide. Maths Bodhi supports concept rebuilding through structured tutoring, practice planning, revision strategy and regular doubt solving. The aim is not only marks improvement but also long-term confidence in mathematics.",
+
+      "Parents also approach Maths Bodhi for students who require patient teaching methods, including special child maths learning support. Every learner processes mathematics differently. Some need visual explanation, repeated examples and slower pacing. Others need advanced challenge and faster progression. Our tutoring ecosystem supports both types of learners with personalised teaching alignment.",
+
+      "Crash courses are another important area of support. Many students need short-term focused revision before school exams, board exams or competitive tests. Maths Bodhi helps students prepare through targeted topic revision, formula practice, mock testing and chapter prioritisation. These crash programs are especially useful for students preparing for CBSE board exams, JEE maths sections and final-term assessments.",
+
+      "Our larger goal is to create a trusted maths learning ecosystem in Gurugram where students can improve performance, strengthen concepts and become more confident problem solvers. Whether the learner is targeting 95%+, preparing for IB mathematics, building foundational confidence or aiming for JEE Advanced, Maths Bodhi focuses on meaningful academic progress with personalised support.",
+    ],
+
+    goalTitle: "Learning goals supported by Maths Bodhi",
+
+    goalParagraphs: [
+      "Marks improvement remains one of the biggest goals for students and parents searching for maths home tutors. Maths Bodhi focuses on structured academic progress through personalised tutoring, concept rebuilding, worksheet practice and exam-oriented preparation. Students often improve when they receive focused attention and consistent revision planning.",
+
+      "Students aiming for 95% and above require more than just textbook completion. High-performing learners need advanced practice, speed improvement, presentation discipline and error analysis. Maths Bodhi supports ambitious learners through advanced tutoring support, performance tracking and strategic revision routines.",
+
+      "For JEE Main and JEE Advanced preparation, students need strong conceptual understanding in algebra, coordinate geometry, calculus, vectors, trigonometry and probability. Maths Bodhi supports students through advanced problem-solving guidance, test practice and performance-oriented mentoring designed for engineering entrance preparation.",
+
+      "Maths Olympiad learners require curiosity-driven mathematical thinking and non-routine problem-solving exposure. Maths Bodhi helps students explore deeper mathematical concepts beyond regular classroom learning and encourages analytical reasoning through guided practice and mentor-driven exploration.",
+
+      "Students preparing for IB MYP and IB DP mathematics often require conceptual depth, structured reasoning and application-based learning support. Maths Bodhi tutors help learners improve confidence in assignments, internal assessments and advanced mathematical understanding required in international curricula.",
+
+      "Special child maths support is approached with patience, empathy and structured teaching techniques. Some students require slower pacing, repetition, visual explanation and confidence building. Maths Bodhi supports families looking for tutors who can provide calmer and more adaptive learning environments.",
+
+      "Parents often request female maths tutors, senior mentors or PhD-level faculty because trust, communication and subject expertise matter deeply in mathematics learning. Maths Bodhi makes it easier to discover tutors aligned with both academic and family preferences while maintaining strong teaching quality standards.",
+
+      "Maths Bodhi ultimately aims to support students across every stage of their maths journey. Some learners need foundational clarity, some need exam-focused revision, some want top scores and others want deeper academic growth. Our focus remains on personalised maths learning, meaningful improvement and long-term confidence.",
+    ],
   },
-  premiumSchools: [],
+
+  premiumSchools: [
+  ],
 };
+
 
 const EMPTY_PUBLIC_STORE = {
   settings: DEFAULT_SETTINGS,
@@ -86,6 +203,14 @@ function emitSiteChange() {
 
 function toArray(value) {
   return Array.isArray(value) ? value : [];
+}
+
+function isApprovedReview(review) {
+  return (review.status ?? review.moderationStatus) === "approved";
+}
+
+function isPublishedBlog(blog) {
+  return blog.status === "published";
 }
 
 function getMergedStore() {
@@ -192,8 +317,10 @@ function toPublicBlog(blog) {
   return {
     ...cloneValue(blog),
     sourceId: blog.sourceId ?? "",
+    summary: blog.summary ?? blog.excerpt ?? blog.description ?? "",
     tags: cloneValue(blog.tags ?? []),
     relatedTutorIds: cloneValue(blog.relatedTutorIds ?? []),
+    to: blog.slug ? `/blogs/${blog.slug}` : "",
   };
 }
 
@@ -274,9 +401,17 @@ export function getSiteDataSnapshot() {
     })
     .map(toPublicTutor);
   const homeReviews = store.reviews
-    .filter((review) => (review.status ?? review.moderationStatus) === "approved")
+    .filter(isApprovedReview)
     .sort((first, second) => (first.order ?? 0) - (second.order ?? 0))
     .map(toPublicReview);
+  const publishedBlogs = store.blogs
+    .filter(isPublishedBlog)
+    .sort(
+      (first, second) =>
+        new Date(second.publishDate ?? second.updatedAt ?? 0).getTime() -
+        new Date(first.publishDate ?? first.updatedAt ?? 0).getTime(),
+    )
+    .map(toPublicBlog);
 
   return {
     brandName: settings.siteName,
@@ -290,6 +425,7 @@ export function getSiteDataSnapshot() {
     premiumSchools: cloneValue(settings.premiumSchools ?? []),
     tutors: homeTutors,
     reviews: homeReviews,
+    blogs: publishedBlogs,
     subjectPages: getActivePageEntries(store, "subject").map((page) => toPublicSubjectPage(store, page)),
     cityPages: store.cities.filter((city) => city.status !== "archived").map(toPublicCityPage),
     sectorPages: store.localities
@@ -326,7 +462,7 @@ export function listCanonicalTutorsSnapshot() {
 }
 
 export function listCanonicalReviewsSnapshot() {
-  return cloneValue(getMergedStore().reviews);
+  return cloneValue(getMergedStore().reviews.filter(isApprovedReview));
 }
 
 export function listTutorProfilesSnapshot() {
@@ -339,7 +475,7 @@ export function listResultsSnapshot() {
 
 export function listPublishedBlogsSnapshot() {
   return getMergedStore().blogs
-    .filter((blog) => blog.status === "published")
+    .filter(isPublishedBlog)
     .map((blog) => toPublicBlog(blog));
 }
 

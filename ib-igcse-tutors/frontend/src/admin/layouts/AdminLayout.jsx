@@ -25,7 +25,7 @@ function AdminLayout() {
           <aside className="border-r border-slate-200 bg-slate-950 px-5 py-6 text-slate-100">
             <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
               <div>
-                <BrandLogo className="h-12 max-w-[210px]" />
+                <BrandLogo className="h-12 max-w-[210px]" tone="dark" />
                 <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">Admin</p>
               </div>
               <p className="mt-4 text-sm leading-6 text-slate-300">
@@ -48,7 +48,7 @@ function AdminLayout() {
                   <div className="mt-3 grid gap-1">
                     {group.items.map((item) => (
                       <NavLink
-                        key={item.to}
+                        key={`${group.label}-${item.to}`}
                         to={item.to}
                         className={({ isActive }) =>
                           `rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
@@ -73,7 +73,7 @@ function AdminLayout() {
                 <div>
                   <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                     {breadcrumbs.map((item, index) => (
-                      <span key={item.to} className="flex items-center gap-2">
+                      <span key={`${item.label}-${item.to}`} className="flex items-center gap-2">
                         {index > 0 ? <span>/</span> : null}
                         <span>{item.label}</span>
                       </span>

@@ -14,28 +14,28 @@ const CORE_BOARD_KEYS = ["cbse", "icse-isc", "igcse", "ib", "jee"];
 const CORE_BOARD_CARD_COPY = {
   cbse: {
     eyebrow: "Board",
-    description: "For school maths support from middle grades to board preparation.",
-    tags: ["Classes 6-12", "Board prep"],
+    description: "For verified K-12 home-tutor support, board exams, crash courses, and 95%+ score planning.",
+    tags: ["K-12", "Board exams"],
   },
   "icse-isc": {
     eyebrow: "Board",
-    description: "For written method, structured school support, and senior-school continuity.",
-    tags: ["ICSE", "ISC"],
+    description: "For written method, ISC depth, board-year planning, and personal attention at home.",
+    tags: ["ICSE", "ISC maths"],
   },
   igcse: {
     eyebrow: "Board",
-    description: "For Core and Extended learners building method clarity and exam confidence.",
+    description: "For Core and Extended learners needing method clarity, paper confidence, and premium maths support.",
     tags: ["Core", "Extended"],
   },
   ib: {
     eyebrow: "Board",
-    description: "For IB learners moving through PYP, MYP, and Diploma maths.",
-    tags: ["PYP", "MYP", "DP"],
+    description: "For IB learners comparing MYP, DP, AA, and AI pathways with experienced maths mentors.",
+    tags: ["MYP", "DP", "AA / AI"],
   },
   jee: {
     eyebrow: "Exam route",
     description:
-      "For students preparing through concept depth, timed practice, and exam problem solving.",
+      "For IIT JEE Main and Advanced maths with concept depth, timed practice, and senior mentor review.",
     tags: ["JEE Main", "JEE Advanced"],
   },
 };
@@ -193,11 +193,11 @@ function toMathsTutorEntity(tutor) {
     rating: String(tutor.rating),
     yearsExperience: tutor.experience,
     experience: tutor.experience,
-    board: tutor.boards?.[0] ?? "Maths",
-    boardSpecialization: tutor.boardTags?.[0] ?? tutor.boards?.[0] ?? "Maths",
-    classesSupported: tutor.classesSupported?.join(", ") || "Flexible support",
-    classFocus: tutor.classesSupported?.[0] ?? "Flexible support",
-    classLevel: tutor.classesSupported?.[0] ?? "Flexible support",
+    board: tutor.boards?.[0] ?? "Maths home tuition",
+    boardSpecialization: tutor.boardTags?.[0] ?? tutor.boards?.[0] ?? "Focused maths support",
+    classesSupported: tutor.classesSupported?.join(", ") || "K-12 and exam support",
+    classFocus: tutor.classesSupported?.[0] ?? "Personal maths support",
+    classLevel: tutor.classesSupported?.[0] ?? "Personal maths support",
     examSupport: cloneValue(tutor.examSupport ?? []),
     boardTags: cloneValue(tutor.boardTags ?? tutor.boards ?? []),
     topicTags: cloneValue(tutor.topicTags ?? tutor.topics ?? []),
@@ -211,9 +211,18 @@ function toMathsTutorEntity(tutor) {
     sectors: cloneValue(tutor.localities ?? []),
     mode: cloneValue(tutor.serviceModes ?? []),
     serviceModes: cloneValue(tutor.serviceModes ?? []),
-    description: tutor.shortBio ?? tutor.summary,
-    shortBio: tutor.shortBio ?? tutor.summary,
-    summary: tutor.summary ?? tutor.shortBio,
+    description:
+      tutor.shortBio ??
+      tutor.summary ??
+      "Maths Bodhi tutor profile for focused maths support, personal attention, and Gurugram home-tuition planning.",
+    shortBio:
+      tutor.shortBio ??
+      tutor.summary ??
+      "Maths Bodhi tutor profile for focused maths support, personal attention, and Gurugram home-tuition planning.",
+    summary:
+      tutor.summary ??
+      tutor.shortBio ??
+      "Maths Bodhi tutor profile for focused maths support, personal attention, and Gurugram home-tuition planning.",
     schoolFocus: cloneValue(tutor.schoolFocus ?? []),
     image: tutor.image,
     imageAlt: tutor.imageAlt,
@@ -302,17 +311,17 @@ function getGeneratedTutorFaqs(tutor) {
     {
       question: `Which maths boards and classes does ${tutor.name} usually support?`,
       answer:
-        `${tutor.name} usually supports ${boardsLabel || "maths learners"} across ${classesLabel || "multiple class levels"}. The focus is on matching the tutoring pace to the student's current school or exam pressure.`,
+        `${tutor.name} usually supports ${boardsLabel || "maths learners"} across ${classesLabel || "K-12 and exam levels"}. Maths Bodhi keeps the match focused on the student's board, current marks, and weekly learning pressure.`,
     },
     {
       question: `What kind of maths support does ${tutor.name} offer?`,
       answer:
-        `${tutor.name} offers ${servicesLabel || "one-to-one maths support"} with an emphasis on clearer method, steadier revision, and practical chapter-by-chapter progress.`,
+        `${tutor.name} offers ${servicesLabel || "one-to-one maths support"} with emphasis on clearer method, personal attention, chapter repair, revision discipline, and realistic score planning.`,
     },
     {
       question: `Can families ask about locality and scheduling fit before booking?`,
       answer:
-        `Yes. Families can check locality coverage${localityLabel ? ` around ${localityLabel}` : ""}, preferred lesson mode, and the most suitable next step before confirming a trial or regular maths plan.`,
+        `Yes. Families can check locality coverage${localityLabel ? ` around ${localityLabel}` : ""}, preferred lesson mode, female tutor preferences where relevant, and the best next step before confirming a demo or regular maths plan.`,
     },
   ];
 }

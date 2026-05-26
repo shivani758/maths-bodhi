@@ -7,6 +7,7 @@ import MathsContextCard from "../../components/maths/MathsContextCard";
 import MathsFaqAccordion from "../../components/maths/MathsFaqAccordion";
 import MathsGuideCard from "../../components/maths/MathsGuideCard";
 import MathsLinkPillGroup from "../../components/maths/MathsLinkPillGroup";
+import MathsReviewCard from "../../components/maths/MathsReviewCard";
 import MathsResultCard from "../../components/maths/MathsResultCard";
 import MathsRouteCardGrid from "../../components/maths/MathsRouteCardGrid";
 import MathsScrollToTop from "../../components/maths/MathsScrollToTop";
@@ -67,6 +68,7 @@ function BoardPageTemplate({ config, templateData = {} }) {
   })();
 
   const featuredTutors = templateData.relatedTutors ?? [];
+  const relatedReviews = templateData.relatedReviews ?? [];
   const featuredResults = templateData.studentResults ?? [];
   const relatedBlogs = templateData.relatedBlogs ?? [];
   const maxTutorCount = Math.min(MAX_VISIBLE_TUTORS, featuredTutors.length);
@@ -142,9 +144,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {page.chips.map((chip) => (
+                  {page.chips.map((chip, index) => (
                     <span
-                      key={chip}
+                      key={`${chip}-${index}`}
                       className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
                     >
                       {chip}
@@ -153,9 +155,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
                 </div>
 
                 <div className="mt-7 grid gap-3 sm:grid-cols-3">
-                  {page.stats.map((stat) => (
+                  {page.stats.map((stat, index) => (
                     <div
-                      key={stat.label}
+                      key={`${stat.label}-${index}`}
                       className="rounded-[22px] border border-slate-200 bg-white px-4 py-4 shadow-sm"
                     >
                       <p className="text-2xl font-bold text-slate-950">{stat.value}</p>
@@ -242,8 +244,8 @@ function BoardPageTemplate({ config, templateData = {} }) {
 
             {page.childSections?.length ? (
               <div className="mt-8 grid gap-6">
-                {page.childSections.map((section) => (
-                  <div key={section.title} className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
+                {page.childSections.map((section, index) => (
+                  <div key={`${section.title}-${index}`} className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
                       {section.badge}
                     </p>
@@ -282,9 +284,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
             />
 
             <div className="mt-8 grid gap-3 md:grid-cols-3">
-              {page.checklist.map((item) => (
+              {page.checklist.map((item, index) => (
                 <div
-                  key={item}
+                  key={`${item}-${index}`}
                   className="rounded-[22px] border border-slate-200 bg-slate-50 px-4 py-4 shadow-sm"
                 >
                   <p className="text-sm font-medium leading-6 text-slate-700">{item}</p>
@@ -293,8 +295,8 @@ function BoardPageTemplate({ config, templateData = {} }) {
             </div>
 
             <div className="mt-8 grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {visibleTutors.map((tutor) => (
-                <MathsTutorCard key={tutor.id} {...tutor} />
+              {visibleTutors.map((tutor, index) => (
+                <MathsTutorCard key={tutor.id ?? tutor.slug ?? `${tutor.name}-${index}`} {...tutor} />
               ))}
             </div>
 
@@ -336,9 +338,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
 
             {page.detailSections?.length ? (
               <div className="mt-8 grid gap-5 lg:grid-cols-2">
-                {page.detailSections.map((section, index) => (
+              {page.detailSections.map((section, index) => (
                   <article
-                    key={section.title}
+                    key={`${section.title}-${index}`}
                     className={`rounded-[26px] border border-slate-200 bg-white p-6 shadow-sm ${
                       page.detailSections.length % 2 === 1 &&
                       index === page.detailSections.length - 1
@@ -350,8 +352,8 @@ function BoardPageTemplate({ config, templateData = {} }) {
                       {section.title}
                     </h3>
                     <div className="mt-4 space-y-4">
-                      {section.paragraphs.map((paragraph) => (
-                        <p key={paragraph} className="text-sm leading-7 text-slate-600">
+                      {section.paragraphs.map((paragraph, paragraphIndex) => (
+                        <p key={`${section.title}-${paragraphIndex}`} className="text-sm leading-7 text-slate-600">
                           {paragraph}
                         </p>
                       ))}
@@ -363,22 +365,46 @@ function BoardPageTemplate({ config, templateData = {} }) {
           </div>
         </section>
 
-        <section className="bg-white px-6 py-14">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle
-              badge="Student Results"
-              title={resultsTitle}
-              subtitle={resultsSubtitle}
-              align="left"
-            />
+        {featuredResults.length ? (
+          <section className="bg-white px-6 py-14">
+            <div className="mx-auto max-w-7xl">
+              <SectionTitle
+                badge="Student Results"
+                title={resultsTitle}
+                subtitle={resultsSubtitle}
+                align="left"
+              />
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {featuredResults.map((result) => (
-                <MathsResultCard key={result.id} {...result} />
-              ))}
+              <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {featuredResults.map((result, index) => (
+                  <MathsResultCard key={result.id ?? `${result.studentLabel}-${index}`} {...result} />
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : null}
+
+        {relatedReviews.length ? (
+          <section className="bg-slate-50 px-6 py-14">
+            <div className="mx-auto max-w-7xl">
+              <SectionTitle
+                badge="Parent Reviews"
+                title={`Parent feedback for ${page.label}`}
+                subtitle="Approved reviews from the public content feed appear here when they match this maths route."
+                align="left"
+              />
+
+              <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {relatedReviews.map((review, index) => (
+                  <MathsReviewCard
+                    key={review.id ?? `${review.parent}-${review.sector}-${index}`}
+                    {...review}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         {relatedBlogs.length ? (
           <section className="bg-slate-50 px-6 py-14">
@@ -391,8 +417,8 @@ function BoardPageTemplate({ config, templateData = {} }) {
               />
 
               <div className="mt-8 grid gap-4 lg:grid-cols-3">
-                {relatedBlogs.map((blog) => (
-                  <MathsGuideCard key={blog.id} {...blog} />
+                {relatedBlogs.map((blog, index) => (
+                  <MathsGuideCard key={blog.id ?? blog.slug ?? `${blog.title}-${index}`} {...blog} />
                 ))}
               </div>
             </div>
@@ -409,9 +435,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
             />
 
             <div className="mt-8 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-              {page.schoolHighlights.map((item) => (
+              {page.schoolHighlights.map((item, index) => (
                 <MathsContextCard
-                  key={item.title}
+                  key={`${item.title}-${index}`}
                   eyebrow={item.subtitle}
                   title={item.title}
                   description={item.description}

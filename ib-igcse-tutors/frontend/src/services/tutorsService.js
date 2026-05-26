@@ -70,7 +70,7 @@ function toTutorPayload(bundle) {
       tutor.experienceLabel?.trim() ||
       tutor.experience?.trim() ||
       (Number(tutor.experienceYears ?? 0) > 0 ? `${Number(tutor.experienceYears)} years` : ""),
-    rating: Number(tutor.rating ?? 4.8),
+    rating: tutor.rating === "" || tutor.rating == null ? undefined : Number(tutor.rating),
     startingFee: tutor.startingFee,
     featured: Boolean(tutor.featured),
     featuredInHome: Boolean(tutor.featuredInHome),
@@ -102,13 +102,8 @@ export async function listTutors() {
 }
 
 export async function listAdminTutors() {
-  try {
-    const data = await apiRequest("/api/admin/tutors");
-    return (Array.isArray(data) ? data : []).map((item) => toFlatTutor(item));
-  } catch (error) {
-    console.error("Admin tutors API failed:", error);
-    return [];
-  }
+  const data = await apiRequest("/api/admin/tutors");
+  return (Array.isArray(data) ? data : []).map((item) => toFlatTutor(item));
 }
 
 export async function getTutorById(id) {
@@ -132,9 +127,9 @@ export function createEmptyTutor() {
       experienceYears: 3,
       experienceLabel: "3 years",
       experience: "3 years",
-      rating: 4.8,
+      rating: "",
       startingFee: "Rs 1,500 per class",
-      boards: ["CBSE Maths"],
+      boards: ["CBSE"],
       classesSupported: ["Class 9"],
       examSupport: [],
       topics: ["Algebra"],

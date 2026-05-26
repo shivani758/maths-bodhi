@@ -8,6 +8,28 @@ const optionalTrimmedString = z.preprocess(
   z.string().trim().optional(),
 );
 
+const optionalBoolean = z.preprocess((value) => {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  const normalized = value.trim().toLowerCase();
+
+  if (!normalized) {
+    return undefined;
+  }
+
+  if (["true", "1", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+
+  if (["false", "0", "no", "off"].includes(normalized)) {
+    return false;
+  }
+
+  return value;
+}, z.boolean().optional());
+
 const DEFAULT_FRONTEND_ORIGIN = "http://localhost:5173";
 const PRODUCTION_DEFAULT_SAME_SITE = "lax";
 
@@ -88,7 +110,7 @@ const rawEnvSchema = z.object({
   SESSION_SECRET: z.string().min(16, "SESSION_SECRET must be at least 16 characters."),
   SESSION_COOKIE_NAME: z.string().min(1).default("maths_bodhi_admin_sid"),
   SESSION_COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).optional(),
-  SESSION_COOKIE_SECURE: z.coerce.boolean().optional(),
+  SESSION_COOKIE_SECURE: optionalBoolean,
   SESSION_COOKIE_DOMAIN: z.string().trim().optional(),
   JWT_SECRET: z.string().min(16, "JWT_SECRET must be at least 16 characters."),
   FRONTEND_ORIGIN: optionalTrimmedString,

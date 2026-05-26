@@ -34,10 +34,10 @@ function RouteCard({ card, isActive = false, variant = "default" }) {
 
       {card.tags?.length ? (
         <div className={`flex flex-wrap ${isBoardVariant ? "mt-3 gap-1.5" : "mt-4 gap-2"}`}>
-          {card.tags.slice(0, isBoardVariant ? 3 : card.tags.length).map((tag) => (
+          {card.tags.slice(0, isBoardVariant ? 3 : card.tags.length).map((tag, index) => (
             <span
-              key={tag}
-              className={`rounded-full border border-slate-200 bg-white font-semibold text-slate-700 ${
+              key={`${card.to ?? card.title}-${tag}-${index}`}
+              className={`min-w-0 break-words rounded-full border border-slate-200 bg-white font-semibold text-slate-700 ${
                 isBoardVariant
                   ? "px-2.5 py-1 text-[10px] leading-none"
                   : "px-3 py-1 text-[11px]"
@@ -65,7 +65,7 @@ function RouteCard({ card, isActive = false, variant = "default" }) {
     isActive
       ? "border-blue-200 bg-blue-50/60 shadow-sky-100"
       : "border-slate-200 bg-white hover:border-blue-200"
-  } min-w-0 ${isBoardVariant ? "p-4 sm:p-5" : "h-full p-5"}`;
+  } h-full min-w-0 ${isBoardVariant ? "p-4 sm:p-5" : "p-5"}`;
 
   if (card.to) {
     return (
@@ -89,10 +89,10 @@ function MathsRouteCardGrid({
   }
 
   return (
-    <div className={className}>
-      {cards.map((card) => (
+    <div className={className.includes("auto-rows-fr") ? className : `${className} auto-rows-fr`}>
+      {cards.map((card, index) => (
         <RouteCard
-          key={`${card.title}-${card.to ?? card.description}`}
+          key={`${card.to ?? card.title}-${index}`}
           card={card}
           isActive={Boolean(activeTo) && card.to === activeTo}
           variant={variant}

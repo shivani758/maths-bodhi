@@ -4,6 +4,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import SectionTitle from "../../components/SectionTitle";
 import MathsFaqAccordion from "../../components/maths/MathsFaqAccordion";
 import MathsGuideCard from "../../components/maths/MathsGuideCard";
+import MathsReviewCard from "../../components/maths/MathsReviewCard";
 import MathsResultCard from "../../components/maths/MathsResultCard";
 import MathsRouteCardGrid from "../../components/maths/MathsRouteCardGrid";
 import MathsTutorCard from "../../components/maths/MathsTutorCard";
@@ -58,9 +59,9 @@ export function PageHeroSection({
 
             {chips.length ? (
               <div className="mt-6 flex flex-wrap gap-2">
-                {chips.map((chip) => (
+                {chips.map((chip, index) => (
                   <span
-                    key={chip}
+                    key={`${chip}-${index}`}
                     className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
                   >
                     {chip}
@@ -101,9 +102,9 @@ export function PageHeroSection({
 
             {stats.length ? (
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                {stats.map((stat) => (
-                  <div
-                    key={stat.label}
+              {stats.map((stat, index) => (
+                <div
+                  key={`${stat.label}-${index}`}
                     className="rounded-[22px] border border-slate-200 bg-white px-4 py-4 shadow-sm"
                   >
                     <p className="text-2xl font-bold text-slate-950">{stat.value}</p>
@@ -392,8 +393,8 @@ export function PageFeaturedTutorsSection({
         <SectionTitle badge={badge} title={title} subtitle={subtitle} align="left" />
 
         <div className="mt-8 grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {visibleTutors.map((tutor) => (
-            <MathsTutorCard key={tutor.id} {...tutor} />
+          {visibleTutors.map((tutor, index) => (
+            <MathsTutorCard key={tutor.id ?? tutor.slug ?? `${tutor.name}-${index}`} {...tutor} />
           ))}
         </div>
 
@@ -434,8 +435,37 @@ export function PageRelatedBlogsSection({
         <SectionTitle badge={badge} title={title} subtitle={subtitle} align="left" />
 
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {blogs.map((blog) => (
-            <MathsGuideCard key={blog.id} {...blog} />
+          {blogs.map((blog, index) => (
+            <MathsGuideCard key={blog.id ?? blog.slug ?? `${blog.title}-${index}`} {...blog} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function PageReviewsSection({
+  badge,
+  title,
+  subtitle,
+  reviews = [],
+  backgroundClassName = "bg-white",
+}) {
+  if (!reviews.length) {
+    return null;
+  }
+
+  return (
+    <section className={`${backgroundClassName} px-6 py-16`}>
+      <div className="mx-auto max-w-7xl">
+        <SectionTitle badge={badge} title={title} subtitle={subtitle} align="left" />
+
+        <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {reviews.map((review, index) => (
+            <MathsReviewCard
+              key={review.id ?? `${review.parent}-${review.sector}-${index}`}
+              {...review}
+            />
           ))}
         </div>
       </div>
@@ -460,8 +490,8 @@ export function PageResultsSection({
         <SectionTitle badge={badge} title={title} subtitle={subtitle} align="left" />
 
         <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {results.map((result) => (
-            <MathsResultCard key={result.id} {...result} />
+          {results.map((result, index) => (
+            <MathsResultCard key={result.id ?? `${result.studentLabel}-${index}`} {...result} />
           ))}
         </div>
       </div>
