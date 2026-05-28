@@ -2,8 +2,22 @@ import dotenv from "dotenv";
 import { z } from "zod";
 dotenv.config();
 const optionalTrimmedString = z.preprocess((value) => (typeof value === "string" && value.trim() === "" ? undefined : value), z.string().trim().optional());
-<<<<<<< HEAD
-=======
+const optionalBoolean = z.preprocess((value) => {
+    if (typeof value !== "string") {
+        return value;
+    }
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) {
+        return undefined;
+    }
+    if (["true", "1", "yes", "on"].includes(normalized)) {
+        return true;
+    }
+    if (["false", "0", "no", "off"].includes(normalized)) {
+        return false;
+    }
+    return value;
+}, z.boolean().optional());
 const DEFAULT_FRONTEND_ORIGIN = "http://localhost:5173";
 const PRODUCTION_DEFAULT_SAME_SITE = "lax";
 function splitFrontendOrigins(value) {
@@ -34,7 +48,6 @@ function parseFrontendOrigins(value) {
         .filter((origin) => Boolean(origin));
     return [...new Set(origins)];
 }
->>>>>>> b9dfe44 (changes before santosh)
 function decodeUrlPassword(value) {
     try {
         const password = new URL(value).password;
@@ -72,14 +85,10 @@ const rawEnvSchema = z.object({
     SESSION_SECRET: z.string().min(16, "SESSION_SECRET must be at least 16 characters."),
     SESSION_COOKIE_NAME: z.string().min(1).default("maths_bodhi_admin_sid"),
     SESSION_COOKIE_SAME_SITE: z.enum(["lax", "strict", "none"]).optional(),
-    SESSION_COOKIE_SECURE: z.coerce.boolean().optional(),
+    SESSION_COOKIE_SECURE: optionalBoolean,
     SESSION_COOKIE_DOMAIN: z.string().trim().optional(),
     JWT_SECRET: z.string().min(16, "JWT_SECRET must be at least 16 characters."),
-<<<<<<< HEAD
-    FRONTEND_ORIGIN: z.string().min(1).default("http://localhost:5173"),
-=======
     FRONTEND_ORIGIN: optionalTrimmedString,
->>>>>>> b9dfe44 (changes before santosh)
     ADMIN_SEED_NAME: z.string().min(1).default("Maths Bodhi Super Admin"),
     ADMIN_SEED_EMAIL: z.string().email(),
     ADMIN_SEED_PASSWORD: z.string().min(8, "ADMIN_SEED_PASSWORD must be at least 8 characters."),
@@ -110,8 +119,6 @@ const rawEnvSchema = z.object({
             message: "SESSION_SECRET must be a separate value from the PostgreSQL password.",
         });
     }
-<<<<<<< HEAD
-=======
     const effectiveSameSite = value.SESSION_COOKIE_SAME_SITE ??
         (value.NODE_ENV === "production" ? PRODUCTION_DEFAULT_SAME_SITE : "lax");
     const effectiveSecure = value.SESSION_COOKIE_SECURE ?? (value.NODE_ENV === "production");
@@ -152,7 +159,6 @@ const rawEnvSchema = z.object({
             message: "SESSION_COOKIE_SECURE must be true when SESSION_COOKIE_SAME_SITE is none.",
         });
     }
->>>>>>> b9dfe44 (changes before santosh)
     if (value.DATABASE_URL) {
         return;
     }
