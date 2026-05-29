@@ -5,13 +5,13 @@ on:
     branches: [staging]
     paths:
       - "ib-igcse-tutors/backend/**"
-      - "ib-igcse-tutors/frontend/**"
+      - "scripts/setup-cloudpanel-backend.sh"
       - ".github/workflows/deploy-backend.yml"
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build Backend and Frontend
+  build-backend:
+    name: Build Backend
     runs-on: ubuntu-latest
 
     steps:
@@ -31,22 +31,10 @@ jobs:
         working-directory: ib-igcse-tutors/backend
         run: npm run build
 
-      - name: Install frontend dependencies
-        working-directory: ib-igcse-tutors/frontend
-        run: npm ci
-
-      - name: Build frontend
-        working-directory: ib-igcse-tutors/frontend
-        env:
-          VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_API_PROXY_TARGET: ${{ secrets.VITE_API_PROXY_TARGET }}
-        run: npm run build
-
   deploy-backend:
     name: Deploy Backend to CloudPanel
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-backend
 
     steps:
       - name: Deploy backend over SSH
@@ -59,17 +47,74 @@ jobs:
           script: |
             set -e
 
-            cd ${{ secrets.SERVER_PROJECT_PATH }}
+            APP_DIR="/home/mathsbodhi/htdocs/www.mathsbodhi.in"
+            REPO_URL="https://github.com/shivani758/maths-bodhi.git"
+            BRANCH="staging"
+            BACKEND_DIR="ib-igcse-tutors/backend"
+            PM2_PROCESS="maths-bodhi-backend"
+            HEALTH_URL="http://localhost:10000/api/health"
 
-            git fetch origin
-            git checkout staging
-            git reset --hard origin/staging
+            cd "$APP_DIR"
 
-            cd ib-igcse-tutors/backend
+            if [ ! -d ".git" ]; then
+              git clone --branch "$BRANCH" --single-branch "$REPO_URL" .
+            else
+              git fetch origin
+              git checkout "$BRANCH"
+              git reset --hard "origin/$BRANCH"
+            fi
+
+            cd "$BACKEND_DIR"
+
+            if [ ! -f ".env" ]; then
+              cat > .env.example.production.todo <<'EOF'
+            # Create this file on the server as:
+            # /home/mathsbodhi/htdocs/www.mathsbodhi.in/ib-igcse-tutors/backend/.env
+            #
+            # Fill in real production values on the server only.
+            # Do not commit .env or paste secrets into GitHub Actions.
+
+            NODE_ENV=production
+            HOST=0.0.0.0
+            PORT=10000
+
+            # PostgreSQL. DATABASE_URL is preferred; split variables are the fallback.
+            DATABASE_URL=postgresql://<database-user>:<url-encoded-database-password>@<database-host>:5432/mathsbodhi
+            DB_HOST=<database-host>
+            DB_PORT=5432
+            DB_NAME=mathsbodhi
+            DB_USER=<database-user>
+            DB_PASSWORD=<database-password>
+
+            SESSION_SECRET=<long-random-session-secret>
+            JWT_SECRET=<long-random-jwt-secret>
+
+            SESSION_COOKIE_NAME=maths_bodhi_admin_sid
+            SESSION_COOKIE_SAME_SITE=lax
+            SESSION_COOKIE_SECURE=true
+            SESSION_COOKIE_DOMAIN=
+            FRONTEND_ORIGIN=https://mathsbodhi.in,https://www.mathsbodhi.in
+
+            ADMIN_SEED_NAME=Maths Bodhi Super Admin
+            ADMIN_SEED_EMAIL=<admin-email>
+            ADMIN_SEED_PASSWORD=<admin-seed-password>
+            EOF
+
+              echo "Missing backend .env."
+              echo "A placeholder was created at $APP_DIR/$BACKEND_DIR/.env.example.production.todo"
+              echo "Create the real backend .env at $APP_DIR/$BACKEND_DIR/.env and rerun deployment."
+              exit 1
+            fi
 
             npm ci
             npm run build
             npm run db:check
 
-            pm2 restart maths-bodhi-backend || pm2 start dist/server.js --name maths-bodhi-backend
+            if pm2 describe "$PM2_PROCESS" >/dev/null 2>&1; then
+              pm2 restart "$PM2_PROCESS" --update-env
+            else
+              pm2 start dist/server.js --name "$PM2_PROCESS" --update-env
+            fi
+
             pm2 save
+            curl -f "$HEALTH_URL"
