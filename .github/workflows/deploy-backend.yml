@@ -43,17 +43,18 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             set -e
 
-            APP_DIR="/home/mathsbodhi/htdocs/www.mathsbodhi.in"
+            APP_DIR="/home/mathsbodhi_user/htdocs/www.mathsbodhi.in"
             REPO_URL="https://github.com/shivani758/maths-bodhi.git"
             BRANCH="staging"
             BACKEND_DIR="ib-igcse-tutors/backend"
             PM2_PROCESS="maths-bodhi-backend"
             HEALTH_URL="http://localhost:10000/api/health"
 
+            mkdir -p "$APP_DIR"
             cd "$APP_DIR"
 
             if [ ! -d ".git" ]; then
