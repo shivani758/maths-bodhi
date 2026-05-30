@@ -161,19 +161,22 @@ jobs:
             require_env DATABASE_URL DB_PASSWORD FRONTEND_ORIGIN SESSION_SECRET JWT_SECRET ADMIN_SEED_EMAIL ADMIN_SEED_PASSWORD VITE_SITE_URL
             load_node_runtime
 
+            echo "Preparing deploy directories..."
             mkdir -p "$WEB_ROOT" "$APP_DIR"
             cd "$APP_DIR"
 
+            echo "Syncing repository branch $BRANCH..."
             if [ ! -d ".git" ]; then
-              git clone --branch "$BRANCH" --single-branch "$REPO_URL" .
+              git clone --quiet --branch "$BRANCH" --single-branch "$REPO_URL" .
             else
-              git fetch origin "$BRANCH"
-              git checkout "$BRANCH"
-              git reset --hard "origin/$BRANCH"
+              git fetch --quiet origin "$BRANCH"
+              git checkout --quiet "$BRANCH"
+              git reset --hard --quiet "origin/$BRANCH"
             fi
 
             cd "$APP_DIR/$BACKEND_DIR"
 
+            echo "Writing backend production environment..."
             cat > .env <<EOF
             NODE_ENV=production
             HOST=0.0.0.0
@@ -197,12 +200,18 @@ jobs:
             EOF
 
             chmod 600 .env
+            echo "Installing backend dependencies..."
             npm ci
+            echo "Building backend..."
             npm run build
+            echo "Migrating database..."
             npm run db:migrate
+            echo "Checking database..."
             npm run db:check
+            echo "Seeding admin user..."
             npm run seed
 
+            echo "Starting or restarting backend with PM2..."
             if pm2 describe "$PM2_PROCESS" >/dev/null 2>&1; then
               pm2 restart "$PM2_PROCESS" --update-env
             else
@@ -213,6 +222,7 @@ jobs:
 
             cd "$APP_DIR/$FRONTEND_DIR"
 
+            echo "Writing frontend production environment..."
             cat > .env.production <<EOF
             VITE_SITE_URL=${VITE_SITE_URL}
             VITE_API_URL=${VITE_API_URL}
@@ -221,9 +231,12 @@ jobs:
             EOF
 
             chmod 600 .env.production
+            echo "Installing frontend dependencies..."
             npm ci
+            echo "Building frontend..."
             npm run build
 
+            echo "Publishing frontend build to $WEB_ROOT..."
             if command -v rsync >/dev/null 2>&1; then
               rsync -a --delete --exclude ".well-known" dist/ "$WEB_ROOT/"
             else
@@ -232,4 +245,7 @@ jobs:
               cp -a dist/. "$WEB_ROOT/"
             fi
 
+            test -s "$WEB_ROOT/index.html"
+            echo "Checking backend health..."
             curl -f "$HEALTH_URL"
+            echo "Full Maths Bodhi deployment completed successfully."
