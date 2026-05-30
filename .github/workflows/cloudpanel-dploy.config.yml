@@ -269,6 +269,9 @@ jobs:
           cd "${FRONTEND_DIR}"
           npm ci
           npm run build
+          chmod 755 "${APP_DIR}" "${APP_DIR}/${APP_SUBDIR}" "${FRONTEND_DIR}" "${FRONTEND_DIR}/dist"
+          find "${FRONTEND_DIR}/dist" -type d -exec chmod 755 {} \;
+          find "${FRONTEND_DIR}/dist" -type f -exec chmod 644 {} \;
 
           cd "${BACKEND_DIR}"
           npm prune --omit=dev
