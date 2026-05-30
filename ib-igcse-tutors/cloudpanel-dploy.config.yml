@@ -1,0 +1,221 @@
+# CloudPanel DPLOY configuration for the ib-igcse-tutors project.
+#
+# DPLOY reads this config from:
+#   /home/<cloudpanel-site-user>/.dploy/config.yml
+#
+# Keep this repo copy as the reviewed deployment template. Replace the
+# placeholders before using it on the server.
+
+project:
+  git_repository: 'git@github.com:YOUR_GITHUB_ORG/YOUR_REPO.git'
+
+  deploy:
+    directory: '/home/YOUR_CLOUDPANEL_SITE_USER/htdocs/YOUR_FRONTEND_DOMAIN'
+    shared_directories:
+      - 'var/logs'
+
+    before_commands:
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 20 || (major === 20 && minor < 19)) { console.error(`Node.js ${process.versions.node} is too old. Use CloudPanel Node.js 22 LTS or >=20.19.0.`); process.exit(1); }'
+        command -v npm >/dev/null
+        command -v pm2 >/dev/null 2>&1 || npm install pm2@latest -g
+
+      - |-
+        set -eu
+        test -f {release_directory}/backend/.env || { echo "Missing backend/.env. Add it as a DPLOY overlay at ~/.dploy/overlays/backend/.env"; exit 1; }
+        test -f {release_directory}/frontend/.env.production || { echo "Missing frontend/.env.production. Add it as a DPLOY overlay at ~/.dploy/overlays/frontend/.env.production"; exit 1; }
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/backend
+        npm ci
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/frontend
+        npm ci
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/backend
+        npm run build
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/frontend
+        npm run build
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/backend
+        npm run db:init
+        npm run db:check
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/backend
+        FRONTEND_SOURCE_DIR="{release_directory}/frontend/src" npm run seed
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        cd {release_directory}/backend
+        npm prune --omit=dev
+        rm -rf {release_directory}/frontend/node_modules
+
+      - |-
+        set -eu
+        mkdir -p {release_directory}/var/logs
+        find {release_directory} -type d -exec chmod 0770 {} \;
+        find {release_directory} -type f -exec chmod 0660 {} \;
+
+    after_commands:
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        DEPLOY_ROOT="$(dirname "$(dirname "{release_directory}")")"
+        APP_ROOT="$DEPLOY_ROOT/current/backend"
+        cat > "$APP_ROOT/ecosystem.config.cjs" <<EOF
+        module.exports = {
+          apps: [
+            {
+              name: "maths-bodhi-backend",
+              cwd: "$APP_ROOT",
+              script: "dist/server.js",
+              exec_mode: "fork",
+              instances: 1,
+              autorestart: true,
+              max_memory_restart: "512M",
+              env: {
+                NODE_ENV: "production"
+              }
+            }
+          ]
+        };
+        EOF
+        pm2 startOrReload "$APP_ROOT/ecosystem.config.cjs" --update-env
+
+      - |-
+        set -eu
+        export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        if command -v nvm >/dev/null 2>&1; then nvm use 22 >/dev/null 2>&1 || nvm use 20 >/dev/null 2>&1 || true; fi
+        pm2 save
+
+      - |-
+        set -eu
+        DEPLOY_ROOT="$(dirname "$(dirname "{release_directory}")")"
+        APP_ROOT="$DEPLOY_ROOT/current/backend"
+        PORT_VALUE="$(grep -E '^[[:space:]]*PORT[[:space:]]*=' "$APP_ROOT/.env" | tail -n 1 | cut -d= -f2- || true)"
+        PORT_VALUE="$(printf '%s' "$PORT_VALUE" | sed "s/[[:space:]\"']//g")"
+        PORT_VALUE="${PORT_VALUE:-4000}"
+        curl -fsS "http://127.0.0.1:${PORT_VALUE}/api/health"
+
+  environment:
+    backend_overlay_file: '~/.dploy/overlays/backend/.env'
+    frontend_overlay_file: '~/.dploy/overlays/frontend/.env.production'
+
+    backend_required:
+      NODE_ENV: 'production'
+      HOST: '127.0.0.1'
+      PORT: '4000'
+      DATABASE_URL: 'postgresql://mathsbodhi_user:URL_ENCODED_DATABASE_PASSWORD@127.0.0.1:5432/mathsbodhi'
+      DB_HOST: '127.0.0.1'
+      DB_PORT: '5432'
+      DB_NAME: 'mathsbodhi'
+      DB_USER: 'mathsbodhi_user'
+      DB_PASSWORD: 'REPLACE_WITH_DATABASE_PASSWORD'
+      SESSION_SECRET: 'REPLACE_WITH_LONG_RANDOM_SESSION_SECRET_MIN_16_CHARS'
+      JWT_SECRET: 'REPLACE_WITH_LONG_RANDOM_JWT_SECRET_MIN_16_CHARS'
+      SESSION_COOKIE_NAME: 'maths_bodhi_admin_sid'
+      SESSION_COOKIE_SAME_SITE: 'lax'
+      SESSION_COOKIE_SECURE: 'true'
+      SESSION_COOKIE_DOMAIN: ''
+      FRONTEND_ORIGIN: 'https://YOUR_FRONTEND_DOMAIN,https://www.YOUR_FRONTEND_DOMAIN'
+      ADMIN_SEED_NAME: 'Maths Bodhi Super Admin'
+      ADMIN_SEED_EMAIL: 'admin@YOUR_FRONTEND_DOMAIN'
+      ADMIN_SEED_PASSWORD: 'REPLACE_WITH_FIRST_ADMIN_PASSWORD_MIN_8_CHARS'
+
+    frontend_required:
+      VITE_API_URL: ''
+      VITE_SITE_URL: 'https://www.YOUR_FRONTEND_DOMAIN'
+      VITE_TWITTER_SITE: ''
+
+  cloudpanel:
+    required_site_setup:
+      frontend_site_type: 'Static HTML'
+      frontend_root_directory: 'current/frontend/dist'
+      backend_process_manager: 'PM2'
+      backend_bind: '127.0.0.1:4000'
+      node_version: '22 LTS, or 20.19.0+ minimum'
+
+    nginx_vhost_requirement: |-
+      If VITE_API_URL is blank, add a same-origin API proxy in the frontend site's CloudPanel vhost:
+
+      location /api/ {
+          proxy_pass http://127.0.0.1:4000;
+          proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      }
+
+      location / {
+          try_files $uri $uri/ /index.html;
+      }
+
+      If you use an API subdomain instead, set VITE_API_URL to that HTTPS origin and
+      set FRONTEND_ORIGIN to the frontend HTTPS origin.
+
+  services:
+    required:
+      - 'CloudPanel Static HTML site for the Vite frontend'
+      - 'PM2-managed Node.js backend process'
+      - 'PostgreSQL database with pgcrypto extension available'
+      - 'NGINX reverse proxy from /api or an API subdomain to 127.0.0.1:4000'
+
+    not_required_by_current_code:
+      - 'Docker'
+      - 'Redis'
+      - 'Message queue'
+      - 'Object storage/S3'
+      - 'External file upload storage'
+      - 'SMTP provider'
+
+  operations:
+    install: 'dploy deploy main'
+    start: 'pm2 startOrReload /home/YOUR_CLOUDPANEL_SITE_USER/htdocs/YOUR_FRONTEND_DOMAIN/current/backend/ecosystem.config.cjs --update-env'
+    restart: 'pm2 restart maths-bodhi-backend --update-env'
+    stop: 'pm2 stop maths-bodhi-backend'
+    logs: 'pm2 logs maths-bodhi-backend --lines 200'
+    status: 'pm2 status maths-bodhi-backend'
+    health_check: 'curl -fsS http://127.0.0.1:4000/api/health'
+    database_migrate: 'cd /home/YOUR_CLOUDPANEL_SITE_USER/htdocs/YOUR_FRONTEND_DOMAIN/current/backend && npm run db:init && npm run db:check'
+    seed_admin_and_static_content: 'cd /home/YOUR_CLOUDPANEL_SITE_USER/htdocs/YOUR_FRONTEND_DOMAIN/current/backend && FRONTEND_SOURCE_DIR=../frontend/src npm run seed'
