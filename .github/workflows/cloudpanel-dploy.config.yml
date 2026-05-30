@@ -299,7 +299,36 @@ jobs:
           PORT_VALUE="$(grep -E '^[[:space:]]*PORT[[:space:]]*=' "${BACKEND_DIR}/.env" | tail -n 1 | cut -d= -f2- || true)"
           PORT_VALUE="$(printf '%s' "${PORT_VALUE}" | sed "s/[[:space:]\"']//g")"
           PORT_VALUE="${PORT_VALUE:-4000}"
-          curl -fsS "http://127.0.0.1:${PORT_VALUE}/api/health"
+          HEALTH_URL="http://127.0.0.1:${PORT_VALUE}/api/health"
+          HEALTH_OK=0
+
+          for attempt in $(seq 1 30); do
+            if curl -fsS --max-time 5 "${HEALTH_URL}" > /tmp/maths-bodhi-health.out 2> /tmp/maths-bodhi-health.err; then
+              cat /tmp/maths-bodhi-health.out
+              HEALTH_OK=1
+              break
+            fi
+
+            echo "Backend health check not ready yet (${attempt}/30)."
+            sleep 2
+          done
+
+          if [ "${HEALTH_OK}" -ne 1 ]; then
+            echo "Backend did not answer ${HEALTH_URL} after waiting."
+            echo "Last curl error:"
+            cat /tmp/maths-bodhi-health.err || true
+            echo "PM2 status:"
+            pm2 status "${PM2_PROCESS_NAME}" || true
+            echo "Recent PM2 logs:"
+            pm2 logs "${PM2_PROCESS_NAME}" --lines 80 --nostream || true
+            echo "Listening TCP sockets:"
+            if command -v ss >/dev/null 2>&1; then
+              ss -ltnp || true
+            elif command -v netstat >/dev/null 2>&1; then
+              netstat -ltnp || true
+            fi
+            exit 1
+          fi
 
           rm -f "${APP_DIR}/.deploy/source.tgz" "${APP_DIR}/.deploy/backend.env" "${APP_DIR}/.deploy/frontend.env.production"
           REMOTE_SCRIPT
