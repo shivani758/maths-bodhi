@@ -23,6 +23,7 @@ jobs:
       VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
       VITE_API_PROXY_TARGET: ${{ secrets.VITE_API_PROXY_TARGET }}
+      VITE_TWITTER_SITE: ${{ secrets.VITE_TWITTER_SITE }}
 
     steps:
       - name: Checkout code
@@ -78,14 +79,16 @@ jobs:
           VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_API_PROXY_TARGET: ${{ secrets.VITE_API_PROXY_TARGET }}
+          VITE_TWITTER_SITE: ${{ secrets.VITE_TWITTER_SITE }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASSWORD }}
-          envs: DATABASE_URL,DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD,FRONTEND_ORIGIN,SESSION_SECRET,JWT_SECRET,SESSION_COOKIE_NAME,SESSION_COOKIE_SAME_SITE,SESSION_COOKIE_SECURE,SESSION_COOKIE_DOMAIN,ADMIN_SEED_NAME,ADMIN_SEED_EMAIL,ADMIN_SEED_PASSWORD,PORT,VITE_SITE_URL,VITE_API_URL,VITE_API_PROXY_TARGET
+          command_timeout: 30m
+          envs: DATABASE_URL,DB_HOST,DB_PORT,DB_NAME,DB_USER,DB_PASSWORD,FRONTEND_ORIGIN,SESSION_SECRET,JWT_SECRET,SESSION_COOKIE_NAME,SESSION_COOKIE_SAME_SITE,SESSION_COOKIE_SECURE,SESSION_COOKIE_DOMAIN,ADMIN_SEED_NAME,ADMIN_SEED_EMAIL,ADMIN_SEED_PASSWORD,PORT,VITE_SITE_URL,VITE_API_URL,VITE_API_PROXY_TARGET,VITE_TWITTER_SITE
           script: |
-            set -e
+            set -eo pipefail
 
             WEB_ROOT="/home/mathsbodhi_user/htdocs/www.mathsbodhi.in"
             APP_DIR="/home/mathsbodhi_user/apps/maths-bodhi"
@@ -96,6 +99,65 @@ jobs:
             PM2_PROCESS="maths-bodhi-backend"
             BACKEND_PORT="${PORT:-10000}"
             HEALTH_URL="http://127.0.0.1:${BACKEND_PORT}/api/health"
+
+            require_env() {
+              for name in "$@"; do
+                eval "value=\${$name:-}"
+                if [ -z "$value" ]; then
+                  echo "Missing required GitHub secret: $name"
+                  exit 1
+                fi
+              done
+            }
+
+            load_node_runtime() {
+              export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+
+              if [ -s "$NVM_DIR/nvm.sh" ]; then
+                . "$NVM_DIR/nvm.sh"
+                nvm use 20 >/dev/null 2>&1 || nvm use --lts >/dev/null 2>&1 || true
+              fi
+
+              if ! command -v npm >/dev/null 2>&1; then
+                for node_bin in "$HOME/.nvm/versions/node"/*/bin "$HOME/.local/bin" /usr/local/bin /usr/bin /opt/nodejs/bin /opt/node/*/bin; do
+                  if [ -x "$node_bin/npm" ]; then
+                    export PATH="$node_bin:$PATH"
+                    break
+                  fi
+                done
+              fi
+
+              if ! command -v npm >/dev/null 2>&1; then
+                if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+                  if ! command -v curl >/dev/null 2>&1; then
+                    echo "Node.js/npm is missing and curl is unavailable to install nvm."
+                    exit 127
+                  fi
+
+                  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+                  . "$NVM_DIR/nvm.sh"
+                fi
+
+                nvm install 20
+                nvm use 20
+              fi
+
+              if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+                echo "Node.js/npm is still unavailable after loading NVM."
+                exit 127
+              fi
+
+              if ! command -v pm2 >/dev/null 2>&1; then
+                npm install -g pm2
+              fi
+
+              node --version
+              npm --version
+              pm2 --version
+            }
+
+            require_env DATABASE_URL DB_PASSWORD FRONTEND_ORIGIN SESSION_SECRET JWT_SECRET ADMIN_SEED_EMAIL ADMIN_SEED_PASSWORD VITE_SITE_URL
+            load_node_runtime
 
             mkdir -p "$WEB_ROOT" "$APP_DIR"
             cd "$APP_DIR"
@@ -153,6 +215,7 @@ jobs:
             VITE_SITE_URL=${VITE_SITE_URL}
             VITE_API_URL=${VITE_API_URL}
             VITE_API_PROXY_TARGET=${VITE_API_PROXY_TARGET}
+            VITE_TWITTER_SITE=${VITE_TWITTER_SITE}
             EOF
 
             chmod 600 .env.production
