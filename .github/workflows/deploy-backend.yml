@@ -150,7 +150,7 @@ jobs:
               npm config set fund false
 
               if ! command -v pm2 >/dev/null 2>&1; then
-                npm install -g pm2
+                npm install -g pm2 --no-audit --fund=false
               fi
 
               node --version
@@ -201,7 +201,7 @@ jobs:
 
             chmod 600 .env
             echo "Installing backend dependencies..."
-            npm ci
+            npm ci --no-audit --fund=false
             echo "Building backend..."
             npm run build
             echo "Migrating database..."
@@ -232,7 +232,7 @@ jobs:
 
             chmod 600 .env.production
             echo "Installing frontend dependencies..."
-            npm ci
+            npm ci --no-audit --fund=false
             echo "Building frontend..."
             npm run build
 
