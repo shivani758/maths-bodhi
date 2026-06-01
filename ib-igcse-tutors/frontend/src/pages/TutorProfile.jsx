@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import Breadcrumbs from "../components/Breadcrumbs";
 import Seo from "../components/Seo";
 import MathsFaqAccordion from "../components/maths/MathsFaqAccordion";
 import MathsGuideCard from "../components/maths/MathsGuideCard";
@@ -9,6 +9,12 @@ import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
 import { getTutorProfileById, getTutorProfileBySlug } from "../services/mathsContentService";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getPersonSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import { buildTutorInquiryMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 import NotFound from "./NotFound";
 
@@ -103,19 +109,12 @@ function InfoCard({ label, value }) {
 function TutorProfile() {
   const { id, slug } = useParams();
   const { siteData, isSiteDataLoading } = useSiteData();
-  const tutor = useMemo(
-    () => (slug ? getTutorProfileBySlug(slug) : getTutorProfileById(id)),
-    [id, slug, siteData.tutors],
-  );
-  const sectorPageByLabel = useMemo(
-    () =>
-      new Map(
-        (siteData.sectorPages ?? []).map((sector) => [
-          normalizeLabel(sector.sectorLabel),
-          sector,
-        ]),
-      ),
-    [siteData.sectorPages],
+  const tutor = slug ? getTutorProfileBySlug(slug) : getTutorProfileById(id);
+  const sectorPageByLabel = new Map(
+    (siteData.sectorPages ?? []).map((sector) => [
+      normalizeLabel(sector.sectorLabel),
+      sector,
+    ]),
   );
 
   if (!tutor && isSiteDataLoading) {
@@ -168,33 +167,33 @@ function TutorProfile() {
     siteData.contact.whatsappNumber,
     buildTutorInquiryMessage(siteData.contact, tutor, {}),
   );
+  const personSchema = getPersonSchema({
+    url: canonicalPath,
+    name: tutor.name,
+    jobTitle: tutor.title ?? "Math Tutor",
+    description: tutor.shortBio ?? intro,
+    image: tutor.image,
+    knowsAbout: uniqueValues([...(tutor.boards ?? []), ...(tutor.topics ?? []).slice(0, 5)]),
+  });
   const schema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
+    getWebPageSchema({
+      url: canonicalPath,
       name: tutor.name,
-      jobTitle: "Math Tutor",
-      worksFor: "Maths Bodhi",
-      description: tutor.shortBio ?? intro,
-      image: tutor.image,
-      knowsAbout: uniqueValues([...(tutor.boards ?? []), ...(tutor.topics ?? []).slice(0, 5)]),
-    },
-    ...(tutor.faqItems?.length
-      ? [
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: tutor.faqItems.map((item) => ({
-              "@type": "Question",
-              name: item.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: item.answer,
-              },
-            })),
-          },
-        ]
-      : []),
+      description: tutor.seo?.description ?? intro,
+      type: "ProfilePage",
+      mainEntityId: personSchema?.["@id"],
+      aboutId: personSchema?.["@id"],
+    }),
+    personSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: "Tutors", to: "/subjects/maths" },
+        { label: tutor.name },
+      ],
+    }),
+    tutor.faqItems?.length ? getFAQSchema({ url: canonicalPath, faqs: tutor.faqItems }) : null,
   ];
 
   return (
@@ -226,7 +225,14 @@ function TutorProfile() {
             </div>
 
             <div>
-              <span className="inline-flex rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
+              <Breadcrumbs
+                items={[
+                  { label: "Home", to: "/" },
+                  { label: "Tutors", to: "/subjects/maths" },
+                  { label: tutor.name },
+                ]}
+              />
+              <span className="mt-6 inline-flex rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
                 Public Tutor Profile
               </span>
               <h1 className="mt-6 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-slate-950 md:text-5xl">

@@ -154,7 +154,7 @@ function normalizePath(path) {
 }
 
 function splitLinkPaths(value) {
-  return String(value ?? "")
+  return String(value ?? "")     
     .split("|")
     .map((item) => normalizePath(item))
     .filter(Boolean);

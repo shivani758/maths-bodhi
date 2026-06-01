@@ -4,6 +4,11 @@ import Seo from "../components/Seo";
 import { GURUGRAM_LOCALITY_OPTIONS } from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
+import {
+  getBreadcrumbSchema,
+  getServiceSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import { buildDemoMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 
 function getUniqueOptions(options) {
@@ -51,14 +56,46 @@ function BookDemo() {
       ),
     [form, siteData.contact],
   );
+  const canonicalPath = pathname === "/book-free-demo-class" ? "/book-free-demo-class" : "/book-demo";
+  const serviceSchema = getServiceSchema({
+    url: canonicalPath,
+    name: "Book a maths demo class",
+    description:
+      "Book a maths demo class in Gurugram for CBSE, IB, IGCSE, ICSE, JEE, and school-specific home tutoring.",
+    serviceType: "Maths demo class booking",
+    areaServed: "Gurugram",
+    audience: {
+      educationalRole: "student",
+      audienceType: "School students",
+    },
+  });
+  const schema = [
+    getWebPageSchema({
+      url: canonicalPath,
+      name: "Book a maths demo class",
+      description:
+        "Book a maths demo class in Gurugram for CBSE, IB, IGCSE, ICSE, JEE, and school-specific home tutoring.",
+      mainEntityId: serviceSchema?.["@id"],
+      aboutId: serviceSchema?.["@id"],
+    }),
+    serviceSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: "Book Demo" },
+      ],
+    }),
+  ];
 
   return (
     <MainLayout>
       <Seo
         title="Book Free Maths Demo Class | Maths Bodhi"
         description="Book a maths demo class in Gurugram for CBSE, IB, IGCSE, ICSE, JEE, and school-specific home tutoring."
-        canonicalPath={pathname === "/book-free-demo-class" ? "/book-free-demo-class" : "/book-demo"}
+        canonicalPath={canonicalPath}
         keywords={["book maths demo", "maths demo class gurugram", "home tutor demo"]}
+        schema={schema}
       />
 
       <div className="min-h-screen bg-slate-50 px-4 py-16">

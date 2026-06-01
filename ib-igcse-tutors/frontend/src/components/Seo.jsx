@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { renderJsonLd, toAbsoluteUrl } from "../utils/schema";
 
 const DEFAULT_TITLE = "Maths Bodhi | Verified Maths Home Tutors in Gurugram";
 const DEFAULT_DESCRIPTION =
@@ -48,18 +49,6 @@ function getKeywordList(keywords) {
   return cleaned.length ? cleaned : DEFAULT_KEYWORDS;
 }
 
-function getSchemaItems(schema) {
-  const items = (Array.isArray(schema) ? schema : [schema]).flat();
-
-  return items.filter((item) => {
-    if (!item || typeof item !== "object") {
-      return false;
-    }
-
-    return Object.keys(item).length > 0;
-  });
-}
-
 export default function Seo({
   title,
   description,
@@ -70,13 +59,12 @@ export default function Seo({
   robots = "index, follow",
 }) {
   useEffect(() => {
-    const siteUrl = import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in";
     const safeTitle = getTextValue(title, DEFAULT_TITLE);
     const safeDescription = getTextValue(description, DEFAULT_DESCRIPTION);
     const safeKeywords = getKeywordList(keywords);
-    const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
-    const imageUrl = new URL(imagePath, siteUrl).toString();
-    const schemaItems = getSchemaItems(schema);
+    const canonicalUrl = toAbsoluteUrl(canonicalPath);
+    const imageUrl = toAbsoluteUrl(imagePath);
+    const schemaDocument = renderJsonLd(schema);
     const twitterSite = String(import.meta.env.VITE_TWITTER_SITE ?? "").trim();
 
     document.title = safeTitle;
@@ -102,7 +90,7 @@ export default function Seo({
     const schemaId = "seo-structured-data";
     let schemaScript = document.getElementById(schemaId);
 
-    if (!schemaItems.length) {
+    if (!schemaDocument) {
       schemaScript?.remove();
       return;
     }
@@ -114,9 +102,7 @@ export default function Seo({
       document.head.appendChild(schemaScript);
     }
 
-    schemaScript.textContent = JSON.stringify(
-      schemaItems.length === 1 ? schemaItems[0] : schemaItems,
-    );
+    schemaScript.textContent = schemaDocument;
   }, [canonicalPath, description, imagePath, keywords, robots, schema, title]);
 
   return null;

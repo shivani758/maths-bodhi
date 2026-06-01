@@ -17,6 +17,11 @@ import { useSiteData } from "../contexts/SiteDataContext";
 import { mathsRouteMap } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
 import { getCityPage } from "../services/siteLookup";
+import {
+  getBreadcrumbSchema,
+  getServiceSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
 import NotFound from "./NotFound";
 
@@ -395,12 +400,43 @@ function CityPage() {
     return <NotFound />;
   }
 
+  const canonicalPath = `/city/${page.slug}`;
+  const serviceSchema = getServiceSchema({
+    url: canonicalPath,
+    name: h1,
+    description: page.subtitle,
+    serviceType: "Maths home tutoring",
+    areaServed: page.label,
+    audience: {
+      educationalRole: "student",
+      audienceType: "School students",
+    },
+  });
+  const schema = [
+    getWebPageSchema({
+      url: canonicalPath,
+      name: h1,
+      description: page.subtitle,
+      mainEntityId: serviceSchema?.["@id"],
+      aboutId: serviceSchema?.["@id"],
+    }),
+    serviceSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: "Cities" },
+        { label: page.label },
+      ],
+    }),
+  ];
+
   return (
     <MainLayout>
       <Seo
         title={`Maths Home Tutor in ${page.label} | ${siteData.brandName}`}
         description={page.subtitle}
-        canonicalPath={`/city/${page.slug}`}
+        canonicalPath={canonicalPath}
         keywords={[
           `maths home tutor in ${page.label.toLowerCase()}`,
           `verified maths tutor in ${page.label.toLowerCase()}`,
@@ -414,6 +450,7 @@ function CityPage() {
           "Maths Olympiad tutor Gurugram",
           ...page.coverageAreas,
         ]}
+        schema={schema}
       />
 
       <div className="bg-white">

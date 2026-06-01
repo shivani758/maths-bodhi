@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
@@ -7,6 +7,12 @@ import TutorCard from "../components/TutorCard";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
 import { getSubjectPage } from "../services/siteLookup";
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getServiceSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
 import NotFound from "./NotFound";
 
@@ -70,9 +76,9 @@ function SubjectPage() {
   const [openFaq, setOpenFaq] = useState(0);
   const primaryCity = page?.relatedCities?.[0] ?? "gurugram";
   const cityLabel = formatSlugLabel(primaryCity);
-  const boardTokens = useMemo(() => (page ? collectBoardTokens(page) : []), [page]);
+  const boardTokens = page ? collectBoardTokens(page) : [];
 
-  const featuredTutors = useMemo(() => {
+  const featuredTutors = (() => {
     if (!page) {
       return [];
     }
@@ -90,9 +96,9 @@ function SubjectPage() {
         ),
       )
       .slice(0, 3);
-  }, [boardTokens, page, tutors]);
+  })();
 
-  const schoolHighlights = useMemo(() => {
+  const schoolHighlights = (() => {
     if (!page) {
       return [];
     }
@@ -112,9 +118,9 @@ function SubjectPage() {
         fit: school.support,
         boardContext: school.highlight,
       }));
-  }, [boardTokens, page, premiumSchools]);
+  })();
 
-  const localDemandZones = useMemo(() => {
+  const localDemandZones = (() => {
     if (!page) {
       return [];
     }
@@ -140,9 +146,9 @@ function SubjectPage() {
         };
       })
       .filter(Boolean);
-  }, [page, primaryCity, sectorPages]);
+  })();
 
-  const featuredReviews = useMemo(() => {
+  const featuredReviews = (() => {
     if (!page) {
       return [];
     }
@@ -152,7 +158,7 @@ function SubjectPage() {
     );
 
     return (matched.length ? matched : reviews).slice(0, 3);
-  }, [boardTokens, reviews]);
+  })();
 
   if (!page) {
     return <NotFound />;
@@ -201,55 +207,37 @@ function SubjectPage() {
     `Hello Maths Bodhi, I want help with ${page.label} home tuition in ${cityLabel}. Please guide me on class fit, school fit, and tutor availability.`,
   );
 
+  const canonicalPath = `/subject/${page.slug}`;
+  const serviceSchema = getServiceSchema({
+    url: canonicalPath,
+    name: `${page.label} home tuition in ${cityLabel}`,
+    description: seoDescription,
+    serviceType: `${page.label} tutoring`,
+    areaServed: cityLabel,
+    audience: {
+      "@type": "EducationalAudience",
+      educationalRole: "student",
+      audienceType: "School students",
+    },
+  });
   const schema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: `${import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in"}/`,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Subjects",
-          item: `${import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in"}/subject/${page.slug}`,
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: page.label,
-          item: `${import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in"}/subject/${page.slug}`,
-        },
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      name: `${page.label} home tuition in ${cityLabel}`,
+    getWebPageSchema({
+      url: canonicalPath,
+      name: page.title,
       description: seoDescription,
-      serviceType: `${page.label} tutoring`,
-      areaServed: cityLabel,
-      provider: {
-        "@type": "Organization",
-        name: siteData.brandName,
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: page.faqItems.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    },
+      mainEntityId: serviceSchema?.["@id"],
+      aboutId: serviceSchema?.["@id"],
+    }),
+    serviceSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: "Subjects", to: "/subjects/maths" },
+        { label: page.label },
+      ],
+    }),
+    page.faqItems?.length ? getFAQSchema({ url: canonicalPath, faqs: page.faqItems }) : null,
   ];
 
   return (
@@ -257,7 +245,7 @@ function SubjectPage() {
       <Seo
         title={page.seoTitle ?? page.title}
         description={seoDescription}
-        canonicalPath={`/subject/${page.slug}`}
+        canonicalPath={canonicalPath}
         keywords={seoKeywords}
         imagePath={heroImage}
         schema={schema}

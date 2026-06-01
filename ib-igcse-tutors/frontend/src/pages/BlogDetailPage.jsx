@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import Breadcrumbs from "../components/Breadcrumbs";
 import MathsGuideCard from "../components/maths/MathsGuideCard";
 import Seo from "../components/Seo";
 import { useSiteData } from "../contexts/SiteDataContext";
@@ -10,6 +10,12 @@ import {
   getRelatedBlogsForBlog,
   getRelatedTutorsForBlog,
 } from "../services/mathsContentService";
+import {
+  SCHEMA_IDS,
+  getArticleSchema,
+  getBreadcrumbSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import NotFound from "./NotFound";
 
 function formatDate(value) {
@@ -80,7 +86,7 @@ function buildSectorLinks(tutors, sectorPages = []) {
 function BlogDetailPage() {
   const { slug } = useParams();
   const { siteData, isSiteDataLoading } = useSiteData();
-  const blog = useMemo(() => getPublishedBlogBySlug(slug), [slug, siteData.blogs]);
+  const blog = getPublishedBlogBySlug(slug);
 
   if (!blog && isSiteDataLoading) {
     return (
@@ -119,20 +125,36 @@ function BlogDetailPage() {
   const keywords = blog.seo?.keywords?.length
     ? blog.seo.keywords
     : [...(blog.tags ?? []), ...(blog.relatedBoards ?? [])];
+  const articleSchema = getArticleSchema({
+    url: canonicalPath,
+    headline: blog.title,
+    description: blog.seo?.description ?? blog.summary,
+    image: coverImage,
+    datePublished: publishDate,
+    dateModified: blog.updatedAt,
+    type: "BlogPosting",
+    author:
+      blog.author && !/maths bodhi|team/i.test(blog.author)
+        ? { "@type": "Person", name: blog.author }
+        : { "@id": SCHEMA_IDS.localBusiness },
+  });
   const schema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: blog.title,
+    getWebPageSchema({
+      url: canonicalPath,
+      name: blog.title,
       description: blog.seo?.description ?? blog.summary,
-      image: coverImage,
-      datePublished: publishDate,
-      author: {
-        "@type": "Organization",
-        name: blog.author || "Maths Bodhi Team",
-      },
-      mainEntityOfPage: canonicalPath,
-    },
+      mainEntityId: articleSchema?.["@id"],
+      aboutId: articleSchema?.["@id"],
+    }),
+    articleSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: "Blog", to: "/subjects/maths" },
+        { label: blog.title },
+      ],
+    }),
   ];
 
   return (
@@ -153,7 +175,14 @@ function BlogDetailPage() {
 
           <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
             <div>
-              <div className="flex flex-wrap items-center gap-3">
+              <Breadcrumbs
+                items={[
+                  { label: "Home", to: "/" },
+                  { label: "Blog", to: "/subjects/maths" },
+                  { label: blog.title },
+                ]}
+              />
+              <div className="mt-6 flex flex-wrap items-center gap-3">
                 {blog.category ? (
                   <span className="rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-700">
                     {blog.category}

@@ -945,7 +945,7 @@ export const gurugramHubPageConfig = {
     { label: "Home", to: "/" },
     { label: "Gurugram" },
   ],
-  schemaType: "LocalBusiness",
+  schemaType: "Service",
   publishStatus: "published",
   sections: {
     hero: {
@@ -1944,7 +1944,7 @@ export const batchOneGurugramEntryConfigs = [
       { label: "Gurugram", to: "/gurugram" },
       { label: "Sector 54" },
     ],
-    schemaType: "LocalBusiness",
+    schemaType: "Service",
     publishStatus: "published",
     sectorSlug: "sector-54",
     focusBoards: ["IB", "IGCSE"],
@@ -2097,7 +2097,7 @@ export const batchOneGurugramEntryConfigs = [
       { label: "Gurugram", to: "/gurugram" },
       { label: "Sector 55" },
     ],
-    schemaType: "LocalBusiness",
+    schemaType: "Service",
     publishStatus: "published",
     sectorSlug: "sector-55",
     focusBoards: ["IB", "IGCSE", "CBSE"],
@@ -2250,7 +2250,7 @@ export const batchOneGurugramEntryConfigs = [
       { label: "Gurugram", to: "/gurugram" },
       { label: "Sector 56" },
     ],
-    schemaType: "LocalBusiness",
+    schemaType: "Service",
     publishStatus: "published",
     sectorSlug: "sector-56",
     focusBoards: ["IB", "IGCSE", "CBSE", "JEE"],
@@ -2407,7 +2407,7 @@ export const batchOneGurugramEntryConfigs = [
       { label: "Gurugram", to: "/gurugram" },
       { label: "Golf Course Road" },
     ],
-    schemaType: "LocalBusiness",
+    schemaType: "Service",
     publishStatus: "published",
     focusBoards: ["IB", "IGCSE", "CBSE"],
     sections: {
@@ -2533,15 +2533,10 @@ function createPublishedGurugramEntryConfig(config) {
   const faqItems = config.sections?.faqs ?? [];
 
   return {
-    template: "GenericPageTemplate",
-    sectionDefinitions: defaultGurugramBatchSectionDefinitions,
-    schemaType: "LocalBusiness",
-    publishStatus: "published",
-    faqReferences: faqItems.map((item) => item.question),
     ...config,
     template: config.template ?? "GenericPageTemplate",
     sectionDefinitions: config.sectionDefinitions ?? defaultGurugramBatchSectionDefinitions,
-    schemaType: config.schemaType ?? "LocalBusiness",
+    schemaType: config.schemaType ?? "Service",
     publishStatus: config.publishStatus ?? "published",
     faqReferences: config.faqReferences ?? faqItems.map((item) => item.question),
   };

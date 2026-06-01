@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 import MainLayout from "../layouts/MainLayout";
 
 function NotFound() {
   return (
     <MainLayout>
+      <Seo title="Page Not Found | Maths Bodhi" description="This Maths Bodhi page could not be found." canonicalPath="/" robots="noindex, follow" />
       <section className="bg-white px-6 py-24">
         <div className="mx-auto max-w-3xl rounded-[32px] border border-slate-200 bg-slate-50 p-10 text-center shadow-sm">
           <span className="inline-flex rounded-full border border-cyan-200 bg-cyan-50 px-4 py-1.5 text-sm font-semibold text-cyan-700">

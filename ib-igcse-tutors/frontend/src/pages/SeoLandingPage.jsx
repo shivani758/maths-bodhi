@@ -8,6 +8,13 @@ import { useSiteData } from "../contexts/SiteDataContext";
 import { getSeoLandingPageConfig } from "../data/seoLandingPages";
 import MainLayout from "../layouts/MainLayout";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
+import {
+  getAbsoluteUrl,
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getServiceSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
 import NotFound from "./NotFound";
 
@@ -131,40 +138,45 @@ function toTutorCardData(tutor) {
 }
 
 function buildSchema(config, tutors) {
-  const siteUrl = import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in";
   const breadcrumbs = [
     { label: "Home", to: "/" },
     { label: config.h1, to: config.path },
   ];
+  const service = getServiceSchema({
+    url: config.path,
+    name: config.h1,
+    description: config.seoDescription,
+    serviceType: config.h1?.toLowerCase().includes("online")
+      ? "Online maths tuition"
+      : "Maths tutoring",
+    areaServed: "Gurugram",
+    audience: {
+      "@type": "EducationalAudience",
+      educationalRole: "student",
+      audienceType: config.audience ?? "School students",
+    },
+  });
   const schema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
+    getWebPageSchema({
+      url: config.path,
       name: config.h1,
       description: config.seoDescription,
-      url: new URL(config.path, siteUrl).toString(),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: breadcrumbs.map((item, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: item.label,
-        item: new URL(item.to, siteUrl).toString(),
-      })),
-    },
+      mainEntityId: service?.["@id"],
+      aboutId: service?.["@id"],
+    }),
+    service,
+    getBreadcrumbSchema({ url: config.path, items: breadcrumbs }),
   ];
 
   if (tutors.length) {
     schema.push({
-      "@context": "https://schema.org",
       "@type": "ItemList",
+      "@id": `${getAbsoluteUrl(config.path)}#tutors`,
       name: `${config.h1} tutor matches`,
       itemListElement: tutors.map((tutor, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: new URL(getTutorProfilePath(tutor), siteUrl).toString(),
+        url: getAbsoluteUrl(getTutorProfilePath(tutor)),
         item: {
           "@type": "Person",
           name: tutor.name,
@@ -176,18 +188,7 @@ function buildSchema(config, tutors) {
   }
 
   if (config.faqs?.length) {
-    schema.push({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: config.faqs.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    });
+    schema.push(getFAQSchema({ url: config.path, faqs: config.faqs }));
   }
 
   return schema;

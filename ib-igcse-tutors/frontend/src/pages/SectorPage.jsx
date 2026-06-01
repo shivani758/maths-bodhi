@@ -8,6 +8,11 @@ import { useSiteData } from "../contexts/SiteDataContext";
 import { getCoreMathsBoardCards } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
 import { getSectorPage } from "../services/siteLookup";
+import {
+  getBreadcrumbSchema,
+  getServiceSchema,
+  getWebPageSchema,
+} from "../utils/schema";
 import NotFound from "./NotFound";
 
 function SectorPage() {
@@ -31,12 +36,44 @@ function SectorPage() {
     return <NotFound />;
   }
 
+  const canonicalPath = `/city/${page.citySlug}/${page.slug}`;
+  const serviceSchema = getServiceSchema({
+    url: canonicalPath,
+    name: page.headline,
+    description: page.subtitle,
+    serviceType: "Maths home tutoring",
+    areaServed: `${page.sectorLabel}, ${page.cityLabel}`,
+    audience: {
+      educationalRole: "student",
+      audienceType: "School students",
+    },
+    serviceOutput: "Personalized maths tutoring support",
+  });
+  const schema = [
+    getWebPageSchema({
+      url: canonicalPath,
+      name: page.headline,
+      description: page.subtitle,
+      mainEntityId: serviceSchema?.["@id"],
+      aboutId: serviceSchema?.["@id"],
+    }),
+    serviceSchema,
+    getBreadcrumbSchema({
+      url: canonicalPath,
+      items: [
+        { label: "Home", to: "/" },
+        { label: page.cityLabel, to: `/city/${page.citySlug}` },
+        { label: page.sectorLabel },
+      ],
+    }),
+  ];
+
   return (
     <MainLayout>
       <Seo
         title={`Maths Home Tutor in ${page.sectorLabel}, ${page.cityLabel} | ${siteData.brandName}`}
         description={page.subtitle}
-        canonicalPath={`/city/${page.citySlug}/${page.slug}`}
+        canonicalPath={canonicalPath}
         keywords={[
           `maths home tutor in ${page.sectorLabel.toLowerCase()}`,
           `maths tuition in ${page.sectorLabel.toLowerCase()}`,
@@ -47,6 +84,7 @@ function SectorPage() {
           page.cityLabel,
           ...page.landmarks,
         ]}
+        schema={schema}
       />
 
       <div className="bg-white">

@@ -13,6 +13,11 @@ import { useSiteData } from "../contexts/SiteDataContext";
 import { getMathsHomeCards, mathsRouteMap } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
 import { listTutors } from "../services/tutorsService";
+import {
+  getBreadcrumbSchema,
+  getFAQSchema,
+  getHomepageSchema,
+} from "../utils/schema";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
 
 const INITIAL_VISIBLE_TUTORS = 6;
@@ -698,8 +703,6 @@ function Home() {
     "Hello Maths Bodhi, I want help finding a maths home tutor in Gurugram.",
   );
   const mathsHomeCards = getMathsHomeCards();
-  const siteUrl = import.meta.env.VITE_SITE_URL || "https://www.mathsbodhi.in";
-
   function scrollToTutorMatches() {
     if (typeof document === "undefined") {
       return;
@@ -744,81 +747,27 @@ function Home() {
   }
 
   const schema = useMemo(
-    () => [
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: siteData.brandName,
-        url: siteUrl,
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        name: `${siteData.brandName} Gurugram`,
-        description: seo.description,
-        telephone: contact.phoneDisplay,
-        email: contact.email,
-        url: siteUrl,
-        logo: `${siteUrl}/assets/mathsbodhi-logo.png`,
-        areaServed: ["Gurugram", "Gurgaon"],
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: contact.streetAddress,
-          addressLocality: contact.city,
-          addressRegion: contact.state,
-          addressCountry: contact.country,
-        },
-        image: `${siteUrl}/images/hero-maths-home.svg`,
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        name: seo.title,
-        description: seo.description,
-        url: siteUrl,
-        about: [
-          "Maths home tutors in Gurugram",
-          "CBSE maths tuition",
-          "ICSE maths tuition",
-          "IGCSE maths tuition",
-          "IB maths tuition",
-          "JEE maths preparation",
-        ],
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Home",
-            item: siteUrl,
-          },
-        ],
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: homepageFaqs.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-          },
-        })),
-      },
-    ],
+    () =>
+      [
+        ...getHomepageSchema({
+          name: siteData.brandName,
+          description: seo.description,
+          contact,
+          image: "/images/hero-maths-home.svg",
+        }),
+        getBreadcrumbSchema({
+          url: "/",
+          items: [{ label: "Home", to: "/" }],
+        }),
+        getFAQSchema({
+          url: "/",
+          faqs: homepageFaqs,
+        }),
+      ],
     [
-      contact.city,
-      contact.email,
-      contact.phoneDisplay,
-      contact.streetAddress,
+      contact,
       seo.description,
-      seo.title,
       siteData.brandName,
-      siteUrl,
     ],
   );
 

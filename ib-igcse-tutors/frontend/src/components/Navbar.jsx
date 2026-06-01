@@ -5,7 +5,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useSiteData } from "../contexts/SiteDataContext";
 import BrandLogo from "./BrandLogo";
 import { buildWhatsAppUrl } from "../utils/whatsapp";
-import AjayVatsyayanPremiumTutorSchema from "./AjayVatsyayanPremiumTutorSchema";
 
 function Navbar() {
   const { siteData } = useSiteData();
@@ -157,8 +156,6 @@ function Navbar() {
 
   return (
     <>
-
-    <AjayVatsyayanPremiumTutorSchema />
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-3 px-5 py-4 sm:px-6">
           <Link to="/" className="flex min-w-0 flex-1 items-center xl:flex-none">
