@@ -9,7 +9,7 @@ import {
   getRecoveryTopicPaths,
   recoveryRouteCatalogRows,
   recoveryRootSeoPages,
-} from "./seoRecoveryCluster";
+} from "./seoRecoveryCluster.js";
 
 const DEMO_PATH = "/book-free-demo-class";
 const WHATSAPP_NUMBER = "918796499818";

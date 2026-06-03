@@ -1,3 +1,5 @@
+// Legacy data for the unused SeoLandingPage component. Active SEO routes are
+// managed by pageSystem/config/p1SeoPageConfigs.js and staticPageConfigs.js.
 function link(label, to, description, tags = []) {
   return { label, to, description, tags };
 }

@@ -19,7 +19,6 @@ const LegacyMathsSubjectRoute = lazy(() => import("./pages/LegacyMathsSubjectRou
 const MathsBoardPage = lazy(() => import("./pages/MathsBoardPage"));
 const CityPage = lazy(() => import("./pages/CityPage"));
 const SectorPage = lazy(() => import("./pages/SectorPage"));
-const SeoLandingPage = lazy(() => import("./pages/SeoLandingPage"));
 const TutorProfile = lazy(() => import("./pages/TutorProfile"));
 const BookDemo = lazy(() => import("./pages/BookDemo"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
@@ -90,6 +89,7 @@ function App() {
           <Route path="/gurugram/:entrySlug" element={<ConfigDrivenPageRoute routeType="gurugram-entry" />} />
           <Route path="/tutors/:slug" element={<TutorProfile />} />
           <Route path="/tutor/:id" element={<TutorProfile />} />
+          <Route path="/blogs" element={<Navigate to="/subjects/maths" replace />} />
           <Route path="/blogs/:slug" element={<BlogDetailPage />} />
           <Route path="/book-demo" element={<BookDemo />} />
           <Route path="/book-free-demo-class" element={<BookDemo />} />

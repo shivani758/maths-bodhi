@@ -4,7 +4,7 @@ import {
   getBatchALocalityMeta,
   getRecoveryLocalityMeta,
   recoveryLocalityBoardPages,
-} from "./seoRecoveryCluster";
+} from "./seoRecoveryCluster.js";
 
 function routeCard({ eyebrow, title, description, tags = [], to }) {
   return { eyebrow, title, description, tags, to };
