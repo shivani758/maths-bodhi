@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
 import TutorCard from "../components/TutorCard";
+import getAjayVatsyayanPremiumTutorSchema, {
+  AJAY_VATSYAYAN_TUTOR_CARD,
+} from "../components/AjayVatsyayanPremiumTutorSchema";
 import {
   BOARD_OPTIONS,
   CLASS_OPTIONS,
@@ -338,6 +341,20 @@ function getFirstListValue(values, fallback) {
   return getList(values)[0] ?? fallback;
 }
 
+function isAjayVatsyayanTutor(tutor) {
+  const identity = [tutor.id, tutor.slug, tutor.name]
+    .map((value) => String(value ?? "").toLowerCase())
+    .join(" ");
+
+  return identity.includes("ajay-vatsyayan") || identity.includes("ajay vatsyayan");
+}
+
+function withAjayVatsyayanFallback(tutors = []) {
+  return tutors.some(isAjayVatsyayanTutor)
+    ? tutors
+    : [AJAY_VATSYAYAN_TUTOR_CARD, ...tutors];
+}
+
 function toTutorCardData(tutor) {
   const boards = getList(tutor.boards);
   const classesSupported = getList(tutor.classesSupported);
@@ -511,7 +528,11 @@ function Home() {
   const [visibleReviews, setVisibleReviews] = useState(6);
   const [visibleSectors, setVisibleSectors] = useState(6);
   const [openFaq, setOpenFaq] = useState(0);
-  const tutors = apiTutors.length ? apiTutors : siteData.tutors;
+  const sourceTutors = apiTutors.length ? apiTutors : siteData.tutors;
+  const tutors = useMemo(
+    () => withAjayVatsyayanFallback(sourceTutors),
+    [sourceTutors],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -642,7 +663,7 @@ function Home() {
   const dynamicHomeStats = useMemo(
     () => [
       {
-        value: String(tutors.length),
+        value: String(sourceTutors.length),
         label: "Published tutor profiles in the public feed",
       },
       {
@@ -658,7 +679,7 @@ function Home() {
         label: "Boards and exam tracks represented in tutor profiles",
       },
     ],
-    [reviews.length, sectorPages.length, tutorBoardCount, tutors.length],
+    [reviews.length, sectorPages.length, sourceTutors.length, tutorBoardCount],
   );
 
   const featuredBlogs = useMemo(
@@ -759,6 +780,7 @@ function Home() {
           url: "/",
           items: [{ label: "Home", to: "/" }],
         }),
+        getAjayVatsyayanPremiumTutorSchema(),
         getFAQSchema({
           url: "/",
           faqs: homepageFaqs,

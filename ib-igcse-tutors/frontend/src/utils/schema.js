@@ -83,6 +83,8 @@ function isPlainObject(value) {
   return value && typeof value === "object" && !Array.isArray(value);
 }
 
+const UNSUPPORTED_SCHEMA_KEYS = new Set(["parent_node", "parentNode"]);
+
 function isEmptySchemaValue(value) {
   if (value == null) {
     return true;
@@ -114,6 +116,10 @@ export function cleanSchemaObject(value) {
 
   if (isPlainObject(value)) {
     const cleanedObject = Object.entries(value).reduce((result, [key, item]) => {
+      if (UNSUPPORTED_SCHEMA_KEYS.has(key)) {
+        return result;
+      }
+
       const cleanedValue = cleanSchemaObject(item);
 
       if (!isEmptySchemaValue(cleanedValue)) {
