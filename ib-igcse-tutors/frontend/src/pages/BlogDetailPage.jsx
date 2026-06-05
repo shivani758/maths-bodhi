@@ -222,6 +222,8 @@ function BlogDetailPage() {
               <img
                 src={coverImage}
                 alt={blog.title}
+                width="960"
+                height="720"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Seo from "../components/Seo";
@@ -7,7 +8,12 @@ import MathsResultCard from "../components/maths/MathsResultCard";
 import MathsReviewCard from "../components/maths/MathsReviewCard";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
-import { getTutorProfileById, getTutorProfileBySlug } from "../services/mathsContentService";
+import {
+  buildTutorProfileContent,
+  getTutorProfileById,
+  getTutorProfileBySlug,
+} from "../services/mathsContentService";
+import { getPublicTutorBySlugOrId } from "../services/tutorsService";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
 import {
   getBreadcrumbSchema,
@@ -66,6 +72,7 @@ const CLASS_ROUTE_MAP = {
   "class 10": "/class-10-maths-tutor",
   "class 12": "/class-12-maths-tutor",
 };
+const HOMEPAGE_ONLY_TUTOR_SLUGS = new Set(["ajay-vatsyayan"]);
 
 function getClassPath(classLevel = "") {
   return CLASS_ROUTE_MAP[normalizeLabel(classLevel)] ?? "";
@@ -109,7 +116,19 @@ function InfoCard({ label, value }) {
 function TutorProfile() {
   const { id, slug } = useParams();
   const { siteData, isSiteDataLoading } = useSiteData();
-  const tutor = slug ? getTutorProfileBySlug(slug) : getTutorProfileById(id);
+  const isHomepageOnlyTutor = slug ? HOMEPAGE_ONLY_TUTOR_SLUGS.has(normalizeLabel(slug)) : false;
+  const tutorLookupKey = slug || id || "";
+  const summaryTutor = isHomepageOnlyTutor ? null : slug ? getTutorProfileBySlug(slug) : getTutorProfileById(id);
+  const [remoteTutorState, setRemoteTutorState] = useState({
+    lookupKey: "",
+    tutor: null,
+    status: "idle",
+  });
+  const hasRemoteTutorResult = remoteTutorState.lookupKey === tutorLookupKey;
+  const remoteTutor = hasRemoteTutorResult ? remoteTutorState.tutor : null;
+  const remoteTutorLoading =
+    !isHomepageOnlyTutor && Boolean(tutorLookupKey) && !summaryTutor && !hasRemoteTutorResult;
+  const tutor = remoteTutor ? buildTutorProfileContent(remoteTutor) : summaryTutor;
   const sectorPageByLabel = new Map(
     (siteData.sectorPages ?? []).map((sector) => [
       normalizeLabel(sector.sectorLabel),
@@ -117,7 +136,39 @@ function TutorProfile() {
     ]),
   );
 
-  if (!tutor && isSiteDataLoading) {
+  useEffect(() => {
+    if (isHomepageOnlyTutor || !tutorLookupKey) {
+      return undefined;
+    }
+
+    let isMounted = true;
+
+    getPublicTutorBySlugOrId(tutorLookupKey)
+      .then((data) => {
+        if (isMounted) {
+          setRemoteTutorState({
+            lookupKey: tutorLookupKey,
+            tutor: data,
+            status: "loaded",
+          });
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setRemoteTutorState({
+            lookupKey: tutorLookupKey,
+            tutor: null,
+            status: "error",
+          });
+        }
+      })
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isHomepageOnlyTutor, tutorLookupKey]);
+
+  if (!tutor && !isHomepageOnlyTutor && (isSiteDataLoading || remoteTutorLoading)) {
     return (
       <MainLayout>
         <div className="bg-white px-6 py-24">
@@ -217,6 +268,8 @@ function TutorProfile() {
               <img
                 src={tutor.image || "/images/hero-maths-home.svg"}
                 alt={tutor.imageAlt || `${tutor.name} maths tutor profile`}
+                width="960"
+                height="720"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"

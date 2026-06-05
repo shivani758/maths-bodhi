@@ -1,20 +1,16 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
-import StudentLogin from "./pages/StudentLogin";
-import TutorLogin from "./pages/TutorLogin";
-import Login from "./pages/Login";
-import StudentDashboard from "./pages/StudentDashboard";
-import TutorDashboard from "./pages/TutorDashboard";
-import NotFound from "./pages/NotFound";
-import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
-import AdminProviders from "./admin/AdminProviders";
-import AdminProtectedRoute from "./admin/components/AdminProtectedRoute";
-import AdminLayout from "./admin/layouts/AdminLayout";
-import AdminLoginPage from "./admin/pages/AdminLoginPage";
 
+const StudentLogin = lazy(() => import("./pages/StudentLogin"));
+const TutorLogin = lazy(() => import("./pages/TutorLogin"));
+const Login = lazy(() => import("./pages/Login"));
+const StudentDashboard = lazy(() => import("./pages/StudentDashboard"));
+const TutorDashboard = lazy(() => import("./pages/TutorDashboard"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Navbar = lazy(() => import("./components/Navbar"));
 const LegacyMathsSubjectRoute = lazy(() => import("./pages/LegacyMathsSubjectRoute"));
 const MathsBoardPage = lazy(() => import("./pages/MathsBoardPage"));
 const CityPage = lazy(() => import("./pages/CityPage"));
@@ -23,6 +19,10 @@ const TutorProfile = lazy(() => import("./pages/TutorProfile"));
 const BookDemo = lazy(() => import("./pages/BookDemo"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
 const ConfigDrivenPageRoute = lazy(() => import("./pageSystem/routes/ConfigDrivenPageRoute"));
+const AdminProviders = lazy(() => import("./admin/AdminProviders"));
+const AdminProtectedRoute = lazy(() => import("./admin/components/AdminProtectedRoute"));
+const AdminLayout = lazy(() => import("./admin/layouts/AdminLayout"));
+const AdminLoginPage = lazy(() => import("./admin/pages/AdminLoginPage"));
 const AdminDashboardPage = lazy(() => import("./admin/pages/AdminDashboardPage"));
 const TutorsListPage = lazy(() => import("./admin/pages/TutorsListPage"));
 const TutorEditorPage = lazy(() => import("./admin/pages/TutorEditorPage"));
@@ -87,6 +87,8 @@ function App() {
           <Route path="/city/:city/:sector" element={<SectorPage />} />
           <Route path="/gurugram" element={<ConfigDrivenPageRoute routeType="gurugram-hub" />} />
           <Route path="/gurugram/:entrySlug" element={<ConfigDrivenPageRoute routeType="gurugram-entry" />} />
+          <Route path="/ajay-vatsyayan" element={<ConfigDrivenPageRoute routeType="ajay-main" />} />
+          <Route path="/:ajayPageSlug/ajay-vatsyayan" element={<ConfigDrivenPageRoute routeType="ajay-intent" />} />
           <Route path="/tutors/:slug" element={<TutorProfile />} />
           <Route path="/tutor/:id" element={<TutorProfile />} />
           <Route path="/blogs" element={<Navigate to="/subjects/maths" replace />} />

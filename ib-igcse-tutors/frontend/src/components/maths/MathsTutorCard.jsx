@@ -80,6 +80,8 @@ function MathsTutorCard({
 }) {
   const { siteData } = useSiteData();
   const displayName = tutorName ?? name;
+  const displayImage = image || "/images/hero-maths-home.svg";
+  const displayImageAlt = imageAlt || `${displayName || "Maths tutor"} profile`;
   const experienceLabel = yearsExperience ?? experience;
   const specializationLabel = boardSpecialization ?? subBoard ?? examType ?? board;
   const classLabel = classesSupported ?? classFocus ?? classLevel;
@@ -120,7 +122,15 @@ function MathsTutorCard({
     <article className="group flex h-full flex-col overflow-hidden rounded-[30px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-sky-100/70 sm:p-6">
       <div className="flex items-start gap-4">
         <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
-          <img src={image} alt={imageAlt} className="h-full w-full object-cover" />
+          <img
+            src={displayImage}
+            alt={displayImageAlt}
+            width="64"
+            height="64"
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="min-w-0 flex-1">

@@ -1468,20 +1468,6 @@ function getLocalityBoardPath(localitySlug, boardSlug) {
   return `/gurugram/${localitySlug}-${boardSlug}-maths-home-tutor`;
 }
 
-function getPrimaryClassPath(boardSlug) {
-  const board = BOARD_META[boardSlug];
-
-  if (board?.classLevels.includes("10")) {
-    return `/class-10-${boardSlug}-maths-home-tutor`;
-  }
-
-  if (board?.classLevels.includes("12")) {
-    return `/class-12-${boardSlug}-maths-home-tutor`;
-  }
-
-  return board?.hubPath ?? "/maths-home-tutor";
-}
-
 export const recoveryBoards = BOARD_META;
 export const recoveryLocalities = LOCALITY_META;
 export const recoveryTopics = TOPIC_META;

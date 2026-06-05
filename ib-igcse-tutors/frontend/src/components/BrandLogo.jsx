@@ -1,4 +1,5 @@
 export const MATHS_BODHI_LOGO_SRC = "/assets/mathsbodhi-logo.png";
+export const MATHS_BODHI_LOGO_SIZE = 128;
 
 function BrandLogo({
   className = "",
@@ -18,6 +19,8 @@ function BrandLogo({
         <img
           src={MATHS_BODHI_LOGO_SRC}
           alt="Maths Bodhi"
+          width={MATHS_BODHI_LOGO_SIZE}
+          height={MATHS_BODHI_LOGO_SIZE}
           className={`h-full w-full object-contain ${imageClassName}`}
           decoding="async"
         />

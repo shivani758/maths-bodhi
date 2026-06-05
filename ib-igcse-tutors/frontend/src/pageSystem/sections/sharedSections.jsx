@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import SectionTitle from "../../components/SectionTitle";
@@ -119,7 +119,15 @@ export function PageHeroSection({
             {heroImage ? (
               <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 p-4 shadow-lg shadow-sky-100/60">
                 <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white">
-                  <img src={heroImage} alt={heroImageAlt} className="h-56 w-full object-cover" />
+                <img
+                  src={heroImage}
+                  alt={heroImageAlt || ""}
+                  width="960"
+                  height="720"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-56 w-full object-cover"
+                />
                 </div>
               </div>
             ) : null}
@@ -219,17 +227,19 @@ function RouteGroupSection({ group, index }) {
 
     return group.cards.filter((card) => getRouteCardSearchText(card).includes(normalizedQuery));
   }, [group.cards, query]);
+  const cappedVisibleCount = Math.min(visibleCount, filteredCards.length);
   const visibleCards = useMemo(
-    () => (hasCardLimit ? filteredCards.slice(0, visibleCount) : filteredCards),
-    [filteredCards, hasCardLimit, visibleCount],
+    () => (hasCardLimit ? filteredCards.slice(0, cappedVisibleCount) : filteredCards),
+    [cappedVisibleCount, filteredCards, hasCardLimit],
   );
   const canLoadMore = hasCardLimit && visibleCount < filteredCards.length;
   const shouldShowLoadControl = hasCardLimit && filteredCards.length > initialVisibleCount;
   const activeSearch = query.trim().length > 0;
 
-  useEffect(() => {
+  function handleSearchChange(event) {
+    setQuery(event.target.value);
     setVisibleCount(initialVisibleCount);
-  }, [initialVisibleCount, group.cards.length, query]);
+  }
 
   return (
     <section
@@ -258,7 +268,7 @@ function RouteGroupSection({ group, index }) {
               id={searchId}
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={handleSearchChange}
               placeholder={group.searchPlaceholder ?? "Search an area, sector, society, or school corridor"}
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             />
@@ -318,9 +328,16 @@ export function PageRouteGroupsSection({ groups = [] }) {
 
   return (
     <>
-      {visibleGroups.map((group, index) => (
-        <RouteGroupSection key={group.id ?? group.title ?? index} group={group} index={index} />
-      ))}
+      {visibleGroups.map((group, index) => {
+        const groupKey = [
+          group.id ?? group.title ?? index,
+          group.cards.length,
+          group.initialVisibleCount ?? "",
+          group.loadStep ?? "",
+        ].join("|");
+
+        return <RouteGroupSection key={groupKey} group={group} index={index} />;
+      })}
     </>
   );
 }
@@ -336,10 +353,6 @@ export function PageFeaturedTutorsSection({
   emptyState,
 }) {
   const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
-
-  useEffect(() => {
-    setVisibleCount(initialVisibleCount);
-  }, [initialVisibleCount, tutors]);
 
   if (!tutors.length) {
     return (
@@ -384,8 +397,9 @@ export function PageFeaturedTutorsSection({
     );
   }
 
-  const visibleTutors = tutors.slice(0, visibleCount);
-  const canLoadMore = visibleCount < tutors.length;
+  const cappedVisibleCount = Math.min(visibleCount, tutors.length);
+  const visibleTutors = tutors.slice(0, cappedVisibleCount);
+  const canLoadMore = cappedVisibleCount < tutors.length;
 
   return (
     <section className={`${backgroundClassName} px-6 py-16`}>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import Seo from "../../components/Seo";
@@ -38,10 +38,6 @@ function BoardPageTemplate({ config, templateData = {} }) {
 
   const coreBoardCards = useMemo(() => getMathsCoreBoardCards(), []);
 
-  useEffect(() => {
-    setVisibleTutorCount(INITIAL_TUTOR_COUNT);
-  }, [page?.key]);
-
   if (!page) {
     return null;
   }
@@ -72,8 +68,9 @@ function BoardPageTemplate({ config, templateData = {} }) {
   const featuredResults = templateData.studentResults ?? [];
   const relatedBlogs = templateData.relatedBlogs ?? [];
   const maxTutorCount = Math.min(MAX_VISIBLE_TUTORS, featuredTutors.length);
-  const visibleTutors = featuredTutors.slice(0, Math.min(visibleTutorCount, maxTutorCount));
-  const canLoadMoreTutors = visibleTutorCount < maxTutorCount;
+  const cappedVisibleTutorCount = Math.min(visibleTutorCount, maxTutorCount);
+  const visibleTutors = featuredTutors.slice(0, cappedVisibleTutorCount);
+  const canLoadMoreTutors = cappedVisibleTutorCount < maxTutorCount;
   const breadcrumbs = config.breadcrumbItems ?? [];
   const heroImage = config.sections?.hero?.heroImage ?? "/images/hero-maths-home.svg";
   const heroImageAlt =
@@ -193,7 +190,16 @@ function BoardPageTemplate({ config, templateData = {} }) {
               <div className="grid gap-5">
                 <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-slate-50 p-4 shadow-lg shadow-sky-100/60">
                   <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white">
-                    <img src={heroImage} alt={heroImageAlt} className="h-56 w-full object-cover" />
+                    <img
+                      src={heroImage}
+                      alt={heroImageAlt || ""}
+                      width="960"
+                      height="720"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                      className="h-56 w-full object-cover"
+                    />
                   </div>
                 </div>
 

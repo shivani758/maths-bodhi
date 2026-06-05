@@ -666,11 +666,13 @@ export function getTutorProfileBySlug(slug) {
   return tutor ? buildTutorProfileContent(tutor) : null;
 }
 
-function buildTutorProfileContent(tutor) {
+export function buildTutorProfileContent(tutor) {
   const tutorProfiles = listTutorProfilesSnapshot();
   const reviews = listCanonicalReviewsSnapshot();
   const results = listResultsSnapshot();
   const profile = tutorProfiles.find((item) => item.tutorId === tutor.id);
+  const profileAssociatedBoards = profile?.associatedBoards ?? [];
+  const profileAssociatedTags = profile?.associatedTags ?? [];
   const relatedReviews = reviews.filter(
     (review) => review.relatedTutorId === tutor.id || tutor.linkedReviewIds?.includes(review.id),
   );
@@ -681,10 +683,10 @@ function buildTutorProfileContent(tutor) {
   return cloneValue({
     ...tutor,
     profileTo: getTutorProfilePath(tutor),
-    longFormProfile: profile?.longFormProfile ?? tutor.fullBio ?? tutor.summary ?? "",
-    teachingStyle: profile?.teachingStyle ?? "",
-    associatedBoards: cloneValue(profile?.associatedBoards ?? tutor.boards ?? []),
-    associatedTags: cloneValue(profile?.associatedTags ?? tutor.badges ?? []),
+    longFormProfile: profile?.longFormProfile || tutor.fullBio || tutor.summary || "",
+    teachingStyle: profile?.teachingStyle || tutor.teachingStyle || "",
+    associatedBoards: cloneValue(profileAssociatedBoards.length ? profileAssociatedBoards : tutor.boards ?? []),
+    associatedTags: cloneValue(profileAssociatedTags.length ? profileAssociatedTags : tutor.badges ?? []),
     faqItems: getGeneratedTutorFaqs(tutor),
     relatedReviews: relatedReviews.map((review) => toMathsReviewEntity(review)),
     relatedResults: relatedResults.map((result) => toMathsResultEntity(result, getTutorStore())),

@@ -692,7 +692,15 @@ export function MediaAssetForm({ draftItem, setDraftItem, onFileSelect }) {
         </FieldGroup>
         {draftItem.url ? (
           <div className="md:col-span-2 overflow-hidden rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-            <img src={draftItem.url} alt={draftItem.altText || draftItem.name} className="h-48 w-full rounded-2xl object-cover" />
+            <img
+              src={draftItem.url}
+              alt={draftItem.altText || draftItem.name || "Media preview"}
+              width="960"
+              height="720"
+              loading="lazy"
+              decoding="async"
+              className="h-48 w-full rounded-2xl object-cover"
+            />
           </div>
         ) : null}
       </FormSection>

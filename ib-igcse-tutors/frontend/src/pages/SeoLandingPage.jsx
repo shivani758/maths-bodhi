@@ -311,6 +311,8 @@ function SeoLandingPage({ pageKey }) {
                 <img
                   src="/images/hero-maths-home.svg"
                   alt={`${config.h1} support overview`}
+                  width="960"
+                  height="720"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"

@@ -5,6 +5,8 @@ import NotFound from "../../pages/NotFound";
 import { resolveConfigPageData } from "../pageDataResolver";
 import {
   resolveBoardPageConfig,
+  resolveAjayIntentPageConfig,
+  resolveAjayMainPageConfig,
   resolveClassPageConfig,
   resolveCityPageConfig,
   resolveExamPageConfig,
@@ -20,6 +22,7 @@ import ClassPageTemplate from "../templates/ClassPageTemplate";
 import ExamPageTemplate from "../templates/ExamPageTemplate";
 import GenericPageTemplate from "../templates/GenericPageTemplate";
 import SectorPageTemplate from "../templates/SectorPageTemplate";
+import AjayPageTemplate from "../templates/AjayPageTemplate";
 
 const TEMPLATE_MAP = {
   BoardPageTemplate,
@@ -28,6 +31,7 @@ const TEMPLATE_MAP = {
   ExamPageTemplate,
   GenericPageTemplate,
   SectorPageTemplate,
+  AjayPageTemplate,
 };
 
 function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlug: seoSlugOverride }) {
@@ -42,6 +46,7 @@ function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlu
   const examSlug = params.examSlug;
   const entrySlug = entrySlugOverride ?? params.entrySlug;
   const seoSlug = seoSlugOverride ?? params.seoSlug;
+  const ajayPageSlug = params.ajayPageSlug;
 
   const config = useMemo(() => {
     switch (routeType) {
@@ -55,6 +60,10 @@ function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlu
         return resolveGurugramEntryConfig(siteData, entrySlug) ?? resolveSectorPageConfig(siteData, "gurugram", entrySlug);
       case "p1-seo":
         return resolveP1SeoPageConfig(seoSlug);
+      case "ajay-main":
+        return resolveAjayMainPageConfig();
+      case "ajay-intent":
+        return resolveAjayIntentPageConfig(ajayPageSlug);
       case "city":
         return resolveCityPageConfig(siteData, citySlug);
       case "sector":
@@ -68,7 +77,7 @@ function ConfigDrivenPageRoute({ routeType, entrySlug: entrySlugOverride, seoSlu
       default:
         return null;
     }
-  }, [boardSlug, stageSlug, trackSlug, citySlug, sectorSlug, classSlug, examSlug, entrySlug, seoSlug, routeType, siteData]);
+  }, [ajayPageSlug, boardSlug, stageSlug, trackSlug, citySlug, sectorSlug, classSlug, examSlug, entrySlug, seoSlug, routeType, siteData]);
   const templateData = useMemo(() => resolveConfigPageData(config), [config]);
 
   if (!config || config.publishStatus !== "published") {

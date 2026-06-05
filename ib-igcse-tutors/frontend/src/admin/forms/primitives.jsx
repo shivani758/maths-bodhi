@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useMemo } from "react";
 
 function splitLines(value) {
@@ -56,6 +57,7 @@ export function ToggleField({ label, description, checked, onChange }) {
     <button
       type="button"
       onClick={() => onChange(!checked)}
+      aria-pressed={checked}
       className={`flex items-start justify-between gap-4 rounded-2xl border px-4 py-3 text-left transition ${
         checked
           ? "border-blue-200 bg-blue-50 text-blue-800"
@@ -172,7 +174,15 @@ export function MediaPickerField({ label, value, onChange, assets = [], error, r
 
         {value ? (
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-3">
-            <img src={value} alt={label} className="h-40 w-full rounded-xl object-cover" />
+            <img
+              src={value}
+              alt=""
+              width="960"
+              height="720"
+              loading="lazy"
+              decoding="async"
+              className="h-40 w-full rounded-xl object-cover"
+            />
           </div>
         ) : null}
       </div>

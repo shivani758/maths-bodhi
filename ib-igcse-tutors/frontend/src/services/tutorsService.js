@@ -96,9 +96,17 @@ export async function listTutors() {
     const data = await apiRequest("/api/tutors");
     return Array.isArray(data) ? data : [];
   } catch (error) {
-    console.error("Public tutors API failed:", error);
+    console.warn("Public tutors API fallback used:", error);
     return [];
   }
+}
+
+export async function getPublicTutorBySlugOrId(slugOrId) {
+  if (!slugOrId) {
+    throw new Error("Tutor slug or ID is required.");
+  }
+
+  return apiRequest(`/api/public/tutors/${encodeURIComponent(slugOrId)}`);
 }
 
 export async function listAdminTutors() {

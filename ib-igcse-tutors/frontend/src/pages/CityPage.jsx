@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
@@ -359,15 +359,12 @@ function CityPage() {
       })
       .slice(0, 3);
   }, [isGurugramPage, page, siteData.reviews]);
+  const cappedVisibleSectorCount = Math.min(visibleSectorCount, page?.topSectors.length ?? 0);
   const visibleSectors = useMemo(
-    () => (page?.topSectors ?? []).slice(0, visibleSectorCount),
-    [page?.topSectors, visibleSectorCount],
+    () => (page?.topSectors ?? []).slice(0, cappedVisibleSectorCount),
+    [cappedVisibleSectorCount, page?.topSectors],
   );
-  const hasMoreSectors = Boolean(page && visibleSectorCount < page.topSectors.length);
-
-  useEffect(() => {
-    setVisibleSectorCount(INITIAL_VISIBLE_SECTORS);
-  }, [page?.slug]);
+  const hasMoreSectors = Boolean(page && cappedVisibleSectorCount < page.topSectors.length);
 
   const cityWhatsAppUrl = useMemo(
     () =>

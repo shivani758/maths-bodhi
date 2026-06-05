@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
-import TutorCard from "../components/TutorCard";
+import AjayMentorBlock from "../components/AjayMentorBlock";
 import getAjayVatsyayanPremiumTutorSchema, {
   AJAY_VATSYAYAN_TUTOR_CARD,
 } from "../components/AjayVatsyayanPremiumTutorSchema";
@@ -13,9 +13,8 @@ import {
   mergeFilterOptions,
 } from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
-import { getMathsHomeCards, mathsRouteMap } from "../data/mathsBoardPages";
 import MainLayout from "../layouts/MainLayout";
-import { listTutors } from "../services/tutorsService";
+import { getAjayRecommendationForPath } from "../pageSystem/config/ajayRecommendations";
 import {
   getBreadcrumbSchema,
   getFAQSchema,
@@ -26,16 +25,47 @@ import { buildWhatsAppUrl } from "../utils/whatsapp";
 const INITIAL_VISIBLE_TUTORS = 6;
 const TUTOR_LOAD_STEP = 6;
 const MAX_VISIBLE_TUTORS = 50;
+const DEFERRED_HOME_IDLE_TIMEOUT = 1200;
+const IMAGE_4_BY_3_SIZE = { width: 960, height: 720 };
+const TutorCard = lazy(() => import("../components/TutorCard"));
+const HOME_AJAY_RECOMMENDATION = getAjayRecommendationForPath("/");
 
 const GENERIC_FILTER_PARTS = new Set(["class", "math", "maths", "road", "sector", "tuition", "tutor"]);
+
+const MATHS_HOME_CARDS = [
+  {
+    title: "CBSE Maths Tuition",
+    eyebrow: "CBSE",
+    description:
+      "Board-aligned maths support for Class 6 to 12, NCERT mastery, exam practice, homework correction, and structured marks-improvement routines.",
+    to: "/subjects/maths/cbse",
+    tags: ["NCERT", "Board exams"],
+  },
+  {
+    title: "IGCSE Maths Tuition",
+    eyebrow: "IGCSE",
+    description:
+      "Core and Extended maths support for international-school learners who need written method, topic clarity, and past-paper preparation.",
+    to: "/subjects/maths/igcse",
+    tags: ["Core/Extended", "Past papers"],
+  },
+  {
+    title: "IB Maths Tuition",
+    eyebrow: "IB",
+    description:
+      "IB MYP and IB DP maths mentoring for AA, AI, HL, and SL pathways with inquiry-led explanation and application-focused practice.",
+    to: "/subjects/maths/ib",
+    tags: ["MYP/DP", "AA/AI"],
+  },
+];
 
 const BOARD_SEARCH_ITEMS = [
   { label: "CBSE", route: "/cbse-maths-tuition" },
   { label: "ICSE", route: "/icse-maths-tuition" },
   { label: "ISC", route: "/isc-maths-tuition" },
   { label: "IGCSE", route: "/igcse-maths-tuition" },
-  { label: "IB MYP", route: mathsRouteMap["ib/myp"] },
-  { label: "IB DP", route: mathsRouteMap["ib/dp"] },
+  { label: "IB MYP", route: "/subjects/maths/ib/myp" },
+  { label: "IB DP", route: "/subjects/maths/ib/dp" },
   { label: "JEE Main", route: "/jee-main-maths-coaching" },
   { label: "JEE Advanced", route: "/jee-advanced-maths-coaching" },
 ];
@@ -337,10 +367,6 @@ function getBlogTimestamp(blog) {
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
-function getFirstListValue(values, fallback) {
-  return getList(values)[0] ?? fallback;
-}
-
 function isAjayVatsyayanTutor(tutor) {
   const identity = [tutor.id, tutor.slug, tutor.name]
     .map((value) => String(value ?? "").toLowerCase())
@@ -353,38 +379,6 @@ function withAjayVatsyayanFallback(tutors = []) {
   return tutors.some(isAjayVatsyayanTutor)
     ? tutors
     : [AJAY_VATSYAYAN_TUTOR_CARD, ...tutors];
-}
-
-function toTutorCardData(tutor) {
-  const boards = getList(tutor.boards);
-  const classesSupported = getList(tutor.classesSupported);
-  const topics = getList(tutor.topics);
-  const localities = getList(tutor.localities?.length ? tutor.localities : tutor.sectors);
-  const serviceModes = getList(tutor.serviceModes?.length ? tutor.serviceModes : tutor.mode);
-  const schoolFocus = getList(tutor.schoolFocus);
-  const experience = tutor.experience ?? tutor.experienceLabel ?? "";
-
-  return {
-    ...tutor,
-    id: tutor.id,
-    slug: tutor.slug,
-    name: tutor.name,
-    title: tutor.title ?? "Math Tutor",
-    rating: String(tutor.rating ?? "0"),
-    experience,
-    board: getFirstListValue(boards, tutor.board ?? "Maths"),
-    classLevel: getFirstListValue(classesSupported, tutor.classLevel ?? "Flexible support"),
-    location: tutor.location ?? getFirstListValue(tutor.cities, "Gurugram"),
-    sectors: localities,
-    topics,
-    price: tutor.startingFee ?? tutor.price ?? "Shared on enquiry",
-    mode: serviceModes,
-    schoolFocus,
-    image: tutor.image || "/images/hero-maths-home.svg",
-    imageAlt: tutor.imageAlt || `${tutor.name} maths tutor profile`,
-    shortBio: tutor.shortBio ?? tutor.summary ?? "",
-    summary: tutor.summary ?? tutor.shortBio ?? "",
-  };
 }
 
 function buildLocalSearchItems(sectorPages) {
@@ -517,8 +511,6 @@ function Home() {
   const { seo, home, contact, reviews, premiumSchools, sectorPages, blogs = [] } = siteData;
   const displaySectorPages = sectorPages.length ? sectorPages : HOME_FALLBACK_SECTOR_PAGES;
 
-  const [apiTutors, setApiTutors] = useState([]);
-  const [tutorsLoading, setTutorsLoading] = useState(true);
   const [selectedClass, setSelectedClass] = useState("All Classes");
   const [selectedSector, setSelectedSector] = useState("All Sectors");
   const [selectedBoard, setSelectedBoard] = useState("All Boards");
@@ -528,38 +520,34 @@ function Home() {
   const [visibleReviews, setVisibleReviews] = useState(6);
   const [visibleSectors, setVisibleSectors] = useState(6);
   const [openFaq, setOpenFaq] = useState(0);
-  const sourceTutors = apiTutors.length ? apiTutors : siteData.tutors;
+  const [renderDeferredSections, setRenderDeferredSections] = useState(
+    () => typeof window === "undefined",
+  );
   const tutors = useMemo(
-    () => withAjayVatsyayanFallback(sourceTutors),
-    [sourceTutors],
+    () => withAjayVatsyayanFallback(siteData.tutors),
+    [siteData.tutors],
   );
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function loadTutors() {
-      setTutorsLoading(true);
-      try {
-        const data = await listTutors();
-        if (isMounted) {
-          setApiTutors(data.map((tutor) => toTutorCardData(tutor)));
-        }
-      } catch {
-        if (isMounted) {
-          setApiTutors([]);
-        }
-      } finally {
-        if (isMounted) {
-          setTutorsLoading(false);
-        }
-      }
+    if (typeof window === "undefined") {
+      return undefined;
     }
 
-    loadTutors();
+    if ("requestIdleCallback" in window) {
+      const handle = window.requestIdleCallback(
+        () => setRenderDeferredSections(true),
+        { timeout: DEFERRED_HOME_IDLE_TIMEOUT },
+      );
 
-    return () => {
-      isMounted = false;
-    };
+      return () => window.cancelIdleCallback?.(handle);
+    }
+
+    const timeoutId = window.setTimeout(
+      () => setRenderDeferredSections(true),
+      DEFERRED_HOME_IDLE_TIMEOUT,
+    );
+
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   const classOptions = useMemo(() => {
@@ -639,10 +627,6 @@ function Home() {
     });
   }, [selectedBoard, selectedClass, selectedMode, selectedSector, selectedTopic, tutors]);
 
-  useEffect(() => {
-    setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
-  }, [selectedBoard, selectedClass, selectedMode, selectedSector, selectedTopic]);
-
   const averageReviewRating = useMemo(() => {
     const ratings = reviews.map((review) => Number(review.rating)).filter(Number.isFinite);
     const total = ratings.reduce((sum, rating) => sum + rating, 0);
@@ -663,7 +647,7 @@ function Home() {
   const dynamicHomeStats = useMemo(
     () => [
       {
-        value: String(sourceTutors.length),
+        value: String(siteData.tutors.length),
         label: "Published tutor profiles in the public feed",
       },
       {
@@ -679,25 +663,27 @@ function Home() {
         label: "Boards and exam tracks represented in tutor profiles",
       },
     ],
-    [reviews.length, sectorPages.length, sourceTutors.length, tutorBoardCount],
+    [reviews.length, sectorPages.length, siteData.tutors.length, tutorBoardCount],
   );
 
   const featuredBlogs = useMemo(
     () =>
-      [...blogs]
-        .filter((blog) => blog?.slug && blog?.title)
-        .sort((first, second) => getBlogTimestamp(second) - getBlogTimestamp(first))
-        .slice(0, 3),
-    [blogs],
+      renderDeferredSections
+        ? [...blogs]
+            .filter((blog) => blog?.slug && blog?.title)
+            .sort((first, second) => getBlogTimestamp(second) - getBlogTimestamp(first))
+            .slice(0, 3)
+        : [],
+    [blogs, renderDeferredSections],
   );
 
   const popularSearchGroups = useMemo(
-    () => buildPopularSearchGroups(displaySectorPages),
-    [displaySectorPages],
+    () => (renderDeferredSections ? buildPopularSearchGroups(displaySectorPages) : []),
+    [displaySectorPages, renderDeferredSections],
   );
   const localContextCards = useMemo(
-    () => buildLocalContextCards(premiumSchools, displaySectorPages, tutors),
-    [premiumSchools, displaySectorPages, tutors],
+    () => (renderDeferredSections ? buildLocalContextCards(premiumSchools, displaySectorPages, tutors) : []),
+    [premiumSchools, displaySectorPages, renderDeferredSections, tutors],
   );
   const totalPopularSearches = useMemo(
     () => popularSearchGroups.reduce((sum, group) => sum + group.items.length, 0),
@@ -723,7 +709,10 @@ function Home() {
     contact.whatsappNumber,
     "Hello Maths Bodhi, I want help finding a maths home tutor in Gurugram.",
   );
-  const mathsHomeCards = getMathsHomeCards();
+  const mathsHomeCards = useMemo(
+    () => (renderDeferredSections ? MATHS_HOME_CARDS : []),
+    [renderDeferredSections],
+  );
   function scrollToTutorMatches() {
     if (typeof document === "undefined") {
       return;
@@ -741,6 +730,7 @@ function Home() {
     setSelectedSector("All Sectors");
     setSelectedMode("All Modes");
     setSelectedTopic("All Topics");
+    setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
   }
 
   function applySearchChip(item) {
@@ -764,6 +754,7 @@ function Home() {
       setSelectedTopic((current) => (current === item.topic ? "All Topics" : item.topic));
     }
 
+    setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
     scrollToTutorMatches();
   }
 
@@ -804,28 +795,6 @@ function Home() {
         schema={schema}
       />
       <style>{`
-        @media (prefers-reduced-motion: no-preference) {
-          .home-hero-entrance {
-            animation: homeFadeSlide 700ms ease-out both;
-          }
-
-          .home-search-entrance {
-            animation: homeFadeSlide 700ms ease-out both;
-            animation-delay: 120ms;
-          }
-
-          @keyframes homeFadeSlide {
-            from {
-              opacity: 0;
-              transform: translateY(18px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        }
-
         .home-filter-select {
           min-height: 3.25rem;
           appearance: none;
@@ -969,6 +938,8 @@ function Home() {
               <img
                 src="/images/hero-maths-home.svg"
                 alt="Premium maths home tutoring dashboard illustration showing concept learning, progress tracking, and local Gurugram service coverage"
+                width={IMAGE_4_BY_3_SIZE.width}
+                height={IMAGE_4_BY_3_SIZE.height}
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
@@ -987,12 +958,19 @@ function Home() {
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                      htmlFor="home-class-filter"
+                      className="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                       Class or level
                     </label>
                     <select
+                      id="home-class-filter"
                       value={selectedClass}
-                      onChange={(event) => setSelectedClass(event.target.value)}
+                      onChange={(event) => {
+                        setSelectedClass(event.target.value);
+                        setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
+                      }}
                       className="home-filter-select w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     >
                       {classOptions.map((option) => (
@@ -1004,12 +982,19 @@ function Home() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                      htmlFor="home-board-filter"
+                      className="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                       Board
                     </label>
                     <select
+                      id="home-board-filter"
                       value={selectedBoard}
-                      onChange={(event) => setSelectedBoard(event.target.value)}
+                      onChange={(event) => {
+                        setSelectedBoard(event.target.value);
+                        setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
+                      }}
                       className="home-filter-select w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     >
                       {boardOptions.map((option) => (
@@ -1021,12 +1006,19 @@ function Home() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                      htmlFor="home-sector-filter"
+                      className="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                       Gurugram sector
                     </label>
                     <select
+                      id="home-sector-filter"
                       value={selectedSector}
-                      onChange={(event) => setSelectedSector(event.target.value)}
+                      onChange={(event) => {
+                        setSelectedSector(event.target.value);
+                        setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
+                      }}
                       className="home-filter-select w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     >
                       {sectorOptions.map((option) => (
@@ -1038,12 +1030,19 @@ function Home() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                      htmlFor="home-mode-filter"
+                      className="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                       Teaching mode
                     </label>
                     <select
+                      id="home-mode-filter"
                       value={selectedMode}
-                      onChange={(event) => setSelectedMode(event.target.value)}
+                      onChange={(event) => {
+                        setSelectedMode(event.target.value);
+                        setVisibleTutorCount(INITIAL_VISIBLE_TUTORS);
+                      }}
                       className="home-filter-select w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-base font-medium text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     >
                       {["All Modes", "Home Tuition", "Online"].map((option) => (
@@ -1076,6 +1075,10 @@ function Home() {
           </div>
         </section>
 
+        <AjayMentorBlock recommendation={HOME_AJAY_RECOMMENDATION} />
+
+        {renderDeferredSections ? (
+          <>
         <section className="overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 px-5 py-16 sm:px-6">
           <div className="home-search-entrance mx-auto max-w-7xl">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -1189,15 +1192,13 @@ function Home() {
                   className="mt-3 max-w-3xl text-base leading-7 text-slate-600 md:text-lg"
                   aria-live="polite"
                 >
-                  {tutorsLoading
-                    ? "Loading live tutor profiles from the backend."
-                    : `Showing ${visibleTutorCards.length} of ${cappedTutorMatches.length} tutor${
-                        cappedTutorMatches.length === 1 ? "" : "s"
-                      } for ${
-                        activeTutorFilters.length
-                          ? activeTutorFilters.join(", ")
-                          : "all maths classes, boards, Gurugram localities, teaching modes, and topics"
-                      }.`}
+                  {`Showing ${visibleTutorCards.length} of ${cappedTutorMatches.length} tutor${
+                    cappedTutorMatches.length === 1 ? "" : "s"
+                  } for ${
+                    activeTutorFilters.length
+                      ? activeTutorFilters.join(", ")
+                      : "all maths classes, boards, Gurugram localities, teaching modes, and topics"
+                  }.`}
                 </p>
               </div>
 
@@ -1233,47 +1234,27 @@ function Home() {
                 ))}
             </div>
 
-            {tutorsLoading ? (
-              <div
-                className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-3"
-                role="status"
-                aria-label="Loading tutor cards"
-              >
-                {Array.from({ length: 6 }, (_, index) => (
-                  <div
-                    key={`tutor-loading-${index}`}
-                    className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm"
-                  >
-                    <div className="flex animate-pulse items-start gap-4">
-                      <div className="h-14 w-14 rounded-2xl bg-slate-100" />
-                      <div className="flex-1 space-y-3">
-                        <div className="h-4 w-2/3 rounded-full bg-slate-100" />
-                        <div className="h-3 w-1/2 rounded-full bg-slate-100" />
-                      </div>
-                    </div>
-                    <div className="mt-6 animate-pulse space-y-3">
-                      <div className="h-3 rounded-full bg-slate-100" />
-                      <div className="h-3 w-5/6 rounded-full bg-slate-100" />
-                      <div className="grid gap-3 pt-3 sm:grid-cols-3">
-                        <div className="h-20 rounded-2xl bg-slate-100" />
-                        <div className="h-20 rounded-2xl bg-slate-100" />
-                        <div className="h-20 rounded-2xl bg-slate-100" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : visibleTutorCards.length ? (
+            {visibleTutorCards.length ? (
               <>
                 <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-3">
-                  {visibleTutorCards.map((tutor, index) => (
-                    <div
-                      key={tutor.id ?? tutor.slug ?? `${tutor.name}-${index}`}
-                      className="h-full [&>article]:h-full"
-                    >
-                      <TutorCard {...tutor} />
-                    </div>
-                  ))}
+                  <Suspense
+                    fallback={Array.from({ length: Math.min(visibleTutorCards.length, 3) }, (_, index) => (
+                      <div
+                        key={`tutor-card-fallback-${index}`}
+                        className="h-80 rounded-[24px] border border-slate-200 bg-slate-50"
+                        aria-hidden="true"
+                      />
+                    ))}
+                  >
+                    {visibleTutorCards.map((tutor, index) => (
+                      <div
+                        key={tutor.id ?? tutor.slug ?? `${tutor.name}-${index}`}
+                        className="h-full [&>article]:h-full"
+                      >
+                        <TutorCard {...tutor} />
+                      </div>
+                    ))}
+                  </Suspense>
                 </div>
 
                 {cappedTutorMatches.length > INITIAL_VISIBLE_TUTORS ? (
@@ -1479,6 +1460,8 @@ function Home() {
               <img
                 src="/images/tutor-premium-school.svg"
                 alt="Maths tutor matching flow for Gurugram families comparing board, class, and locality fit"
+                width={IMAGE_4_BY_3_SIZE.width}
+                height={IMAGE_4_BY_3_SIZE.height}
                 loading="lazy"
                 decoding="async"
                 className="aspect-[4/3] w-full rounded-[24px] border border-slate-200 bg-white object-cover"
@@ -1517,6 +1500,8 @@ function Home() {
               <img
                 src="/images/tutor-classroom-progress.svg"
                 alt="Maths progress illustration showing planning, regular review, and demo-class readiness"
+                width={IMAGE_4_BY_3_SIZE.width}
+                height={IMAGE_4_BY_3_SIZE.height}
                 loading="lazy"
                 decoding="async"
                 className="aspect-[4/3] w-full rounded-[24px] border border-slate-200 bg-slate-50 object-cover"
@@ -1849,6 +1834,8 @@ function Home() {
             </div>
           </div>
         </section>
+          </>
+        ) : null}
       </div>
     </MainLayout>
   );

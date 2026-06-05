@@ -1,5 +1,7 @@
 import Seo from "../../components/Seo";
+import AjayMentorBlock from "../../components/AjayMentorBlock";
 import MainLayout from "../../layouts/MainLayout";
+import { getAjayRecommendationForPath } from "../config/ajayRecommendations";
 import { buildConfigPageSchema } from "../pageConfigService";
 import {
   PageCtaSection,
@@ -34,6 +36,7 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
   const reviewsSection = config.sections?.reviews ?? {};
   const blogsSection = config.sections?.relatedBlogs ?? {};
   const faqSection = config.sections?.faqSection ?? {};
+  const ajayRecommendation = getAjayRecommendationForPath(config.canonicalUrl);
 
   return (
     <MainLayout>
@@ -68,6 +71,8 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
             points={config.sections?.supportPoints?.points}
           />
         ) : null}
+
+        <AjayMentorBlock recommendation={ajayRecommendation} />
 
         {isSectionEnabled(config, "route-groups") ? (
           <PageRouteGroupsSection groups={routeGroups} />

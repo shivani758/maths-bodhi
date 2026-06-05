@@ -57,6 +57,8 @@ function getMatchingSectorPage(sectorPages = [], sectorLabel = "") {
 function TutorCard({
   id,
   slug,
+  anchorId,
+  hasPublicProfile = true,
   name,
   title,
   rating,
@@ -75,12 +77,14 @@ function TutorCard({
   const { siteData } = useSiteData();
   const displaySummary =
     summary ||
-    "View this verified Maths Bodhi tutor profile to compare board fit, class level, teaching approach, locality coverage, and availability.";
+    (hasPublicProfile
+      ? "View this verified Maths Bodhi tutor profile to compare board fit, class level, teaching approach, locality coverage, and availability."
+      : "Ask Maths Bodhi about this tutor to compare board fit, class level, teaching approach, locality coverage, and availability.");
   const displayBoard = board || "Board and exam fit on enquiry";
   const displayClassLevel = classLevel || "Class and goal fit shared on enquiry";
   const displayExperience = experience || "Verified experience shared on enquiry";
   const displayPrice = price || "Fee shared after tutor fit check";
-  const ratingLabel = rating ? `${rating}/5 rated` : "Verified profile";
+  const ratingLabel = rating ? `${rating}/5 rated` : hasPublicProfile ? "Verified profile" : "Details on enquiry";
   const displayImage = image || "/images/hero-maths-home.svg";
   const displayImageAlt = imageAlt || `${name} maths tutor profile`;
   const boardPath = getBoardPath(displayBoard);
@@ -89,16 +93,21 @@ function TutorCard({
     siteData.contact.whatsappNumber,
     buildTutorInquiryMessage(siteData.contact, { id, name, title }, {}),
   );
-  const profilePath = getTutorProfilePath({ id, slug });
+  const profilePath = hasPublicProfile ? getTutorProfilePath({ id, slug }) : "";
 
   return (
-    <article className="group relative overflow-hidden rounded-[22px] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg sm:rounded-[24px] sm:p-5">
+    <article
+      id={anchorId}
+      className="group relative overflow-hidden rounded-[22px] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg sm:rounded-[24px] sm:p-5"
+    >
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400" />
       <div className="flex items-start gap-4">
         <div className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 sm:h-16 sm:w-16">
           <img
             src={displayImage}
             alt={displayImageAlt}
+            width="64"
+            height="64"
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover"
@@ -109,9 +118,13 @@ function TutorCard({
           <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
             <div>
               <h3 className="text-lg font-bold text-slate-950">
-                <Link to={profilePath} className="transition hover:text-blue-700">
-                  {name}
-                </Link>
+                {profilePath ? (
+                  <Link to={profilePath} className="transition hover:text-blue-700">
+                    {name}
+                  </Link>
+                ) : (
+                  <span>{name}</span>
+                )}
               </h3>
               <p className="mt-1 text-sm leading-6 text-slate-600">{title}</p>
             </div>
@@ -228,13 +241,15 @@ function TutorCard({
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <Link
-          to={profilePath}
-          aria-label={`View ${name}'s tutor profile`}
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:flex-1"
-        >
-          View Tutor Profile
-        </Link>
+        {profilePath ? (
+          <Link
+            to={profilePath}
+            aria-label={`View ${name}'s tutor profile`}
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:border-blue-200 hover:text-blue-700 sm:flex-1"
+          >
+            View Tutor Profile
+          </Link>
+        ) : null}
 
         <a
           href={whatsappUrl}

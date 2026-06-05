@@ -364,21 +364,19 @@ function toPublicLocalityPage(locality) {
 }
 
 export async function refreshPublicSiteData() {
-  const [bootstrapResult, tutorsResult, blogsResult, reviewsResult] = await Promise.all([
-    fetchPublicPayload("/api/public/bootstrap"),
-    fetchPublicArray("/api/tutors"),
-    fetchPublicArray("/api/blogs"),
-    fetchPublicArray("/api/reviews"),
-  ]);
+  const bootstrapResult = await fetchPublicPayload("/api/public/bootstrap");
   const bootstrap = bootstrapResult.ok ? bootstrapResult.data : {};
 
   apiContentCache = {
     ...EMPTY_PUBLIC_STORE,
-    tutors: tutorsResult.ok ? tutorsResult.data : toArray(bootstrap.tutors),
-    blogs: blogsResult.ok ? blogsResult.data : toArray(bootstrap.blogs),
-    reviews: reviewsResult.ok ? reviewsResult.data : toArray(bootstrap.reviews),
+    tutors: toArray(bootstrap.tutors),
+    blogs: toArray(bootstrap.blogs),
+    reviews: toArray(bootstrap.reviews),
     results: toArray(bootstrap.results),
     pages: toArray(bootstrap.pages),
+    faqs: toArray(bootstrap.faqs),
+    cities: toArray(bootstrap.cities),
+    localities: toArray(bootstrap.localities),
   };
   emitSiteChange();
   return cloneValue(apiContentCache);
@@ -483,16 +481,6 @@ export function listFaqsSnapshot() {
   return cloneValue(getMergedStore().faqs);
 }
 
-async function fetchPublicArray(path) {
-  try {
-    const data = await apiRequest(path);
-    return { ok: true, data: toArray(data) };
-  } catch (error) {
-    console.error(`${path} API failed:`, error);
-    return { ok: false, data: [] };
-  }
-}
-
 async function fetchPublicPayload(path) {
   try {
     const data = await apiRequest(path);
@@ -501,7 +489,7 @@ async function fetchPublicPayload(path) {
       data: data && typeof data === "object" ? data : {},
     };
   } catch (error) {
-    console.error(`${path} API failed:`, error);
+    console.warn(`${path} API fallback used:`, error);
     return { ok: false, data: {} };
   }
 }

@@ -316,7 +316,16 @@ function SubjectPage() {
 
               <div className="rounded-[32px] border border-slate-200 bg-white p-5 shadow-xl shadow-sky-100">
                 <div className="overflow-hidden rounded-[26px] border border-slate-200 bg-slate-50">
-                  <img src={heroImage} alt={heroImageAlt} className="h-56 w-full object-cover" />
+                  <img
+                    src={heroImage}
+                    alt={heroImageAlt || ""}
+                    width="960"
+                    height="720"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="h-56 w-full object-cover"
+                  />
                 </div>
 
                 <div className="mt-6">

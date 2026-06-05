@@ -6,6 +6,10 @@ import {
 import { getCityPage, getSectorPage } from "../services/siteLookup";
 import { getP1SeoPageConfig } from "./config/p1SeoPageConfigs";
 import {
+  getAjayIntentPageConfig,
+  getAjayMainPageConfig,
+} from "./config/ajayPageConfigs";
+import {
   futureClassPageConfigs,
   futureExamPageConfigs,
   gurugramPublicEntryConfigs,
@@ -808,6 +812,20 @@ export function resolveGurugramEntryConfig(siteData, entrySlug) {
 
 export function resolveP1SeoPageConfig(slug) {
   const matchedConfig = getP1SeoPageConfig(normalizeSlug(slug));
+
+  if (!matchedConfig) {
+    return null;
+  }
+
+  return createPageConfig(matchedConfig);
+}
+
+export function resolveAjayMainPageConfig() {
+  return createPageConfig(getAjayMainPageConfig());
+}
+
+export function resolveAjayIntentPageConfig(slug) {
+  const matchedConfig = getAjayIntentPageConfig(normalizeSlug(slug));
 
   if (!matchedConfig) {
     return null;

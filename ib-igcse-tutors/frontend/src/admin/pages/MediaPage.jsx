@@ -63,7 +63,15 @@ function MediaPage() {
           render: (item) => (
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                <img src={item.url} alt={item.altText || item.name} className="h-full w-full object-cover" />
+                <img
+                  src={item.url}
+                  alt={item.altText || item.name || "Media asset"}
+                  width="320"
+                  height="180"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-900">{item.name}</p>

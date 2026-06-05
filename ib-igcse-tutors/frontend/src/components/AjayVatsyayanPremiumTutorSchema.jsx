@@ -1,10 +1,13 @@
 import { SCHEMA_IDS, cleanSchemaObject, getAbsoluteUrl } from "../utils/schema";
 
-export const AJAY_VATSYAYAN_TUTOR_PATH = "/tutors/ajay-vatsyayan";
+export const AJAY_VATSYAYAN_HOMEPAGE_ANCHOR = "ajay-vatsyayan";
+export const AJAY_VATSYAYAN_TUTOR_PATH = `/#${AJAY_VATSYAYAN_HOMEPAGE_ANCHOR}`;
 
 export const AJAY_VATSYAYAN_TUTOR_CARD = {
   id: "ajay-vatsyayan-premium-maths-tutor",
   slug: "ajay-vatsyayan",
+  anchorId: AJAY_VATSYAYAN_HOMEPAGE_ANCHOR,
+  hasPublicProfile: false,
   name: "Ajay Vatsyayan",
   title: "Senior Maths Home Tutor in Gurugram",
   rating: "",
@@ -31,15 +34,16 @@ export const AJAY_VATSYAYAN_TUTOR_CARD = {
 };
 
 export function getAjayVatsyayanPremiumTutorSchema() {
-  const profileUrl = getAbsoluteUrl(AJAY_VATSYAYAN_TUTOR_PATH);
+  const homepageAnchorUrl = getAbsoluteUrl(`/#${AJAY_VATSYAYAN_HOMEPAGE_ANCHOR}`);
+  const personId = getAbsoluteUrl("/#ajay-vatsyayan-person");
 
   return cleanSchemaObject({
     "@type": "Person",
-    "@id": `${profileUrl}#person`,
+    "@id": personId,
     name: AJAY_VATSYAYAN_TUTOR_CARD.name,
     jobTitle: AJAY_VATSYAYAN_TUTOR_CARD.title,
     description: AJAY_VATSYAYAN_TUTOR_CARD.summary,
-    url: profileUrl,
+    url: homepageAnchorUrl,
     image: getAbsoluteUrl(AJAY_VATSYAYAN_TUTOR_CARD.image),
     worksFor: {
       "@id": SCHEMA_IDS.localBusiness,
