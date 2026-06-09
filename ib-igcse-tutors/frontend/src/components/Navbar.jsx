@@ -33,7 +33,7 @@ function Navbar() {
     },
     {
       label: "Gurugram Sectors",
-      to: "/city/gurugram",
+      to: "/gurugram",
       isActive: pathname.startsWith("/city/gurugram") || pathname.startsWith("/gurugram"),
     },
   ];

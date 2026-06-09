@@ -29,7 +29,7 @@ const recommendationByPath = new Map([
     },
   ],
   [
-    "/city/gurugram",
+    "/gurugram",
     {
       to: "/maths-home-tutor-gurgaon/ajay-vatsyayan",
       title: "Premium mentor option for Gurugram families",

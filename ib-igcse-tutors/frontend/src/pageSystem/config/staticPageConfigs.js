@@ -18,6 +18,28 @@ function faqItem(question, answer) {
   return { question, answer };
 }
 
+function getLocalitySeoDescription(label, context = "") {
+  const contextText = context
+    ? ` ${context.replace(/\.$/, "")}.`
+    : "";
+
+  return `Find verified Maths Bodhi home tutors in ${label}, Gurugram for CBSE, IB, IGCSE, JEE, and school maths support.${contextText} Book a free demo.`;
+}
+
+function getBoardLocalitySeoDescription(page) {
+  return `Find verified ${page.boardLabel} maths home tutor support in ${page.localityLabel}, Gurugram with board-specific method, class planning, topic repair, and a Maths Bodhi demo next step.`;
+}
+
+function getSocietySeoDescription(page) {
+  const areaLabel = page.societyLabel ?? page.localityLabel;
+
+  if (page.societyLabel) {
+    return `Find Maths Bodhi tutor context near ${page.societyLabel}, ${page.localityLabel || "Gurugram"} with board/class fit, home or online lesson planning, and a demo next step.`;
+  }
+
+  return getLocalitySeoDescription(areaLabel, page.note || page.localityNote);
+}
+
 const gurugramSchoolContextCards = [
   routeCard({
     eyebrow: "School context",
@@ -2556,7 +2578,7 @@ function createLocalityRouteCards(label, nearbyRoutes = []) {
       title: "Gurugram Maths Tutor Hub",
       description: "Compare this locality with the wider Gurugram route before choosing verified home tuition or online support.",
       tags: ["Gurugram", "Locality hub"],
-      to: "/city/gurugram",
+      to: "/gurugram",
     }),
     routeCard({
       eyebrow: "Core service",
@@ -2578,7 +2600,7 @@ function createLocalityRouteCards(label, nearbyRoutes = []) {
         title: item.label,
         description: `Compare ${label} with ${item.label} if travel convenience, school corridor fit, or tutor preference matters.`,
         tags: ["Nearby", "Gurugram"],
-        to: `/city/gurugram/${item.slug}`,
+        to: `/gurugram/${item.slug}`,
       }),
     ),
     routeCard({
@@ -2586,7 +2608,7 @@ function createLocalityRouteCards(label, nearbyRoutes = []) {
       title: "Book Free Demo Class",
       description: "Share the student's class, board, target score, topic pressure, and preferred timing before shortlisting.",
       tags: ["Demo", "WhatsApp handoff"],
-      to: "/book-free-demo-class",
+      to: "/book-demo",
     }),
   ].slice(0, 8);
 }
@@ -2602,7 +2624,7 @@ function createCityGurugramLocalityFallbackConfig({
   return createPublishedGurugramEntryConfig({
     id: `city-gurugram-${slug}-service`,
     slug,
-    routePath: `/city/gurugram/${slug}`,
+    routePath: `/gurugram/${slug}`,
     pageType: "sector",
     title: `${label} maths home tutor`,
     h1: `Verified maths home tutor in ${label}, Gurugram for board-wise support and regular practice`,
@@ -2628,12 +2650,12 @@ function createCityGurugramLocalityFallbackConfig({
       tokens,
       limit: 3,
     },
-    seoTitle: `Verified Maths Home Tutor in ${label} Gurugram | Maths Bodhi`,
-    seoDescription: `Explore verified maths home tuition in ${label}, Gurugram with locality context, board-wise next pages, published tutor matches where available, and a demo CTA.`,
-    canonicalUrl: `/city/gurugram/${slug}`,
+    seoTitle: `Maths Tutor in ${label}, Gurugram | Boards and Locality | Maths Bodhi`,
+    seoDescription: getLocalitySeoDescription(label, context),
+    canonicalUrl: `/gurugram/${slug}`,
     breadcrumbItems: [
       { label: "Home", to: "/" },
-      { label: "Gurugram", to: "/city/gurugram" },
+      { label: "Gurugram", to: "/gurugram" },
       { label },
     ],
     sectorSlug: slug,
@@ -2708,11 +2730,11 @@ function createCityGurugramLocalityFallbackConfig({
             "Maths Bodhi can still check current tutor availability after the family shares class, board, timing, target score, and preferred learning mode.",
           primaryAction: {
             label: "Book a free maths demo class",
-            to: "/book-free-demo-class",
+            to: "/book-demo",
           },
           secondaryAction: {
             label: "Back to Gurugram hub",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -2736,7 +2758,7 @@ function createCityGurugramLocalityFallbackConfig({
           "Share the board, class, locality, target score, and the maths concern that needs attention. Maths Bodhi can guide the next step on WhatsApp.",
         primaryAction: {
           label: "Book free demo class",
-          to: "/book-free-demo-class",
+          to: "/book-demo",
         },
         secondaryAction: {
           label: "WhatsApp Maths Bodhi",
@@ -2812,7 +2834,7 @@ function createRecoveryBoardCards(page) {
       ["Home tuition", "Main hub"],
     ),
     recoveryRouteCard(
-      "/city/gurugram",
+      "/gurugram",
       "Gurugram City Page",
       "City hub",
       "Browse Gurugram sectors, board routes, and tutor context from the city page.",
@@ -2901,7 +2923,7 @@ function createRecoveryLocalityBoardConfig(page) {
       limit: 3,
     },
     seoTitle: `Verified ${page.boardLabel} Maths Home Tutor in ${page.localityLabel} Gurugram | Maths Bodhi`,
-    seoDescription: `Explore ${page.primaryKeyword} with verified tutor context, related locality, board, class, topic, WhatsApp, mentor, and demo links.`,
+    seoDescription: getBoardLocalitySeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -2998,7 +3020,7 @@ function createRecoveryLocalityBoardConfig(page) {
             "Maths Bodhi can still check current availability after the family shares class, board, school area, weak chapters, target score, and preferred timing.",
           primaryAction: {
             label: "Book a free maths demo class",
-            to: "/book-free-demo-class",
+            to: "/book-demo",
           },
           secondaryAction: {
             label: "Back to Gurugram hub",
@@ -3026,7 +3048,7 @@ function createRecoveryLocalityBoardConfig(page) {
           "Share the class, board, locality, school area, target, and current maths concern. Maths Bodhi can check tutor fit and guide the next step on WhatsApp.",
         primaryAction: {
           label: "Book a free maths demo class",
-          to: "/book-free-demo-class",
+          to: "/book-demo",
         },
         secondaryAction: {
           label: "WhatsApp Maths Bodhi",
@@ -3211,8 +3233,8 @@ function createBatchALocalityConfig(page) {
       tokens: [page.localityLabel, "school support", "board preparation"],
       limit: 3,
     },
-    seoTitle: `Verified Maths Home Tutor in ${page.localityLabel} Gurugram | Maths Bodhi`,
-    seoDescription: `Find verified maths home tuition in ${page.localityLabel}, Gurugram with related locality, board, class, topic, WhatsApp, and demo links.`,
+    seoTitle: `${page.localityLabel} Maths Home Tutor Route | School Fit | Maths Bodhi`,
+    seoDescription: getLocalitySeoDescription(page.localityLabel, page.localityNote || page.corridor),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -3319,7 +3341,7 @@ function createBatchALocalityConfig(page) {
             "Maths Bodhi can still check current fit after the family shares the student's class, board, school area, weak chapters, target score, and preferred learning mode.",
           primaryAction: {
             label: "Book a free maths demo class",
-            to: "/book-free-demo-class",
+            to: "/book-demo",
           },
           secondaryAction: {
             label: "Back to Gurugram hub",
@@ -3347,7 +3369,7 @@ function createBatchALocalityConfig(page) {
           "Share the student's class, board, locality, school area, target, and current maths concern. Maths Bodhi can check whether home tuition, online support, or a focused mentor call is the right next step.",
         primaryAction: {
           label: "Book a free maths demo class",
-          to: "/book-free-demo-class",
+          to: "/book-demo",
         },
         secondaryAction: {
           label: "WhatsApp Maths Bodhi",
@@ -3616,8 +3638,8 @@ function createBatchEConfig(page) {
       tokens: [areaLabel, "school support", "board preparation"],
       limit: 3,
     },
-    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
-    seoDescription: `Explore ${page.primaryKeyword} with verified tutor context, related society, sector, locality, board, class, topic, WhatsApp, mentor, and demo links.`,
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: getSocietySeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -3714,7 +3736,7 @@ function createBatchEConfig(page) {
             "Maths Bodhi can still check current fit after the family shares the student's class, board, school area, weak chapters, target score, and preferred learning mode.",
           primaryAction: {
             label: "Book a free maths demo class",
-            to: "/book-free-demo-class",
+            to: "/book-demo",
           },
           secondaryAction: {
             label: "Back to Gurugram hub",
@@ -3729,7 +3751,7 @@ function createBatchEConfig(page) {
           "Share the student's class, board, locality or society, school area, target, and current maths concern. Maths Bodhi can guide the next step on WhatsApp.",
         primaryAction: {
           label: "Book a free maths demo class",
-          to: "/book-free-demo-class",
+          to: "/book-demo",
         },
         secondaryAction: {
           label: "WhatsApp Maths Bodhi",
@@ -4048,7 +4070,7 @@ export const batchTwoGurugramEntryConfigs = [
     },
     seoTitle: "Verified Maths Home Tutor on Sohna Road Gurugram | Board JEE Maths Bodhi",
     seoDescription:
-      "Find verified maths home tuition on Sohna Road Gurugram with practical travel fit, board support, senior-school maths help, JEE planning, and tutor routes.",
+      "Find Maths Bodhi home tutors on Sohna Road, Gurugram for CBSE, IB, IGCSE, JEE, and senior-school maths support with practical travel fit.",
     canonicalUrl: "/gurugram/sohna-road",
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -4181,7 +4203,7 @@ export const batchTwoGurugramEntryConfigs = [
     },
     seoTitle: "Verified Maths Home Tutor in DLF Phase 1 Gurugram | IB IGCSE Maths Bodhi",
     seoDescription:
-      "Find verified maths home tuition in DLF Phase 1 Gurugram with premium-school context, Golf Course Road access, and stronger IB or IGCSE tutor fit.",
+      "Compare Maths Bodhi home tutors in DLF Phase 1, Gurugram for premium-school maths, Golf Course Road access, and IB or IGCSE fit.",
     canonicalUrl: "/gurugram/dlf-phase-1",
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -4451,7 +4473,7 @@ export const batchTwoGurugramEntryConfigs = [
     },
     seoTitle: "Verified Maths Home Tutor in South City 1 Gurugram | Maths Bodhi",
     seoDescription:
-      "Find verified maths home tuition in South City 1 Gurugram for school support, chapter clarity, homework structure, and steadier Class 10 to 12 preparation.",
+      "Find Maths Bodhi home tutors in South City 1, Gurugram for chapter clarity, homework structure, and steadier Class 10 to 12 preparation.",
     canonicalUrl: "/gurugram/south-city-1",
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -4584,7 +4606,7 @@ export const batchTwoGurugramEntryConfigs = [
     },
     seoTitle: "Verified Maths Home Tutor in Sushant Lok 1 Gurugram | Maths Bodhi",
     seoDescription:
-      "Find verified maths home tuition in Sushant Lok 1 Gurugram for school support, class-wise maths help, and flexible lesson planning in central Gurugram.",
+      "Compare Maths Bodhi home tutors in Sushant Lok 1, Gurugram for class-wise maths help, school support, and flexible lesson planning.",
     canonicalUrl: "/gurugram/sushant-lok-1",
     breadcrumbItems: [
       { label: "Home", to: "/" },

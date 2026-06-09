@@ -1,6 +1,6 @@
 import { AJAY_MAIN_PATH } from "./ajayConstants.js";
 
-const DEMO_PATH = "/book-free-demo-class";
+const DEMO_PATH = "/book-demo";
 
 function relatedLink(label, to, description) {
   return { label, to, description };
@@ -100,7 +100,7 @@ export const ajayMainPageConfig = createAjayPage({
   stats: [
     { value: "Senior", label: "Maths mentor positioning" },
     { value: "1:1", label: "Home or online fit check" },
-    { value: "No ratings", label: "No fake review schema" },
+    { value: "No ratings", label: "No fake rating markup" },
   ],
   knowsAbout: [
     "IB DP Mathematics",
@@ -165,7 +165,7 @@ export const ajayMainPageConfig = createAjayPage({
     relatedLink("BITSAT with Ajay", "/bitsat-maths-home-tutor/ajay-vatsyayan", "For students balancing board revision, speed, accuracy, and BITSAT maths pressure."),
   ],
   faqs: [
-    faq("Is Ajay Vatsyayan shown with ratings or reviews?", "No. This page intentionally avoids fake reviews, fake ratings, Review schema, and aggregate rating markup. Families should use the page as a fit guide and confirm details directly with Maths Bodhi."),
+    faq("Is Ajay Vatsyayan shown with ratings or reviews?", "No. This page intentionally avoids fake reviews, fake ratings, review structured data, and aggregate rating markup. Families should use the page as a fit guide and confirm details directly with Maths Bodhi."),
     faq("Does this page guarantee Ajay's availability?", "No. Availability depends on schedule, location, mode, class level, board, and student need. Maths Bodhi confirms availability only after an enquiry."),
     faq("Which students are the strongest fit for Ajay?", "The strongest fit is usually a senior or advanced learner in IB, IGCSE, CBSE Class 12, JEE, BITSAT, or similar maths contexts where concept depth and exam planning are important."),
     faq("Can Ajay teach both home and online?", "Home or online support can be discussed during the fit call. The final mode should depend on the student's discipline, location, time slot, and topic need."),
@@ -286,7 +286,7 @@ export const ajayIntentPageConfigs = [
       faq("Is Ajay always the right tutor for MYP students?", "No. Some MYP students need a younger-stage tutor for routine practice. Ajay should be discussed when the need is deeper concept repair, senior mentoring, or preparation for a harder maths pathway."),
       faq("Can this help a student before IB DP?", "Yes, if the student has gaps in algebra, functions, geometry, data handling, or maths confidence that could become harder in DP."),
       faq("Is the content different from the IB DP Ajay page?", "Yes. This page focuses on MYP foundation, criterion-aware work, confidence, and study rhythm rather than IA planning and DP final papers."),
-      faq("Does the page include hidden testimonials?", "No. It does not include fake testimonials, review schema, or rating markup."),
+      faq("Does the page include hidden testimonials?", "No. It does not include fake testimonials, review structured data, or rating markup."),
       faq("Should parents choose home or online?", "That depends on maturity, attention span, location, and family timing. Maths Bodhi can discuss both options during enquiry."),
     ],
   }),
@@ -344,7 +344,7 @@ export const ajayIntentPageConfigs = [
       faq("Is this page for IGCSE Core or Extended?", "It can support either enquiry, but the fit call should clarify tier, current marks, exam month, and whether the student needs confidence building or higher-demand paper practice."),
       faq("Can Ajay help with past-paper practice?", "Past-paper practice can be part of the plan, but the useful work is error analysis, topic repair, and method correction rather than simply assigning more papers."),
       faq("Why not create separate Core and Extended Ajay pages now?", "The site is intentionally starting with one strong IGCSE Ajay page to avoid thin duplicate pages. A separate Extended page can be added later only if the content becomes genuinely distinct."),
-      faq("Does the page use fake ratings?", "No. It does not use fake ratings, aggregate rating markup, or review schema."),
+      faq("Does the page use fake ratings?", "No. It does not use fake ratings, aggregate rating markup, or review structured data."),
       faq("Is home tuition always better for IGCSE?", "No. Home tuition helps some students, while online can work for disciplined learners. The mode should be chosen after the fit discussion."),
     ],
   }),
@@ -518,7 +518,7 @@ export const ajayIntentPageConfigs = [
       faq("Is this page for beginners?", "Usually no. Students with major basics gaps may need foundation repair before Advanced-specific mentoring."),
       faq("What makes Advanced support different?", "The focus is deeper problem analysis, method selection, multi-concept thinking, and disciplined review rather than only speed practice."),
       faq("Can this be online?", "Possibly, if the student is disciplined and can share attempted solutions clearly. Home tuition can help when accountability and live correction matter more."),
-      faq("Does this page include rank claims?", "No. It avoids rank promises, guaranteed outcomes, ratings, and review schema."),
+      faq("Does this page include rank claims?", "No. It avoids rank promises, guaranteed outcomes, ratings, and review structured data."),
       faq("Why is this separate from JEE Main?", "JEE Advanced has different problem depth and preparation style, so the content and canonical URL are intentionally separate."),
     ],
   }),
@@ -647,7 +647,7 @@ export const ajayIntentPageConfigs = [
     breadcrumbLabel: "Best Maths Tutor Gurgaon",
     seoTitle: "Best Maths Home Tutor Gurgaon Ajay Vatsyayan | Maths Bodhi",
     seoDescription:
-      "Use this page to evaluate Ajay Vatsyayan responsibly for best maths home tutor Gurgaon intent without fake rankings, ratings, or review schema.",
+      "Use this page to evaluate Ajay Vatsyayan responsibly for best maths home tutor Gurgaon intent without fake rankings, ratings, or review structured data.",
     h1: "Ajay Vatsyayan for families searching best maths home tutor in Gurgaon",
     intro:
       "This page handles the best maths tutor search intent carefully: Ajay is presented as a premium senior option to evaluate, not as a fake ranked winner or guaranteed outcome.",
@@ -694,7 +694,7 @@ export const ajayIntentPageConfigs = [
       faq("Does this page claim Ajay is the number one tutor?", "No. It avoids fake rankings and presents Ajay as a premium senior option to evaluate."),
       faq("Why include a best tutor page at all?", "Because parents search that way. The page answers the intent responsibly with criteria, limitations, and no fake ratings."),
       faq("Should every family choose Ajay?", "No. The best tutor depends on board, class, goal, locality, mode, and student personality."),
-      faq("Does this page use review schema?", "No. It uses only safe Person, WebPage, BreadcrumbList, and FAQPage schema where valid."),
+      faq("Does this page use review structured data?", "No. It uses only safe Person, WebPage, BreadcrumbList, and FAQPage schema where valid."),
       faq("When should I use a more specific page?", "Use the IB, IGCSE, CBSE Class 12, JEE, or BITSAT Ajay page when the student's need is clearly tied to that route."),
     ],
   }),

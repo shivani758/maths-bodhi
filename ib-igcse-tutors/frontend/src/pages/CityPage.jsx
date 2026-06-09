@@ -72,13 +72,13 @@ const BOARD_ROUTE_LINKS = [
 const CLASS_ROUTE_LINKS = [
   {
     label: "Class 10",
-    to: "/class-10-maths-tutor",
+    to: "/gurugram/class-10-maths-home-tutor",
     description:
       "Board-focused maths support for chapter clarity, worksheet correction, exam practice and confident revision.",
   },
   {
     label: "Class 12",
-    to: "/class-12-maths-tutor",
+    to: "/gurugram/class-12-maths-home-tutor",
     description:
       "Senior maths mentoring for calculus, algebra, probability, board exams, JEE readiness and high-score planning.",
   },
@@ -489,7 +489,7 @@ function CityPage() {
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link
-                    to="/book-free-demo-class"
+                    to="/book-demo"
                     className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo
@@ -616,7 +616,7 @@ function CityPage() {
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <Link
-                    to="/book-free-demo-class"
+                    to="/book-demo"
                     className="rounded-2xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo
@@ -840,7 +840,7 @@ function CityPage() {
                     Reset filters
                   </button>
                   <Link
-                    to="/book-free-demo-class"
+                    to="/book-demo"
                     className="rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book Free Demo

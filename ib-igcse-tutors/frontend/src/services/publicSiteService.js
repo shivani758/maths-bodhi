@@ -1,4 +1,5 @@
 import { apiRequest } from "./apiClient";
+import { combineListValues, normalizeClassListValue } from "./clientDataUtils";
 import {
   MATHS_BODHI_ADDRESS,
   MATHS_BODHI_PHONE_DISPLAY,
@@ -256,6 +257,19 @@ function getActivePageEntries(store, pageType) {
 }
 
 function toPublicTutor(tutor) {
+  const boards = combineListValues(tutor.boards, tutor.associatedBoards, tutor.boardTags, tutor.board, tutor.exams);
+  const classesSupported = normalizeClassListValue(
+    tutor.classesSupported,
+    tutor.classes,
+    tutor.classLevels,
+    tutor.classFit,
+    tutor.classLevel,
+    tutor.examSupport,
+    tutor.exams,
+  );
+  const localities = combineListValues(tutor.localities, tutor.sectors, tutor.localityTags);
+  const serviceModes = combineListValues(tutor.serviceModes, tutor.mode, tutor.serviceModeTags);
+
   return {
     id: tutor.id,
     sourceId: tutor.sourceId ?? "",
@@ -264,34 +278,34 @@ function toPublicTutor(tutor) {
     title: tutor.title,
     rating: String(tutor.rating),
     experience: tutor.experience ?? tutor.experienceLabel ?? "",
-    board: tutor.boards?.[0] ?? "Maths",
-    classLevel: tutor.classesSupported?.[0] ?? "Flexible support",
+    board: boards[0] ?? "Maths",
+    classLevel: classesSupported[0] ?? "Flexible support",
     location: tutor.location ?? "Gurugram",
-    sectors: tutor.localities ?? [],
-    topics: tutor.topics ?? [],
+    sectors: localities,
+    topics: combineListValues(tutor.topics, tutor.topicTags),
     price: tutor.startingFee,
-    mode: tutor.serviceModes ?? [],
+    mode: serviceModes,
     studentsHelped: tutor.studentsHelped ?? 0,
-    schoolFocus: tutor.schoolFocus ?? [],
+    schoolFocus: combineListValues(tutor.schoolFocus, tutor.schoolFitTags),
     image: tutor.image,
     imageAlt: tutor.imageAlt,
     shortBio: tutor.shortBio ?? tutor.summary,
     fullBio: tutor.fullBio ?? tutor.summary ?? "",
     summary: tutor.summary ?? tutor.shortBio,
-    boards: cloneValue(tutor.boards ?? []),
-    classesSupported: cloneValue(tutor.classesSupported ?? []),
-    localities: cloneValue(tutor.localities ?? []),
-    cities: cloneValue(tutor.cities ?? []),
-    serviceModes: cloneValue(tutor.serviceModes ?? tutor.mode ?? []),
+    boards,
+    classesSupported,
+    localities,
+    cities: combineListValues(tutor.cities),
+    serviceModes,
     startingFee: tutor.startingFee ?? tutor.price,
-    qualifications: tutor.qualifications ?? [],
+    qualifications: cloneValue(toArray(tutor.qualifications)),
     availability: tutor.availability ?? "",
-    achievements: tutor.achievements ?? [],
-    badges: cloneValue(tutor.badges ?? []),
-    linkedReviewIds: cloneValue(tutor.linkedReviewIds ?? []),
-    linkedResultIds: cloneValue(tutor.linkedResultIds ?? []),
+    achievements: cloneValue(toArray(tutor.achievements)),
+    badges: combineListValues(tutor.badges),
+    linkedReviewIds: combineListValues(tutor.linkedReviewIds),
+    linkedResultIds: combineListValues(tutor.linkedResultIds),
     seo: cloneValue(tutor.seo ?? null),
-    featuredOn: cloneValue(tutor.featuredOn ?? []),
+    featuredOn: combineListValues(tutor.featuredOn),
   };
 }
 

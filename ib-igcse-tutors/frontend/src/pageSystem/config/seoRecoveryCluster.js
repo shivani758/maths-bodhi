@@ -792,7 +792,12 @@ const BATCH_B_INTENT_META = [
       classLevel,
       intent: "homework help",
       cluster: `Class ${classLevel} Homework Help`,
-      parentHubPath: classLevel === "10" ? "/class-10-maths-tutor" : classLevel === "12" ? "/class-12-maths-tutor" : "/maths-home-tutor",
+      parentHubPath:
+        classLevel === "10"
+          ? "/gurugram/class-10-maths-home-tutor"
+          : classLevel === "12"
+            ? "/gurugram/class-12-maths-home-tutor"
+            : "/maths-home-tutor",
       focus: "homework follow-through, chapter clarity, school worksheets, and a practical routine before tests build up",
     }),
   ),
@@ -1633,7 +1638,7 @@ export const batchASchoolPages = BATCH_A_SCHOOL_META.map((item) => {
     intentType: item.intentType,
     localitySlug: item.localitySlug,
     localityLabel: locality?.label ?? "Gurugram",
-    localityPath: locality ? `/gurugram/${locality.slug}-maths-home-tutor` : "/city/gurugram",
+    localityPath: locality ? `/gurugram/${locality.slug}-maths-home-tutor` : "/gurugram",
     curriculumSignals: item.curriculumSignals,
     parentHubPath: batchAHubPage.path,
     primaryKeyword: `${item.intentType.toLowerCase()} maths home tutor for ${item.schoolName.toLowerCase()} gurugram`,

@@ -136,26 +136,25 @@ function StudentLogin() {
 
       <div className="min-h-screen bg-slate-50 px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-          <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-xl">
+          <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-xl ring-1 ring-slate-900/10">
             <div className="mb-6">
-              <BrandLogo className="h-14 max-w-[240px]" />
+              <BrandLogo tone="dark" className="h-14 max-w-[240px]" />
               <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">Student</p>
             </div>
             <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-cyan-300">
               Student Access
             </span>
             <h1 className="mt-5 text-4xl font-bold">
-              Start your maths support journey with the right details
+              Find the right maths tutor for your child
             </h1>
             <p className="mt-4 text-lg leading-8 text-slate-300">
-              This login is designed as a smart intake step. Once you continue, the student
-              dashboard can send your full brief directly to the Maths Bodhi WhatsApp number for
-              matching and follow-up.
+              Share the student's class, board, location, and maths concerns so Maths Bodhi can
+              suggest a tutor who fits the student's pace, goals, and family schedule.
             </p>
             <div className="mt-8 space-y-3 text-sm text-slate-300">
-              <p>Board-aware matching for CBSE, ICSE, IGCSE, IB, and JEE maths.</p>
-              <p>Sector-based coverage across premium Gurugram localities.</p>
-              <p>Parent-friendly workflow with clear next steps after login.</p>
+              <p>Support for CBSE, ICSE, IGCSE, IB, and JEE maths needs.</p>
+              <p>Gurugram tutor matching based on board, class, and locality.</p>
+              <p>Clear next steps for parents after the student details are saved.</p>
             </div>
             <Link
               to="/"
@@ -168,8 +167,8 @@ function StudentLogin() {
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-slate-950">Student login details</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Share enough information to help us route you to the correct maths tutor and
-              WhatsApp conversation.
+              Tell us what the student needs help with, and we will use these details for tutor
+              matching and the next WhatsApp conversation.
             </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -177,12 +176,12 @@ function StudentLogin() {
                 {
                   id: "new",
                   title: "New student",
-                  text: "Submit details for tutor matching and the student intake dashboard.",
+                  text: "Share class, board, location, and maths goals for tutor matching.",
                 },
                 {
                   id: "returning",
                   title: "Returning student",
-                  text: "If this browser has a saved session, Maths Bodhi opens the dashboard automatically.",
+                  text: "If you have signed in here before, Maths Bodhi opens your student page automatically.",
                 },
               ].map((item) => (
                 <button
@@ -203,8 +202,8 @@ function StudentLogin() {
 
             {profileMode === "returning" ? (
               <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                No saved student dashboard is open in this browser right now. Continue the intake
-                below to rebuild the local session safely.
+                We cannot find a saved student sign-in on this device. Continue below to save the
+                student details again.
               </p>
             ) : null}
 
@@ -357,7 +356,7 @@ function StudentLogin() {
               ))}
 
               <button className="md:col-span-2 rounded-2xl bg-blue-600 px-5 py-4 font-semibold text-white transition hover:bg-blue-700">
-                Continue profile
+                Continue to student profile
               </button>
             </form>
           </div>

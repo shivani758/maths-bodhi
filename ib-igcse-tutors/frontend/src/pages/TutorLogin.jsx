@@ -135,33 +135,32 @@ function TutorLogin() {
     <MainLayout>
       <Seo
         title="Tutor Login | Maths Bodhi"
-        description="Tutor dashboard access for maths specialists who want to onboard with Maths Bodhi and connect through a WhatsApp-first workflow."
+        description="Tutor dashboard access for maths specialists who want to submit their profile for Maths Bodhi verification."
         canonicalPath={location.pathname === "/tutor/login" ? "/tutor/login" : "/tutor-login"}
         keywords={["maths tutor login", "tutor dashboard", "gurugram maths tutor onboarding"]}
       />
 
       <div className="min-h-screen bg-slate-50 px-4 py-16">
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-          <div className="rounded-[32px] bg-blue-600 p-8 text-white shadow-xl shadow-blue-100">
+          <div className="rounded-[32px] bg-blue-700 p-8 text-white shadow-xl shadow-blue-100 ring-1 ring-blue-500/20">
             <div className="mb-6">
-              <BrandLogo className="h-14 max-w-[240px]" />
+              <BrandLogo tone="dark" className="h-14 max-w-[240px]" />
               <p className="mt-3 text-xs uppercase tracking-[0.16em] text-blue-100">Tutor</p>
             </div>
             <span className="inline-flex rounded-full bg-white/15 px-4 py-1.5 text-sm font-semibold">
               Tutor Access
             </span>
             <h1 className="mt-5 text-4xl font-bold">
-              Join a premium maths tutoring workflow designed for Gurugram
+              Submit your maths tutor profile for verification
             </h1>
             <p className="mt-4 text-lg leading-8 text-blue-50">
-              Share your teaching profile, boards, sectors, and availability. After login, the
-              tutor dashboard can send your onboarding brief straight to the Maths Bodhi WhatsApp
-              number for review.
+              Share your teaching experience, boards, classes, Gurugram areas, and availability so
+              the Maths Bodhi team can review your fit before your profile is shown to families.
             </p>
             <div className="mt-8 space-y-3 text-sm text-blue-50">
-              <p>Highlight your strongest boards, classes, and maths topics.</p>
-              <p>Choose preferred sectors for home tuition routing in Gurugram.</p>
-              <p>Use the tutor dashboard to submit documents, availability, and profile updates.</p>
+              <p>Highlight the classes, boards, and maths topics you teach best.</p>
+              <p>Add preferred Gurugram sectors for home tuition requests.</p>
+              <p>Share availability and profile details for team review.</p>
             </div>
             <Link
               to="/"
@@ -174,8 +173,8 @@ function TutorLogin() {
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-slate-950">Tutor login details</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              This information helps the team review fit, local routing, and premium school
-              compatibility before your profile is finalized.
+              These details help Maths Bodhi check your teaching fit, location preferences, and
+              readiness before profile approval.
             </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -183,12 +182,12 @@ function TutorLogin() {
                 {
                   id: "new",
                   title: "New tutor",
-                  text: "Submit teaching details for profile review and onboarding.",
+                  text: "Send your teaching profile for review and verification.",
                 },
                 {
                   id: "returning",
                   title: "Returning tutor",
-                  text: "If this browser has a saved tutor session, Maths Bodhi opens the dashboard automatically.",
+                  text: "If you have signed in here before, Maths Bodhi opens your tutor page automatically.",
                 },
               ].map((item) => (
                 <button
@@ -209,8 +208,8 @@ function TutorLogin() {
 
             {profileMode === "returning" ? (
               <p className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                No saved tutor dashboard is open in this browser right now. Continue the onboarding
-                form below to rebuild the local session safely.
+                We cannot find a saved tutor sign-in on this device. Continue below to save your
+                profile details again.
               </p>
             ) : null}
 
@@ -327,7 +326,7 @@ function TutorLogin() {
               </label>
 
               <button className="md:col-span-2 rounded-2xl bg-slate-950 px-5 py-4 font-semibold text-white transition hover:bg-slate-800">
-                Update profile
+                Continue to tutor profile
               </button>
             </form>
           </div>

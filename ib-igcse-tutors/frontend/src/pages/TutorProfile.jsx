@@ -13,6 +13,7 @@ import {
   getTutorProfileById,
   getTutorProfileBySlug,
 } from "../services/mathsContentService";
+import { combineListValues, normalizeClassListValue } from "../services/clientDataUtils";
 import { getPublicTutorBySlugOrId } from "../services/tutorsService";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
 import {
@@ -24,8 +25,8 @@ import {
 import { buildTutorInquiryMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 import NotFound from "./NotFound";
 
-function uniqueValues(values = []) {
-  return [...new Set(values.filter(Boolean))];
+function uniqueValues(...values) {
+  return combineListValues(...values);
 }
 
 function splitParagraphs(text) {
@@ -69,8 +70,8 @@ function normalizeLabel(value) {
 }
 
 const CLASS_ROUTE_MAP = {
-  "class 10": "/class-10-maths-tutor",
-  "class 12": "/class-12-maths-tutor",
+  "class 10": "/gurugram/class-10-maths-home-tutor",
+  "class 12": "/gurugram/class-12-maths-home-tutor",
 };
 const HOMEPAGE_ONLY_TUTOR_SLUGS = new Set(["ajay-vatsyayan"]);
 
@@ -104,11 +105,52 @@ function Chip({ children, tone = "slate", to = "" }) {
   return <span className={className}>{children}</span>;
 }
 
+function formatListPreview(values = [], fallback, maxVisible = 3) {
+  const items = uniqueValues(values);
+
+  if (!items.length) {
+    return fallback;
+  }
+
+  const visibleItems = items.slice(0, maxVisible);
+  const remainingCount = items.length - visibleItems.length;
+
+  return remainingCount > 0
+    ? `${visibleItems.join(", ")} +${remainingCount} more`
+    : visibleItems.join(", ");
+}
+
+function formatShortText(value, fallback, maxLength = 78) {
+  const text = String(value ?? "").trim().replace(/\s+/g, " ");
+
+  if (!text) {
+    return fallback;
+  }
+
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  return `${text.slice(0, maxLength).trim().replace(/[.,;:]+$/, "")}...`;
+}
+
+function formatAvailabilityText(value) {
+  const text = String(value ?? "").trim().replace(/\s+/g, " ");
+
+  if (/home tuition/i.test(text) && /online/i.test(text) && /hybrid/i.test(text)) {
+    return "Home, online, or hybrid timings by enquiry";
+  }
+
+  return formatShortText(text, "Shared on enquiry");
+}
+
 function InfoCard({ label, value }) {
   return (
-    <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="mt-2 text-lg font-bold text-slate-950">{value}</p>
+    <div className="flex h-full min-h-28 flex-col rounded-[20px] border border-slate-200 bg-white p-4 shadow-sm">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-2 break-words text-base font-bold leading-6 text-slate-950 [overflow-wrap:anywhere]">
+        {value}
+      </p>
     </div>
   );
 }
@@ -199,21 +241,27 @@ function TutorProfile() {
         "This profile is being completed. Families can still compare the tutor's board fit, class coverage, lesson mode, and enquiry options before booking.",
       ];
   const teachingParagraphs = splitParagraphs(tutor.teachingStyle);
-  const boardChips = uniqueValues(tutor.boards ?? []);
-  const classChips = uniqueValues(tutor.classesSupported ?? []);
-  const topicChips = uniqueValues(tutor.topics ?? []);
-  const serviceChips = uniqueValues(tutor.serviceModes ?? []);
-  const localityChips = uniqueValues(tutor.localities ?? []);
-  const tagChips = uniqueValues(tutor.associatedTags ?? []);
+  const boardChips = uniqueValues(tutor.boards, tutor.associatedBoards, tutor.boardTags, tutor.board, tutor.exams);
+  const classChips = normalizeClassListValue(
+    tutor.classesSupported,
+    tutor.classes,
+    tutor.classLevels,
+    tutor.classFit,
+    tutor.classFocus,
+    tutor.classLevel,
+    tutor.examSupport,
+    tutor.exams,
+  );
+  const topicChips = uniqueValues(tutor.topics, tutor.topicTags);
+  const serviceChips = uniqueValues(tutor.serviceModes, tutor.mode, tutor.serviceModeTags);
+  const localityChips = uniqueValues(tutor.localities, tutor.sectors, tutor.localityTags);
+  const tagChips = uniqueValues(tutor.associatedTags, tutor.badges);
   const primaryBoard = boardChips[0] ?? "Maths";
   const primaryBoardPath = getBoardPath(primaryBoard);
   const ratingLabel = tutor.rating ? `${tutor.rating}/5 rated` : "New profile";
   const experienceLabel = tutor.experience || "Experience shared on enquiry";
   const feeLabel = tutor.startingFee ?? tutor.price ?? "Shared on enquiry";
-  const subjectsAndSchools = uniqueValues([
-    ...(topicChips ?? []).slice(0, 2),
-    ...(tutor.schoolFocus ?? []).slice(0, 2),
-  ]).join(" + ");
+  const subjectsAndSchools = uniqueValues(topicChips.slice(0, 2), (tutor.schoolFocus ?? []).slice(0, 2)).join(" + ");
   const whatsappUrl = buildWhatsAppUrl(
     siteData.contact.whatsappNumber,
     buildTutorInquiryMessage(siteData.contact, tutor, {}),
@@ -224,7 +272,7 @@ function TutorProfile() {
     jobTitle: tutor.title ?? "Math Tutor",
     description: tutor.shortBio ?? intro,
     image: tutor.image,
-    knowsAbout: uniqueValues([...(tutor.boards ?? []), ...(tutor.topics ?? []).slice(0, 5)]),
+                knowsAbout: uniqueValues(boardChips, topicChips.slice(0, 5)),
   });
   const schema = [
     getWebPageSchema({
@@ -253,7 +301,7 @@ function TutorProfile() {
         title={tutor.seo?.title ?? `${headline} | Maths Bodhi`}
         description={tutor.seo?.description ?? intro}
         canonicalPath={canonicalPath}
-        keywords={tutor.seo?.keywords ?? uniqueValues([tutor.name, ...(tutor.boards ?? []), ...(tutor.topics ?? [])])}
+        keywords={tutor.seo?.keywords ?? uniqueValues([tutor.name], boardChips, topicChips)}
         imagePath={tutor.image}
         schema={schema}
       />
@@ -332,11 +380,14 @@ function TutorProfile() {
                 </Link>
               </div>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <InfoCard label="Class fit" value={classChips[0] ?? "Flexible support"} />
-                <InfoCard label="Boards" value={boardChips.join(", ") || "Maths support"} />
-                <InfoCard label="Availability" value={tutor.availability ?? "Shared on enquiry"} />
-                <InfoCard label="Lesson modes" value={serviceChips.join(", ") || "One-to-one support"} />
+              <div
+                className="mt-8 grid auto-rows-fr gap-4"
+                style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 14rem), 1fr))" }}
+              >
+                <InfoCard label="Class fit" value={formatListPreview(classChips, "Flexible support", 3)} />
+                <InfoCard label="Boards" value={formatListPreview(boardChips, "Maths support", 3)} />
+                <InfoCard label="Availability" value={formatAvailabilityText(tutor.availability)} />
+                <InfoCard label="Lesson modes" value={formatListPreview(serviceChips, "One-to-one support", 2)} />
               </div>
             </div>
           </div>

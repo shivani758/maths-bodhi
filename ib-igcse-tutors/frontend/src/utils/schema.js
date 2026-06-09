@@ -83,7 +83,26 @@ function isPlainObject(value) {
   return value && typeof value === "object" && !Array.isArray(value);
 }
 
-const UNSUPPORTED_SCHEMA_KEYS = new Set(["parent_node", "parentNode"]);
+const UNSUPPORTED_SCHEMA_KEYS = new Set([
+  "aggregateRating",
+  "ratingValue",
+  "ratingCount",
+  "review",
+  "reviews",
+  "reviewCount",
+  "reviewRating",
+  "parent_node",
+  "parentNode",
+]);
+const ALLOWED_TOP_LEVEL_SCHEMA_TYPES = new Set([
+  "Organization",
+  "LocalBusiness",
+  "WebSite",
+  "WebPage",
+  "BreadcrumbList",
+  "FAQPage",
+  "Person",
+]);
 
 function isEmptySchemaValue(value) {
   if (value == null) {
@@ -268,6 +287,44 @@ function stripContext(item) {
   return rest;
 }
 
+function getSchemaTypes(item) {
+  return asArray(item?.["@type"]).filter(Boolean);
+}
+
+function normalizeTopLevelSchemaType(item) {
+  if (!isPlainObject(item)) {
+    return item;
+  }
+
+  const schemaTypes = getSchemaTypes(item);
+
+  if (!schemaTypes.length) {
+    return item;
+  }
+
+  if (schemaTypes.includes("EducationalOrganization") && schemaTypes.includes("LocalBusiness")) {
+    return {
+      ...item,
+      "@type": ["Organization", "LocalBusiness"],
+    };
+  }
+
+  if (["CollectionPage", "ContactPage", "ProfilePage"].some((type) => schemaTypes.includes(type))) {
+    return {
+      ...item,
+      "@type": "WebPage",
+    };
+  }
+
+  return item;
+}
+
+function isAllowedTopLevelSchemaItem(item) {
+  const schemaTypes = getSchemaTypes(item);
+
+  return !schemaTypes.length || schemaTypes.some((type) => ALLOWED_TOP_LEVEL_SCHEMA_TYPES.has(type));
+}
+
 function normalizeGraphItems(graph) {
   return asArray(graph)
     .flatMap((item) => {
@@ -281,7 +338,9 @@ function normalizeGraphItems(graph) {
 
       return [item];
     })
-    .map(stripContext);
+    .map(stripContext)
+    .map(normalizeTopLevelSchemaType)
+    .filter(isAllowedTopLevelSchemaItem);
 }
 
 function dedupeGraphItems(items) {
@@ -323,7 +382,7 @@ export function getBaseBusinessSchema({
   };
 
   return cleanSchemaObject({
-    "@type": ["EducationalOrganization", "LocalBusiness"],
+    "@type": ["Organization", "LocalBusiness"],
     "@id": MAIN_ENTITY_ID,
     name,
     alternateName: "Mathsbodhi",

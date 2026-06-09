@@ -104,7 +104,7 @@ function AjayPageTemplate({ config }) {
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    to={cta.primaryAction?.to || "/book-free-demo-class"}
+                    to={cta.primaryAction?.to || "/book-demo"}
                     className="rounded-2xl bg-slate-950 px-6 py-3.5 text-center font-semibold text-white transition hover:bg-slate-800"
                   >
                     {cta.primaryAction?.label || "Book a free demo discussion"}
@@ -259,7 +259,7 @@ function AjayPageTemplate({ config }) {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row md:justify-end">
               <Link
-                to={cta.primaryAction?.to || "/book-free-demo-class"}
+                to={cta.primaryAction?.to || "/book-demo"}
                 className="rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
               >
                 {cta.primaryAction?.label || "Book a free demo discussion"}

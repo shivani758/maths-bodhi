@@ -179,7 +179,7 @@ function BoardPageTemplate({ config, templateData = {} }) {
                     Discuss on WhatsApp
                   </a>
                   <Link
-                    to={parentPage?.route ?? "/city/gurugram"}
+                    to={parentPage?.route ?? "/gurugram"}
                     className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
                   >
                     {parentPage ? `Back to ${parentPage.label}` : "Browse Gurugram maths areas"}

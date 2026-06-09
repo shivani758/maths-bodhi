@@ -843,7 +843,7 @@ function Home() {
                 {[
                   {
                     label: "Class 10 support",
-                    to: "/class-10-maths-tutor",
+                    to: "/gurugram/class-10-maths-home-tutor",
                   },
                   {
                     label: "IB maths experts",
@@ -870,7 +870,7 @@ function Home() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
-                  to="/book-free-demo-class"
+                  to="/book-demo"
                   className="w-full rounded-2xl bg-blue-600 px-6 py-3.5 text-center font-semibold text-white shadow-lg shadow-blue-100 transition duration-200 hover:bg-blue-700 motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] sm:w-auto"
                 >
                   Book Free Maths Demo
@@ -884,7 +884,7 @@ function Home() {
                   WhatsApp Maths Bodhi
                 </a>
                 <Link
-                  to="/city/gurugram"
+                  to="/gurugram"
                   className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-center font-semibold text-slate-900 transition duration-200 hover:border-blue-200 hover:text-blue-700 hover:shadow-sm motion-safe:hover:-translate-y-1 motion-safe:hover:scale-[1.01] sm:w-auto"
                 >
                   Explore Gurugram Tutors
@@ -1213,7 +1213,7 @@ function Home() {
                   </button>
                 ) : null}
                 <Link
-                  to="/book-free-demo-class"
+                  to="/book-demo"
                   className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   Request custom tutor matching
@@ -1300,7 +1300,7 @@ function Home() {
                     Reset filters
                   </button>
                   <Link
-                    to="/book-free-demo-class"
+                    to="/book-demo"
                     className="w-full rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
                   >
                     Book a demo

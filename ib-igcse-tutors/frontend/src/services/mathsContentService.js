@@ -1,5 +1,6 @@
 import { mathsBoardConfig, mathsRouteMap } from "../data/mathsBoardConfig";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
+import { combineListValues, normalizeClassListValue } from "./clientDataUtils";
 import {
   listBoardPagesSnapshot,
   listCanonicalReviewsSnapshot,
@@ -57,8 +58,25 @@ function dedupeById(items) {
   });
 }
 
-function uniqueValues(values = []) {
-  return [...new Set(values.filter(Boolean))];
+function uniqueValues(...values) {
+  return combineListValues(...values);
+}
+
+function getTutorBoards(tutor) {
+  return uniqueValues(tutor.boards, tutor.associatedBoards, tutor.boardTags, tutor.board, tutor.exams);
+}
+
+function getTutorClasses(tutor) {
+  return normalizeClassListValue(
+    tutor.classesSupported,
+    tutor.classes,
+    tutor.classLevels,
+    tutor.classFit,
+    tutor.classFocus,
+    tutor.classLevel,
+    tutor.examSupport,
+    tutor.exams,
+  );
 }
 
 function normalizeToken(value) {
@@ -184,6 +202,15 @@ function getBoardKeyFromName(boardLabel = "") {
 }
 
 function toMathsTutorEntity(tutor) {
+  const boards = getTutorBoards(tutor);
+  const classesSupported = getTutorClasses(tutor);
+  const topics = uniqueValues(tutor.topicTags, tutor.topics);
+  const localities = uniqueValues(tutor.localityTags, tutor.localities, tutor.sectors);
+  const serviceModes = uniqueValues(tutor.serviceModeTags, tutor.serviceModes, tutor.mode);
+  const exams = uniqueValues(tutor.examSupport, tutor.exams);
+  const schoolFocus = uniqueValues(tutor.schoolFitTags, tutor.schoolFocus);
+  const boardSpecialization = tutor.boardSpecialization ?? tutor.subBoard ?? tutor.examType ?? boards[0];
+
   return {
     id: tutor.id,
     slug: tutor.slug,
@@ -193,24 +220,24 @@ function toMathsTutorEntity(tutor) {
     rating: String(tutor.rating),
     yearsExperience: tutor.experience,
     experience: tutor.experience,
-    board: tutor.boards?.[0] ?? "Maths home tuition",
-    boardSpecialization: tutor.boardTags?.[0] ?? tutor.boards?.[0] ?? "Focused maths support",
-    classesSupported: tutor.classesSupported?.join(", ") || "K-12 and exam support",
-    classFocus: tutor.classesSupported?.[0] ?? "Personal maths support",
-    classLevel: tutor.classesSupported?.[0] ?? "Personal maths support",
-    examSupport: cloneValue(tutor.examSupport ?? []),
-    boardTags: cloneValue(tutor.boardTags ?? tutor.boards ?? []),
-    topicTags: cloneValue(tutor.topicTags ?? tutor.topics ?? []),
-    localityTags: cloneValue(tutor.localityTags ?? tutor.localities ?? []),
-    serviceModeTags: cloneValue(tutor.serviceModeTags ?? tutor.serviceModes ?? []),
-    schoolFitTags: cloneValue(tutor.schoolFitTags ?? tutor.schoolFocus ?? []),
-    topics: cloneValue(tutor.topics ?? []),
-    chips: cloneValue(tutor.badges ?? []),
+    board: boards[0] ?? "Maths home tuition",
+    boardSpecialization: boardSpecialization ?? "Focused maths support",
+    classesSupported: classesSupported.join(", ") || "K-12 and exam support",
+    classFocus: classesSupported.slice(0, 3).join(", ") || "Personal maths support",
+    classLevel: classesSupported[0] ?? "Personal maths support",
+    examSupport: cloneValue(exams),
+    boardTags: cloneValue(uniqueValues(tutor.boardTags, boards)),
+    topicTags: cloneValue(topics),
+    localityTags: cloneValue(localities),
+    serviceModeTags: cloneValue(serviceModes),
+    schoolFitTags: cloneValue(schoolFocus),
+    topics: cloneValue(topics),
+    chips: cloneValue(uniqueValues(tutor.badges)),
     price: tutor.startingFee,
     startingFee: tutor.startingFee,
-    sectors: cloneValue(tutor.localities ?? []),
-    mode: cloneValue(tutor.serviceModes ?? []),
-    serviceModes: cloneValue(tutor.serviceModes ?? []),
+    sectors: cloneValue(localities),
+    mode: cloneValue(serviceModes),
+    serviceModes: cloneValue(serviceModes),
     description:
       tutor.shortBio ??
       tutor.summary ??
@@ -223,7 +250,7 @@ function toMathsTutorEntity(tutor) {
       tutor.summary ??
       tutor.shortBio ??
       "Maths Bodhi tutor profile for focused maths support, personal attention, and Gurugram home-tuition planning.",
-    schoolFocus: cloneValue(tutor.schoolFocus ?? []),
+    schoolFocus: cloneValue(schoolFocus),
     image: tutor.image,
     imageAlt: tutor.imageAlt,
     featuredOn: cloneValue(tutor.featuredOn ?? []),
@@ -671,8 +698,26 @@ export function buildTutorProfileContent(tutor) {
   const reviews = listCanonicalReviewsSnapshot();
   const results = listResultsSnapshot();
   const profile = tutorProfiles.find((item) => item.tutorId === tutor.id);
+  const boards = getTutorBoards(tutor);
+  const classesSupported = getTutorClasses(tutor);
+  const topics = uniqueValues(tutor.topics, tutor.topicTags);
+  const localities = uniqueValues(tutor.localities, tutor.sectors, tutor.localityTags);
+  const serviceModes = uniqueValues(tutor.serviceModes, tutor.mode, tutor.serviceModeTags);
+  const exams = uniqueValues(tutor.examSupport, tutor.exams);
+  const schoolFocus = uniqueValues(tutor.schoolFocus, tutor.schoolFitTags);
   const profileAssociatedBoards = profile?.associatedBoards ?? [];
   const profileAssociatedTags = profile?.associatedTags ?? [];
+  const normalizedTutor = {
+    ...tutor,
+    boards,
+    classesSupported,
+    topics,
+    localities,
+    serviceModes,
+    examSupport: exams,
+    exams,
+    schoolFocus,
+  };
   const relatedReviews = reviews.filter(
     (review) => review.relatedTutorId === tutor.id || tutor.linkedReviewIds?.includes(review.id),
   );
@@ -681,16 +726,16 @@ export function buildTutorProfileContent(tutor) {
   );
 
   return cloneValue({
-    ...tutor,
+    ...normalizedTutor,
     profileTo: getTutorProfilePath(tutor),
     longFormProfile: profile?.longFormProfile || tutor.fullBio || tutor.summary || "",
     teachingStyle: profile?.teachingStyle || tutor.teachingStyle || "",
-    associatedBoards: cloneValue(profileAssociatedBoards.length ? profileAssociatedBoards : tutor.boards ?? []),
+    associatedBoards: cloneValue(profileAssociatedBoards.length ? uniqueValues(profileAssociatedBoards) : boards),
     associatedTags: cloneValue(profileAssociatedTags.length ? profileAssociatedTags : tutor.badges ?? []),
-    faqItems: getGeneratedTutorFaqs(tutor),
+    faqItems: getGeneratedTutorFaqs(normalizedTutor),
     relatedReviews: relatedReviews.map((review) => toMathsReviewEntity(review)),
     relatedResults: relatedResults.map((result) => toMathsResultEntity(result, getTutorStore())),
-    relatedBlogs: getRelatedBlogsForTutorEntity(tutor),
+    relatedBlogs: getRelatedBlogsForTutorEntity(normalizedTutor),
   });
 }
 

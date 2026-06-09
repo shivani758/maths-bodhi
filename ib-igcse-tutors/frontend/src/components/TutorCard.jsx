@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSiteData } from "../contexts/SiteDataContext";
+import { combineListValues } from "../services/clientDataUtils";
 import { getTutorProfilePath } from "../utils/tutorRoutes";
 import { buildTutorInquiryMessage, buildWhatsAppUrl } from "../utils/whatsapp";
 
@@ -37,8 +38,8 @@ function normalizeLabel(value) {
 }
 
 const CLASS_ROUTE_MAP = {
-  "class 10": "/class-10-maths-tutor",
-  "class 12": "/class-12-maths-tutor",
+  "class 10": "/gurugram/class-10-maths-home-tutor",
+  "class 12": "/gurugram/class-12-maths-home-tutor",
 };
 
 function getClassPath(classLevel = "") {
@@ -75,6 +76,10 @@ function TutorCard({
   imageAlt,
 }) {
   const { siteData } = useSiteData();
+  const topicItems = combineListValues(topics);
+  const sectorItems = combineListValues(sectors);
+  const modeItems = combineListValues(mode);
+  const schoolFocusItems = combineListValues(schoolFocus);
   const displaySummary =
     summary ||
     (hasPublicProfile
@@ -172,15 +177,15 @@ function TutorCard({
               {displayBoard}
             </Link>
           </div>
-          {schoolFocus[0] ? (
+          {schoolFocusItems[0] ? (
             <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-700">
-              {schoolFocus[0]}
+              {schoolFocusItems[0]}
             </span>
           ) : null}
         </div>
-        {topics.length ? (
+        {topicItems.length ? (
           <div className="mt-4 flex flex-wrap gap-2">
-            {topics.slice(0, 3).map((topic) => (
+            {topicItems.slice(0, 3).map((topic) => (
               <span
                 key={topic}
                 className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700"
@@ -197,8 +202,8 @@ function TutorCard({
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {sectors.length ? (
-          sectors.slice(0, 3).map((sector) => {
+        {sectorItems.length ? (
+          sectorItems.slice(0, 3).map((sector) => {
             const sectorPath = getSectorPath(getMatchingSectorPage(siteData.sectorPages, sector));
             const className =
               "rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700";
@@ -223,8 +228,8 @@ function TutorCard({
           </span>
         )}
         <div className="flex flex-wrap gap-2">
-          {mode.length ? (
-            mode.map((item) => (
+          {modeItems.length ? (
+            modeItems.map((item) => (
               <span
                 key={item}
                 className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700"

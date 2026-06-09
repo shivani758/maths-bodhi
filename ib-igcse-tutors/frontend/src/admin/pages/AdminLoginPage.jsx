@@ -27,7 +27,7 @@ function AdminLoginPage() {
     <>
       <Seo
         title="Admin Login | Maths Bodhi"
-        description="Secure admin login for the Maths Bodhi content workspace."
+        description="Secure admin login for managing Maths Bodhi tutors, content, reviews, and enquiries."
         canonicalPath="/admin/login"
         robots="noindex, nofollow"
       />
@@ -36,23 +36,24 @@ function AdminLoginPage() {
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-2xl">
             <div className="mb-6">
-              <BrandLogo className="h-14 max-w-[240px]" />
+              <BrandLogo tone="dark" className="h-14 max-w-[240px]" />
               <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">Admin</p>
             </div>
             <span className="inline-flex rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-cyan-300">
-              Admin Workspace
+              Admin Access
             </span>
-            <h1 className="mt-5 text-4xl font-bold tracking-tight">Maths Bodhi admin login</h1>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight">Maths Bodhi admin sign in</h1>
             <p className="mt-4 text-lg leading-8 text-slate-300">
-              Sign in to the connected admin workspace for tutors, blogs, reviews, and student
-              results.
+              Sign in to manage tutor profiles, parent enquiries, reviews, results, and Maths
+              Bodhi content from one trusted place.
             </p>
             <div className="mt-8 rounded-[24px] border border-white/10 bg-white/5 p-5 text-sm leading-7 text-slate-300">
               <p>
                 Use your admin credentials to continue.
               </p>
               <p className="mt-3">
-                Manage Maths Bodhi tutors, enquiries, content, reviews, results, and local SEO pages from one workspace.
+                Keep public tutor details, learning pages, parent reviews, and local pages clear
+                and up to date.
               </p>
             </div>
             <Link
@@ -66,7 +67,8 @@ function AdminLoginPage() {
           <div className="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-2xl font-bold tracking-tight text-slate-950">Sign in to admin</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Continue to the connected admin workspace for tutors, reviews, results, blogs, and the rest of the Maths Bodhi content system.
+              Continue to review tutor information, update content, manage feedback, and keep
+              public Maths Bodhi pages accurate.
             </p>
 
             <form

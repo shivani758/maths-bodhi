@@ -73,7 +73,7 @@ function StudentDashboard() {
                   Send requirement on WhatsApp
                 </a>
                 <Link
-                  to="/book-free-demo-class"
+                  to="/book-demo"
                   className="rounded-2xl border border-white/20 px-5 py-3 font-semibold text-white transition hover:bg-white/10"
                 >
                   Book free demo
@@ -235,7 +235,7 @@ function StudentDashboard() {
                     </a>
                   ))}
                   <Link
-                    to="/book-free-demo-class"
+                    to="/book-demo"
                     className="rounded-2xl bg-blue-600 px-5 py-4 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Book free demo

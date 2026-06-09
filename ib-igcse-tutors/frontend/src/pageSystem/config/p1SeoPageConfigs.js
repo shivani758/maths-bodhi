@@ -11,8 +11,28 @@ import {
   recoveryRootSeoPages,
 } from "./seoRecoveryCluster.js";
 
-const DEMO_PATH = "/book-free-demo-class";
+const DEMO_PATH = "/book-demo";
 const WHATSAPP_NUMBER = "918796499818";
+
+const CANONICAL_PATH_ALIASES = new Map([
+  ["/book-free-demo-class", DEMO_PATH],
+  ["/city/gurugram", "/gurugram"],
+  ["/class-10-maths-tutor", "/gurugram/class-10-maths-home-tutor"],
+  ["/class-12-maths-tutor", "/gurugram/class-12-maths-home-tutor"],
+]);
+
+function canonicalizePublicPath(path) {
+  const normalizedPath = String(path ?? "").trim();
+  return CANONICAL_PATH_ALIASES.get(normalizedPath) ?? normalizedPath;
+}
+
+function canonicalizeLinkList(value) {
+  return String(value ?? "")
+    .split("|")
+    .map((item) => canonicalizePublicPath(item))
+    .filter(Boolean)
+    .join(" | ");
+}
 
 function row({
   id,
@@ -26,7 +46,18 @@ function row({
   keyword,
   links = "",
 }) {
-  return { id, segment, pageType, audience, cluster, title, path, parent, keyword, links };
+  return {
+    id,
+    segment,
+    pageType,
+    audience,
+    cluster,
+    title,
+    path: canonicalizePublicPath(path),
+    parent: canonicalizePublicPath(parent),
+    keyword,
+    links: canonicalizeLinkList(links),
+  };
 }
 
 export const p1SeoUrlRows = [
@@ -117,7 +148,7 @@ export const p1SeoUrlRows = [
 ];
 
 const knownSupportingPages = [
-  { path: "/city/gurugram", title: "Gurugram Maths Tutor Hub", segment: "Location", cluster: "Gurugram" },
+  { path: "/gurugram", title: "Gurugram Maths Tutor Hub", segment: "Location", cluster: "Gurugram" },
   { path: "/subjects/maths", title: "Maths by Board", segment: "Board", cluster: "Boards" },
   { path: "/gurugram", title: "Gurugram Maths Home Tuition", segment: "Location", cluster: "Gurugram" },
   { path: "/gurugram/cbse-maths-home-tutor", title: "CBSE Maths Home Tutor in Gurugram", segment: "Location", cluster: "CBSE" },
@@ -125,8 +156,8 @@ const knownSupportingPages = [
   { path: "/gurugram/igcse-maths-home-tutor", title: "IGCSE Maths Home Tutor in Gurugram", segment: "Location", cluster: "IGCSE" },
   { path: "/gurugram/ib-maths-home-tutor", title: "IB Maths Home Tutor in Gurugram", segment: "Location", cluster: "IB" },
   { path: "/gurugram/jee-maths-home-tutor", title: "JEE Maths Home Tutor in Gurugram", segment: "Location", cluster: "JEE" },
-  { path: "/class-10-maths-tutor", title: "Class 10 Maths Tutor", segment: "Class", cluster: "Class 10" },
-  { path: "/class-12-maths-tutor", title: "Class 12 Maths Tutor", segment: "Class", cluster: "Class 12" },
+  { path: "/gurugram/class-10-maths-home-tutor", title: "Class 10 Maths Home Tutor in Gurugram", segment: "Class", cluster: "Class 10" },
+  { path: "/gurugram/class-12-maths-home-tutor", title: "Class 12 Maths Home Tutor in Gurugram", segment: "Class", cluster: "Class 12" },
 ];
 
 const p1RowByPath = new Map(p1SeoUrlRows.map((item) => [item.path, item]));
@@ -150,7 +181,7 @@ function slugFromPath(path) {
 }
 
 function normalizePath(path) {
-  return String(path ?? "").trim();
+  return canonicalizePublicPath(path);
 }
 
 function splitLinkPaths(value) {
@@ -183,7 +214,7 @@ function getPageDescription(path, currentRow) {
     return "Return to the main Maths Bodhi hub for verified maths tutor discovery across boards, classes, and Gurugram routes.";
   }
 
-  if (path === "/city/gurugram") {
+  if (path === "/gurugram") {
     return "Compare Gurugram sector context, verified tutor availability, and local home-tuition fit.";
   }
 
@@ -217,7 +248,7 @@ function getRelatedPaths(currentRow) {
   return unique([
     currentRow.parent !== currentRow.path ? currentRow.parent : "",
     "/",
-    "/city/gurugram",
+    "/gurugram",
     DEMO_PATH,
     ...suggestedPaths,
     ...sameClusterPaths,
@@ -252,6 +283,81 @@ function getHeroIntro(rowData) {
   }
 
   return `${base} It links the parent hub, related maths routes, and the demo flow so families can move from browsing to a useful first conversation.`;
+}
+
+function getCoreSeoDescription(rowData) {
+  const keyword = String(rowData.keyword || rowData.title || "maths support").toLowerCase();
+  const title = rowData.title || "Maths Bodhi";
+  const audience = rowData.audience && rowData.audience !== "All" ? ` for ${rowData.audience.toLowerCase()}` : "";
+
+  if (/contact/i.test(rowData.pageType) || /contact/i.test(title)) {
+    return "Contact Maths Bodhi to discuss the student's class, board, locality, weak chapters, and whether home tuition or online maths support is the right next step.";
+  }
+
+  if (/fees|pricing/i.test(`${title} ${keyword}`)) {
+    return "Understand how Maths Bodhi discusses maths tuition fees after class level, board, location, lesson mode, tutor fit, and schedule are clear.";
+  }
+
+  if (/online/i.test(`${title} ${keyword}`)) {
+    return "Find online maths tutor support with Maths Bodhi for structured notes, regular doubt clearing, board-aware revision, and flexible scheduling for Gurugram students.";
+  }
+
+  if (/demo/i.test(`${title} ${keyword}`)) {
+    return "Book a free Maths Bodhi demo conversation after sharing the student's class, board, Gurugram locality, maths concerns, target score, and preferred timing.";
+  }
+
+  if (/jee/i.test(`${title} ${keyword}`)) {
+    return `Find Maths Bodhi support for ${keyword} with problem-solving structure, mock review, senior-school planning, and a clear demo next step.`;
+  }
+
+  if (/cbse|icse|isc|igcse|ib|cambridge/i.test(`${title} ${keyword}`)) {
+    return `Find Maths Bodhi ${keyword} support${audience} with board-specific method, class fit, revision planning, and verified tutor shortlisting in Gurugram.`;
+  }
+
+  if (/class|grade|myp/i.test(`${title} ${keyword}`)) {
+    return `Find Maths Bodhi ${keyword} support with class-wise planning, weak-chapter repair, school-test preparation, and home or online tutor fit in Gurugram.`;
+  }
+
+  return `Find Maths Bodhi ${keyword} guidance for Gurugram families comparing verified tutor fit, board or class needs, lesson mode, and a practical demo next step.`;
+}
+
+function getGeneratedSeoDescription(page) {
+  const title = page.title || page.primaryKeyword || "maths support";
+  const keyword = String(page.primaryKeyword || title).toLowerCase();
+  const board = page.boardLabel ? `${page.boardLabel} ` : "";
+  const classText = page.classLevel ? `Class ${page.classLevel} ` : "";
+  const topic = page.topicLabel ? `${page.topicLabel.toLowerCase()} ` : "";
+  const area = page.localityLabel ? ` in ${page.localityLabel}, Gurugram` : " in Gurugram";
+
+  if (page.schoolName) {
+    return `Use this Maths Bodhi page for ${page.schoolName} search context without affiliation claims. Compare class, board, locality, tutor fit, and demo next steps.`;
+  }
+
+  if (page.societyLabel) {
+    return `Find Maths Bodhi maths tutor context near ${page.societyLabel}, ${page.localityLabel || "Gurugram"} with board/class fit, schedule planning, and a demo next step.`;
+  }
+
+  if (page.localityLabel && page.boardLabel) {
+    return `Find verified ${board}maths home tutor support${area} with board fit, class planning, topic repair, and a Maths Bodhi demo conversation.`;
+  }
+
+  if (page.localityLabel) {
+    return `Find verified Maths Bodhi home tutors${area} for CBSE, IB, IGCSE, JEE, and school maths support. Share class, board, timing, and goals.`;
+  }
+
+  if (page.kind === "topic-mastery" || page.topicLabel) {
+    return `Find ${board}${topic}maths tutor support with Maths Bodhi for ${classText || "school "}students, topic clarity, practice review, and demo planning.`;
+  }
+
+  if (page.kind?.includes("comparison")) {
+    return `${title} helps parents compare home tuition, online support, tutor fit, scheduling, and realistic next steps before choosing maths help.`;
+  }
+
+  if (page.kind === "resource-support" || page.kind === "exam-guide") {
+    return `${title} gives parents a practical Maths Bodhi guide for revision planning, weak-topic repair, exam pressure, and the right tutor conversation.`;
+  }
+
+  return `Find ${keyword} with Maths Bodhi for board fit, class needs, Gurugram tutor availability, home or online lessons, and a clear demo next step.`;
 }
 
 function buildSupportPoints(rowData) {
@@ -352,7 +458,7 @@ function createSeoConfig(rowData) {
       limit: 3,
     },
     seoTitle: rowData.title.includes("Maths Bodhi") ? rowData.title : `${rowData.title} | Maths Bodhi`,
-    seoDescription: `Explore ${rowData.keyword} with Maths Bodhi. Compare verified maths tutor fit, related maths routes, Gurugram context, and demo next steps.`,
+    seoDescription: getCoreSeoDescription(rowData),
     canonicalUrl: rowData.path,
     breadcrumbItems: buildBreadcrumbs(rowData),
     schemaType: rowData.pageType === "Curriculum Hub" ? "CollectionPage" : "Service",
@@ -407,7 +513,7 @@ function createSeoConfig(rowData) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -455,7 +561,7 @@ function getRecoveryCurrentRow(page) {
 }
 
 function buildRecoveryCards(paths = [], currentRow) {
-  return unique(paths)
+  return unique(paths.map(canonicalizePublicPath))
     .filter((path) => path !== currentRow.path && routeCatalog.has(path))
     .slice(0, 6)
     .map((path) => routeCard(path, currentRow));
@@ -695,8 +801,8 @@ function createRecoveryRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
-    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare verified tutor fit, related locality, board, class, topic, WhatsApp, and demo routes.`,
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: getGeneratedSeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -797,7 +903,7 @@ function createRecoveryRootSeoConfig(page) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -1054,8 +1160,8 @@ function createBatchARootSeoConfig(page) {
     },
     seoTitle: `${page.title} | Maths Bodhi`,
     seoDescription: isSchoolPage
-      ? `Explore maths home tuition for ${page.schoolName} search intent with affiliation-safe copy, related locality, board, class, topic, WhatsApp, and demo links.`
-      : "Explore Gurgaon maths home tutor routes by locality, school corridor, board, class, topic, WhatsApp, and free demo next steps.",
+      ? getGeneratedSeoDescription(page)
+      : "Find Maths Bodhi home tutor routes in Gurgaon by sector, school corridor, board, class, and topic. Share the student's need before a free demo.",
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -1166,7 +1272,7 @@ function createBatchARootSeoConfig(page) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -1492,8 +1598,8 @@ function createBatchBRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
-    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare board, class, topic, Gurugram locality, verified tutor fit, online support, WhatsApp, and demo next steps.`,
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: getGeneratedSeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -1591,7 +1697,7 @@ function createBatchBRootSeoConfig(page) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -1898,8 +2004,8 @@ function createBatchCRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
-    seoDescription: `Explore ${page.primaryKeyword} with Maths Bodhi. Compare topic mastery, exam support, board routes, class routes, Gurugram home tuition, WhatsApp, and demo next steps.`,
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: getGeneratedSeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -1998,7 +2104,7 @@ function createBatchCRootSeoConfig(page) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },
@@ -2326,8 +2432,8 @@ function createBatchDRootSeoConfig(page) {
       tokens,
       limit: 3,
     },
-    seoTitle: `${page.title} | Verified Maths Bodhi Tutor`,
-    seoDescription: `Compare ${page.primaryKeyword} with Maths Bodhi. Review support format, board, class, topic, Gurugram locality, WhatsApp, and demo next steps without unsupported claims.`,
+    seoTitle: `${page.title} | Maths Bodhi`,
+    seoDescription: getGeneratedSeoDescription(page),
     canonicalUrl: page.path,
     breadcrumbItems: [
       { label: "Home", to: "/" },
@@ -2426,7 +2532,7 @@ function createBatchDRootSeoConfig(page) {
           },
           secondaryAction: {
             label: "Browse Gurugram tutor context",
-            to: "/city/gurugram",
+            to: "/gurugram",
           },
         },
       },

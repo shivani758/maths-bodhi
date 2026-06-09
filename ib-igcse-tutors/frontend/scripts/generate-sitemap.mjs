@@ -145,6 +145,7 @@ function getGurugramEntryAliasCanonicals() {
 
 const ALTERNATE_CANONICAL_PATHS = new Map([
   ["/city/gurugram", "/gurugram"],
+  ["/book-free-demo-class", "/book-demo"],
   ["/class-10-maths-tutor", "/gurugram/class-10-maths-home-tutor"],
   ["/class-12-maths-tutor", "/gurugram/class-12-maths-home-tutor"],
   ...getGurugramEntryAliasCanonicals(),
@@ -279,7 +280,7 @@ function addHome() {
 }
 
 function addStaticRoutes() {
-  for (const route of ["/book-demo", "/book-free-demo-class"]) {
+  for (const route of ["/book-demo"]) {
     addEntry(route, {
       category: "static",
       source: "frontend/src/App.jsx",
@@ -558,8 +559,11 @@ async function addLiveApiRoutes() {
         continue;
       }
 
+      const citySlug = locality.citySlug || "gurugram";
+      const localityPath = citySlug === "gurugram" ? `/gurugram/${locality.slug}` : `/city/${citySlug}/${locality.slug}`;
+
       liveSummary.localityPages += 1;
-      addEntry(`/city/${locality.citySlug || "gurugram"}/${locality.slug}`, {
+      addEntry(localityPath, {
         category: "locality",
         source: `/api/public/bootstrap:locality:${locality.slug}`,
         lastmod: locality.updatedAt || locality.createdAt || generatedDate,

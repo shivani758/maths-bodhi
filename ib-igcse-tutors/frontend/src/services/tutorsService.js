@@ -1,8 +1,13 @@
 import { apiRequest } from "./apiClient";
+import { combineListValues, normalizeClassListValue } from "./clientDataUtils";
 import { refreshPublicSiteData } from "./publicSiteService";
 
-function uniqueValues(values = []) {
-  return [...new Set((values ?? []).filter(Boolean))];
+function uniqueValues(...values) {
+  return combineListValues(...values);
+}
+
+function authoredListValues(value) {
+  return Array.isArray(value) ? value.filter(Boolean) : value ? [value] : [];
 }
 
 function extractExperienceYears(value = "") {
@@ -15,20 +20,33 @@ function createProfileFromTutor(tutor) {
     id: tutor.profile?.id || `profile-${tutor.id || "new"}`,
     tutorId: tutor.id || "",
     longFormProfile: tutor.fullBio ?? "",
-    qualifications: tutor.qualifications ?? [],
+    qualifications: authoredListValues(tutor.qualifications),
     teachingStyle: tutor.teachingStyle ?? "",
-    achievements: tutor.achievements ?? [],
-    associatedBoards: tutor.boards ?? [],
-    associatedTags: tutor.badges ?? [],
-    profileMediaIds: tutor.profile?.profileMediaIds ?? [],
-    linkedFaqIds: tutor.profile?.linkedFaqIds ?? [],
-    linkedStudentResultIds: tutor.linkedResultIds ?? [],
+    achievements: authoredListValues(tutor.achievements),
+    associatedBoards: uniqueValues(tutor.boards, tutor.associatedBoards, tutor.boardTags),
+    associatedTags: uniqueValues(tutor.badges, tutor.associatedTags),
+    profileMediaIds: uniqueValues(tutor.profile?.profileMediaIds),
+    linkedFaqIds: uniqueValues(tutor.profile?.linkedFaqIds),
+    linkedStudentResultIds: uniqueValues(tutor.linkedResultIds),
   };
 }
 
 function toTutorBundle(entity) {
   const tutor = {
     ...entity,
+    boards: uniqueValues(entity.boards, entity.associatedBoards, entity.boardTags),
+    classesSupported: normalizeClassListValue(
+      entity.classesSupported,
+      entity.classes,
+      entity.classLevels,
+      entity.classFit,
+      entity.classLevel,
+      entity.examSupport,
+      entity.exams,
+    ),
+    topics: uniqueValues(entity.topics, entity.topicTags),
+    localities: uniqueValues(entity.localities, entity.sectors, entity.localityTags),
+    serviceModes: uniqueValues(entity.serviceModes, entity.mode, entity.serviceModeTags),
     experienceYears: Number(entity.experienceYears ?? extractExperienceYears(entity.experience ?? entity.experienceLabel)),
     experienceLabel: entity.experienceLabel ?? entity.experience ?? "",
     experience: entity.experience ?? entity.experienceLabel ?? "",
@@ -42,15 +60,41 @@ function toTutorBundle(entity) {
 }
 
 function toFlatTutor(entity) {
+  const boards = uniqueValues(entity.boards, entity.associatedBoards, entity.boardTags);
+  const classesSupported = normalizeClassListValue(
+    entity.classesSupported,
+    entity.classes,
+    entity.classLevels,
+    entity.classFit,
+    entity.classLevel,
+    entity.examSupport,
+    entity.exams,
+  );
+
   return {
     ...entity,
-    profile: createProfileFromTutor(entity),
+    boards,
+    classesSupported,
+    topics: uniqueValues(entity.topics, entity.topicTags),
+    localities: uniqueValues(entity.localities, entity.sectors, entity.localityTags),
+    serviceModes: uniqueValues(entity.serviceModes, entity.mode, entity.serviceModeTags),
+    profile: createProfileFromTutor({ ...entity, boards, classesSupported }),
   };
 }
 
 function toTutorPayload(bundle) {
   const tutor = bundle.tutor;
   const profile = bundle.profile;
+  const boards = uniqueValues(tutor.boards, tutor.associatedBoards, tutor.boardTags);
+  const classesSupported = normalizeClassListValue(
+    tutor.classesSupported,
+    tutor.classes,
+    tutor.classLevels,
+    tutor.classFit,
+    tutor.classLevel,
+    tutor.examSupport,
+    tutor.exams,
+  );
 
   return {
     name: tutor.name,
@@ -59,12 +103,12 @@ function toTutorPayload(bundle) {
     shortBio: tutor.shortBio,
     fullBio: profile.longFormProfile || tutor.fullBio,
     teachingStyle: profile.teachingStyle,
-    boards: uniqueValues(tutor.boards),
-    classesSupported: uniqueValues(tutor.classesSupported),
-    topics: uniqueValues(tutor.topics),
+    boards,
+    classesSupported,
+    topics: uniqueValues(tutor.topics, tutor.topicTags),
     cities: uniqueValues(tutor.cities?.length ? tutor.cities : ["gurugram"]),
-    localities: uniqueValues(tutor.localities),
-    serviceModes: uniqueValues(tutor.serviceModes),
+    localities: uniqueValues(tutor.localities, tutor.sectors, tutor.localityTags),
+    serviceModes: uniqueValues(tutor.serviceModes, tutor.mode, tutor.serviceModeTags),
     experienceYears: Number(tutor.experienceYears ?? extractExperienceYears(tutor.experience ?? tutor.experienceLabel)),
     experienceLabel:
       tutor.experienceLabel?.trim() ||
@@ -78,8 +122,8 @@ function toTutorPayload(bundle) {
     image: tutor.image,
     imageAlt: tutor.imageAlt,
     seo: tutor.seo,
-    qualifications: uniqueValues(profile.qualifications),
-    achievements: uniqueValues(profile.achievements),
+    qualifications: authoredListValues(profile.qualifications),
+    achievements: authoredListValues(profile.achievements),
     badges: uniqueValues(tutor.badges),
     schoolFocus: uniqueValues(tutor.schoolFocus),
     availability: tutor.availability,

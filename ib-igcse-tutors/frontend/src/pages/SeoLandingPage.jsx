@@ -235,7 +235,7 @@ function SeoLandingPage({ pageKey }) {
   const fallbackDescription = siteData.tutors.length
     ? "The page is live, but the current published profiles do not match this specific class, board, mode, or locality filter. Use Book Free Demo or WhatsApp to check current availability."
     : "This page only shows real published tutor profiles. Use Book Free Demo or WhatsApp while tutor data is unavailable.";
-  const primaryCtaTo = config.primaryCtaTo ?? "/book-free-demo-class";
+  const primaryCtaTo = config.primaryCtaTo ?? "/book-demo";
 
   return (
     <MainLayout>
@@ -394,7 +394,7 @@ function SeoLandingPage({ pageKey }) {
                     WhatsApp
                   </a>
                   <Link
-                    to="/city/gurugram"
+                    to="/gurugram"
                     className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:bg-white hover:text-blue-700 sm:w-auto"
                   >
                     Browse Gurugram

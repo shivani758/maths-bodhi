@@ -11,7 +11,9 @@ function BrandLogo({
   const nameClassName = isDark ? "text-white drop-shadow-sm" : "text-slate-950";
   const bodhiClassName = isDark ? "text-cyan-300" : "text-[#00AEEF]";
   const taglineClassName = isDark ? "text-cyan-100" : "text-slate-500";
-  const markClassName = isDark ? "rounded-2xl bg-white p-1 shadow-sm shadow-cyan-950/30" : "";
+  const markClassName = isDark
+    ? "rounded-2xl bg-white/95 p-1 shadow-sm shadow-cyan-950/30 ring-1 ring-white/80"
+    : "";
 
   return (
     <span className={`inline-flex min-w-0 shrink-0 items-center gap-2.5 ${className}`}>

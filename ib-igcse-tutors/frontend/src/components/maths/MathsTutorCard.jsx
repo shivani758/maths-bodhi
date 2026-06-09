@@ -1,18 +1,15 @@
 import { Link } from "react-router-dom";
 import { useSiteData } from "../../contexts/SiteDataContext";
+import { combineListValues, normalizeClassListValue } from "../../services/clientDataUtils";
 import { getTutorProfilePath } from "../../utils/tutorRoutes";
 import { buildTutorInquiryMessage, buildWhatsAppUrl } from "../../utils/whatsapp";
 
-function unique(values = []) {
-  return [...new Set(values.filter(Boolean))];
+function unique(...values) {
+  return combineListValues(...values);
 }
 
 function toArray(values) {
-  if (Array.isArray(values)) {
-    return values.filter(Boolean);
-  }
-
-  return values ? [values] : [];
+  return combineListValues(values);
 }
 
 function TutorStat({ label, value }) {
@@ -84,7 +81,8 @@ function MathsTutorCard({
   const displayImageAlt = imageAlt || `${displayName || "Maths tutor"} profile`;
   const experienceLabel = yearsExperience ?? experience;
   const specializationLabel = boardSpecialization ?? subBoard ?? examType ?? board;
-  const classLabel = classesSupported ?? classFocus ?? classLevel;
+  const classList = normalizeClassListValue(classesSupported, classFocus, classLevel);
+  const classLabel = classList.join(", ");
   const feeLabel = startingFee ?? price;
   const descriptionText =
     shortBio ??
@@ -107,7 +105,7 @@ function MathsTutorCard({
     ...serviceTags,
     ...toArray(chips),
   ]).slice(0, 5);
-  const infoLine = unique([classLabel, experienceLabel]).join(" | ");
+  const infoLine = [classLabel, experienceLabel].filter(Boolean).join(" | ");
   const whatsappUrl = buildWhatsAppUrl(
     siteData.contact.whatsappNumber,
     buildTutorInquiryMessage(
@@ -171,7 +169,7 @@ function MathsTutorCard({
       ) : null}
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <TutorStat label="Class fit" value={classLabel ?? "Class and goal fit shared on enquiry"} />
+        <TutorStat label="Class fit" value={classLabel || "Class and goal fit shared on enquiry"} />
         <TutorStat label="Experience" value={experienceLabel ?? "Verified experience shared on enquiry"} />
         <TutorStat label="Starting fee" value={feeLabel ?? "Fee shared after tutor fit check"} />
       </div>
