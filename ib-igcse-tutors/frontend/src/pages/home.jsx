@@ -14,6 +14,7 @@ import {
 } from "../constants/filterOptions";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
+import { SeoContentSections } from "../components/seo/SeoContentSections";
 import { getAjayRecommendationForPath } from "../pageSystem/config/ajayRecommendations";
 import {
   getBreadcrumbSchema,
@@ -29,6 +30,114 @@ const DEFERRED_HOME_IDLE_TIMEOUT = 1200;
 const IMAGE_4_BY_3_SIZE = { width: 960, height: 720 };
 const TutorCard = lazy(() => import("../components/TutorCard"));
 const HOME_AJAY_RECOMMENDATION = getAjayRecommendationForPath("/");
+const HOME_SEO_CONTENT = {
+  intro: {
+    eyebrow: "Maths tutor guide",
+    title: "Maths home tutor in Gurugram with a clearer parent-first path",
+    paragraphs: [
+      "Maths Bodhi helps Gurugram families move from a broad tutor search into a focused conversation about the student's board, class, weak chapters, school routine, and preferred learning mode.",
+      "The page is designed to support real parent decisions: whether the student needs home tuition, online maths support, board revision, JEE preparation, or a steady one-to-one tutor for confidence and practice.",
+    ],
+  },
+  whyChoose: {
+    title: "Why parents use Maths Bodhi before shortlisting tutors",
+    items: [
+      {
+        title: "Board-aware support",
+        description:
+          "Families can compare CBSE, ICSE, ISC, IB, IGCSE, Cambridge, JEE, and Olympiad maths needs before choosing a tutor path.",
+      },
+      {
+        title: "Class-level planning",
+        description:
+          "Class 10, Class 12, and senior-school students often need different routines, test planning, and topic repair from younger learners.",
+      },
+      {
+        title: "Sector and schedule fit",
+        description:
+          "Home tuition works best when travel, school timing, tutor availability, and online backup options are checked early.",
+      },
+    ],
+  },
+  whoItHelps: {
+    title: "Who this page helps",
+    paragraphs: [
+      "This page is for parents comparing maths home tutor options in Gurugram and students who need more structure around homework, worksheets, board exams, international curricula, or competitive preparation.",
+    ],
+    bullets: [
+      {
+        title: "Parents comparing tutors",
+        description:
+          "Use the boards, classes, sectors, and tutor cards to narrow the first conversation without guessing from a generic list.",
+      },
+      {
+        title: "Students with uneven maths confidence",
+        description:
+          "Share the weak chapters, recent test pattern, and goal so the tutor match can focus on the actual learning gap.",
+      },
+    ],
+  },
+  howItWorks: {
+    title: "How tutor matching works",
+    steps: [
+      {
+        title: "Share the student's context",
+        description:
+          "Send class, board, school area, weak chapters, current marks, target score, locality, and preferred timing.",
+      },
+      {
+        title: "Compare the right route",
+        description:
+          "Use board, class, sector, topic, and mode pages to understand whether the need is regular tuition, revision, or exam support.",
+      },
+      {
+        title: "Book a focused demo",
+        description:
+          "The demo conversation helps confirm tutor fit, learning style, schedule, and next steps without unsupported guarantees.",
+      },
+    ],
+  },
+  localContext: {
+    title: "Gurugram sector and school-corridor context",
+    paragraphs: [
+      "Families often ask for maths tutors around Sector 56, Sector 54, Golf Course Road, Sohna Road, DLF phases, South City, and Sushant Lok because the student needs support that fits school timing and travel practicality.",
+    ],
+    items: [
+      {
+        title: "Home tuition fit",
+        description:
+          "Best when the student needs live correction, routine, and accountability close to home.",
+      },
+      {
+        title: "Online support fit",
+        description:
+          "Useful for doubt clearing, senior-school planning, and continuity during busy school weeks.",
+      },
+      {
+        title: "Board/class fit",
+        description:
+          "The shortlist should still reflect curriculum depth, exam style, and class-level pressure.",
+      },
+    ],
+  },
+  relatedLinks: [
+    {
+      label: "Maths home tutor",
+      to: "/maths-home-tutor",
+      description: "Compare the main home tuition path before choosing a board, class, or sector.",
+    },
+    {
+      label: "Gurugram sectors",
+      to: "/gurugram",
+      description: "Browse locality and sector context for home tuition in Gurugram.",
+    },
+    {
+      label: "Maths by board",
+      to: "/subjects/maths",
+      description: "Choose the right curriculum route for CBSE, IB, IGCSE, ICSE, ISC, Cambridge, or JEE.",
+    },
+  ],
+};
 
 const GENERIC_FILTER_PARTS = new Set(["class", "math", "maths", "road", "sector", "tuition", "tutor"]);
 
@@ -1319,6 +1428,11 @@ function Home() {
           </div>
         </section>
 
+        <SeoContentSections
+          content={HOME_SEO_CONTENT}
+          title="Maths home tutor in Gurugram"
+        />
+
         <section className="bg-white px-6 py-14">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
@@ -1746,8 +1860,8 @@ function Home() {
           </section>
         ) : null}
 
-        <section className="bg-white px-6 py-14">
-          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
+        <section className="bg-white px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-start">
             <div className="rounded-[32px] border border-slate-200 bg-slate-50 p-8 shadow-sm">
               <SectionTitle
                 badge="Questions Parents Ask"
@@ -1790,20 +1904,20 @@ function Home() {
               </div>
             </div>
 
-            <div className="rounded-[32px] bg-slate-950 p-8 text-white shadow-xl">
+            <div className="h-fit self-start rounded-[32px] bg-slate-950 p-6 text-white shadow-xl sm:p-8">
               <p className="text-sm font-semibold uppercase tracking-wide text-cyan-300">
                 Clear Next Step
               </p>
               <h2 className="mt-4 text-3xl font-bold md:text-4xl">
                 Start with the maths support path that fits your student’s goal
               </h2>
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
                 Book a demo for CBSE, ICSE, ISC, IGCSE, IB, JEE, Olympiad maths, crash-course
                 revision, special attention, female tutor support, or personalised maths home
                 tuition in Gurugram.
               </p>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 <Link
                   to="/student-login"
                   className="rounded-2xl bg-white px-5 py-4 text-center font-semibold text-slate-950 transition hover:bg-slate-100"

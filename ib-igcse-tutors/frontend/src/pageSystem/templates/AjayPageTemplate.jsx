@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import Seo from "../../components/Seo";
 import MainLayout from "../../layouts/MainLayout";
+import { SeoContentSections } from "../../components/seo/SeoContentSections";
+import { buildDefaultSeoContent } from "../../components/seo/seoContentDefaults";
 import {
   AJAY_MAIN_PATH,
   AJAY_PERSON_ID,
@@ -62,6 +64,16 @@ function AjayPageTemplate({ config }) {
   const relatedLinks = config.sections?.relatedLinks ?? [];
   const fitBullets = config.sections?.fitBullets ?? [];
   const faqs = config.sections?.faqs ?? [];
+  const ajaySeoContent = buildDefaultSeoContent({
+    title: config.title,
+    intro: config.intro,
+    primaryKeyword: config.focus,
+    area: config.entity?.serviceArea || "Gurugram",
+    boards: hero.chips,
+    classes: [config.audience, config.entity?.audience].filter(Boolean),
+    relatedLinks,
+    cta,
+  });
 
   return (
     <MainLayout>
@@ -160,6 +172,12 @@ function AjayPageTemplate({ config }) {
             </div>
           </section>
         ) : null}
+
+        <SeoContentSections
+          content={config.seoContent}
+          fallback={ajaySeoContent}
+          title={config.title}
+        />
 
         {contentSections.map((section, index) => (
           <section

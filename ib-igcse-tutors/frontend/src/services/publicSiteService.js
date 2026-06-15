@@ -18,7 +18,7 @@ const EVENT_NAME = "maths-bodhi-public-site-change";
     phoneDisplay: MATHS_BODHI_PHONE_DISPLAY,
     whatsappNumber: MATHS_BODHI_WHATSAPP_NUMBER,
     email: "support@mathsbodhi.in",
-    supportHours: "Mon to Sat, 9 AM to 8 PM",
+    supportHours: "Available 24/7 for maths tutor support",
     address: MATHS_BODHI_ADDRESS,
     streetAddress: "1st Floor, 497 Housing Board Colony",
     city: "Gurgaon",

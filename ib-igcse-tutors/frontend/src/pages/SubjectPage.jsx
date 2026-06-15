@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
+import { SeoContentSections } from "../components/seo/SeoContentSections";
 import TutorCard from "../components/TutorCard";
 import { useSiteData } from "../contexts/SiteDataContext";
 import MainLayout from "../layouts/MainLayout";
@@ -194,6 +195,47 @@ function SubjectPage() {
       description: zone.reason,
     })),
   ];
+  const subjectSeoContent = page.seoContent ?? {
+    intro: {
+      eyebrow: "Subject guide",
+      title: `${page.label} maths support that parents can actually compare`,
+      paragraphs: [
+        page.subtitle,
+        "Use this page to connect board expectations, class level, school context, weak topics, and tutor fit before booking a demo.",
+      ],
+    },
+    whyChoose: {
+      title: `Why ${page.label} needs a specific tutor plan`,
+      items: boardSupportCards.slice(0, 3).map((item) => ({
+        title: item.title,
+        description: item.text,
+      })),
+    },
+    whoItHelps: {
+      title: "Who this subject page helps",
+      paragraphs: [
+        `This route helps families comparing ${page.label.toLowerCase()} support for school work, revision, exam preparation, and confidence building.`,
+      ],
+    },
+    howItWorks: {
+      title: "How Maths Bodhi builds the support path",
+      steps: page.learningApproach.slice(0, 3).map((item) => ({
+        title: item.title,
+        description: item.text,
+      })),
+    },
+    localContext: {
+      title: `${cityLabel} demand and school fit`,
+      paragraphs: [
+        `${page.label} tutor matching works best when the family shares class, school area, board path, weak chapters, and preferred mode along with locality.`,
+      ],
+      items: localDemandZones.slice(0, 3).map((zone) => ({
+        title: zone.label,
+        description: zone.reason,
+      })),
+    },
+    relatedLinks: relatedLinks.slice(0, 6),
+  };
 
   const seoKeywords = page.keywords?.length
     ? page.keywords
@@ -466,6 +508,11 @@ function SubjectPage() {
             </div>
           </div>
         </section>
+
+        <SeoContentSections
+          content={subjectSeoContent}
+          title={page.label}
+        />
 
         <section className="bg-slate-50 px-6 py-16">
           <div className="mx-auto grid max-w-7xl gap-6 xl:grid-cols-[1.08fr_0.92fr]">

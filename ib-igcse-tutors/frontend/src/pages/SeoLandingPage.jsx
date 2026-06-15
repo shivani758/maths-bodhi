@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Seo from "../components/Seo";
 import SectionTitle from "../components/SectionTitle";
+import { SeoContentSections } from "../components/seo/SeoContentSections";
 import TutorCard from "../components/TutorCard";
 import { useSiteData } from "../contexts/SiteDataContext";
 import { getSeoLandingPageConfig } from "../data/seoLandingPages";
@@ -236,6 +237,62 @@ function SeoLandingPage({ pageKey }) {
     ? "The page is live, but the current published profiles do not match this specific class, board, mode, or locality filter. Use Book Free Demo or WhatsApp to check current availability."
     : "This page only shows real published tutor profiles. Use Book Free Demo or WhatsApp while tutor data is unavailable.";
   const primaryCtaTo = config.primaryCtaTo ?? "/book-demo";
+  const landingSeoContent = config.seoContent ?? {
+    intro: {
+      eyebrow: "Tutor route guide",
+      title: `How to use this ${config.h1} page`,
+      paragraphs: [
+        config.intro,
+        "Use this page to compare tutor fit, board or class needs, locality, learning mode, and the next step before opening a demo conversation.",
+      ],
+    },
+    whyChoose: {
+      title: "Why this route matters",
+      items: [
+        {
+          title: "Specific learning fit",
+          description:
+            "A good tutor match depends on the student's current confidence, weak chapters, school pace, and target score.",
+        },
+        {
+          title: "Real profile matching",
+          description:
+            "Tutor cards appear only from published profiles that match the page focus, not placeholder profiles.",
+        },
+        {
+          title: "Clear next step",
+          description:
+            "The CTA asks for class, board, timing, and goals so the first conversation is useful.",
+        },
+      ],
+    },
+    whoItHelps: {
+      title: "Who this page helps",
+      paragraphs: [
+        `This page is useful for families comparing ${config.h1.toLowerCase()} and students who need a more focused maths support route.`,
+      ],
+    },
+    howItWorks: {
+      steps: [
+        {
+          title: "Review the page focus",
+          description:
+            "Check whether the board, class, mode, locality, or topic matches the student's need.",
+        },
+        {
+          title: "Compare tutor cards",
+          description:
+            "Use published tutor details only when they appear for the current page filters.",
+        },
+        {
+          title: "Book or message",
+          description:
+            "Share the student's details so Maths Bodhi can confirm the right next step.",
+        },
+      ],
+    },
+    relatedLinks: config.relatedLinks,
+  };
 
   return (
     <MainLayout>
@@ -404,6 +461,11 @@ function SeoLandingPage({ pageKey }) {
             )}
           </div>
         </section>
+
+        <SeoContentSections
+          content={landingSeoContent}
+          title={config.h1}
+        />
 
         <section className="bg-white px-6 py-16">
           <div className="mx-auto max-w-7xl">

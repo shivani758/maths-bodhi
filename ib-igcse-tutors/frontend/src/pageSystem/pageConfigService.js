@@ -49,6 +49,7 @@ function createPageConfig(config) {
     schemaType: config.schemaType ?? "CollectionPage",
     publishStatus: config.publishStatus ?? "draft",
     entity: config.entity ?? null,
+    seoContent: config.seoContent ?? null,
     sections: config.sections ?? {},
   };
 }
@@ -64,7 +65,7 @@ function getVisibleFaqItems(config) {
     return [];
   }
 
-  return config.sections?.faqs ?? config.entity?.faqItems ?? [];
+  return config.sections?.faqs ?? config.entity?.faqItems ?? config.seoContent?.faq ?? [];
 }
 
 function isSectionEnabled(config, sectionId) {

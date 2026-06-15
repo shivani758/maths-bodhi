@@ -247,8 +247,8 @@ const cbseAreas = [
   ),
   area(
     "School corridor",
-    "Sector 45",
-    "/gurugram/sector-45",
+    "South City 1",
+    "/gurugram/south-city-1",
     "Useful when families want practical travel coverage, South City access, and regular updates on maths progress.",
     ["South City", "Home tuition"],
   ),

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
+import { SeoContentSections } from "../components/seo/SeoContentSections";
 import MathsReviewCard from "../components/maths/MathsReviewCard";
 import TutorCard from "../components/TutorCard";
 import {
@@ -19,6 +20,7 @@ import MainLayout from "../layouts/MainLayout";
 import { getCityPage } from "../services/siteLookup";
 import {
   getBreadcrumbSchema,
+  getFAQSchema,
   getServiceSchema,
   getWebPageSchema,
 } from "../utils/schema";
@@ -398,6 +400,98 @@ function CityPage() {
   }
 
   const canonicalPath = `/city/${page.slug}`;
+  const citySeoContent = {
+    intro: {
+      eyebrow: "Local tutor guide",
+      title: `Maths home tutor support in ${page.label}`,
+      paragraphs: [
+        `${page.label} families can use this page to compare maths tutor routes by board, class, sector, and home tuition fit before asking for a shortlist.`,
+        "The goal is to make the first conversation practical: class level, board, school timing, weak chapters, target score, locality, and whether home or online support is better.",
+      ],
+    },
+    whyChoose: {
+      title: `Why local context matters in ${page.label}`,
+      items: [
+        {
+          title: "Travel and timing",
+          description:
+            "Regular home tuition works best when tutor availability fits school hours, commute time, and the student's weekly rhythm.",
+        },
+        {
+          title: "Board and class fit",
+          description:
+            "CBSE, IB, IGCSE, JEE, and senior-school maths need different depth, paper practice, and revision planning.",
+        },
+        {
+          title: "Tutor shortlist quality",
+          description:
+            "A useful shortlist should reflect the student's current confidence, topic gaps, preferred mode, and family schedule.",
+        },
+      ],
+    },
+    whoItHelps: {
+      title: `Who this ${page.label} page is for`,
+      paragraphs: [
+        "This page is for parents comparing maths home tuition near their area and students who need a more consistent plan for school maths, board exams, or advanced preparation.",
+      ],
+    },
+    howItWorks: {
+      title: "How Maths Bodhi uses city and sector details",
+      steps: [
+        {
+          title: "Choose the area",
+          description:
+            "Start with the city or sector so the tutor shortlist stays realistic for home tuition and weekly scheduling.",
+        },
+        {
+          title: "Add board and class",
+          description:
+            "Share the student's board, class, weak chapters, and exam calendar so the match is not just locality-based.",
+        },
+        {
+          title: "Confirm the next step",
+          description:
+            "Use a demo or WhatsApp conversation to check tutor fit, mode, timing, and the learning plan.",
+        },
+      ],
+    },
+    localContext: {
+      title: `${page.label} locality and sector fit`,
+      paragraphs: [
+        `Popular ${page.label} searches usually combine area convenience with class, board, and topic pressure. Nearby sectors help families compare home tuition practicality before committing to a routine.`,
+      ],
+      items: page.topSectors.slice(0, 3).map((sector) => ({
+        title: sector.label,
+        description: sector.summary,
+      })),
+    },
+    faq: [
+      {
+        question: `How should parents choose a maths tutor in ${page.label}?`,
+        answer:
+          "Start with the student's board, class, weak chapters, target score, school timing, and preferred learning mode. Locality should support consistency, not replace academic fit.",
+      },
+      {
+        question: "Can the same enquiry cover home tuition and online maths support?",
+        answer:
+          "Yes. Families can share both preferences, then decide whether home tuition, online support, or a hybrid plan is more practical for the student.",
+      },
+      {
+        question: "Why do board and class filters matter on a city page?",
+        answer:
+          "A Class 10 CBSE student, an IB DP learner, and a JEE aspirant need different teaching depth, practice rhythm, and exam planning.",
+      },
+    ],
+    relatedLinks: [
+      ...BOARD_ROUTE_LINKS,
+      ...CLASS_ROUTE_LINKS,
+      ...page.topSectors.slice(0, 3).map((sector) => ({
+        label: sector.label,
+        to: getSupportedSectorPath(siteData, page, sector) || canonicalPath,
+        description: sector.summary,
+      })),
+    ].slice(0, 6),
+  };
   const serviceSchema = getServiceSchema({
     url: canonicalPath,
     name: h1,
@@ -426,6 +520,7 @@ function CityPage() {
         { label: page.label },
       ],
     }),
+    getFAQSchema({ url: canonicalPath, faqs: citySeoContent.faq }),
   ];
 
   return (
@@ -787,6 +882,11 @@ function CityPage() {
             ) : null}
           </div>
         </section>
+
+        <SeoContentSections
+          content={citySeoContent}
+          title={`Maths home tutor in ${page.label}`}
+        />
 
         <section id="city-tutor-matches" className="bg-white px-6 py-14">
           <div className="mx-auto max-w-7xl">

@@ -14,6 +14,8 @@ import MathsScrollToTop from "../../components/maths/MathsScrollToTop";
 import MathsTutorCard from "../../components/maths/MathsTutorCard";
 import { useSiteData } from "../../contexts/SiteDataContext";
 import MainLayout from "../../layouts/MainLayout";
+import { SeoContentSections } from "../../components/seo/SeoContentSections";
+import { buildDefaultSeoContent } from "../../components/seo/seoContentDefaults";
 import { buildConfigPageSchema } from "../pageConfigService";
 import {
   getMathsBoardPageContent,
@@ -105,6 +107,27 @@ function BoardPageTemplate({ config, templateData = {} }) {
     page.key === "hub"
       ? "These short guides help families compare board fit, maths routines, and the kind of support that usually matters most."
       : `These guides stay close to the questions families often ask before choosing ${page.label.toLowerCase()} support.`;
+  const boardSeoContent = buildDefaultSeoContent({
+    title: page.label,
+    intro: page.subtitle,
+    primaryKeyword: `${page.label} maths support`,
+    area: "Gurugram",
+    boards: [page.label],
+    classes: page.chips,
+    relatedLinks: [
+      ...coreBoardCards.map((card) => ({
+        label: card.title,
+        to: card.to,
+        description: card.description,
+      })),
+      ...(page.childSections ?? []).flatMap((section) => section.items ?? []),
+    ].slice(0, 6),
+    cta: {
+      title: `Plan ${page.label} maths support with Maths Bodhi`,
+      description: page.cta.description,
+      primaryAction: { label: page.cta.label, to: "/book-demo" },
+    },
+  });
 
   return (
     <MainLayout>
@@ -370,6 +393,12 @@ function BoardPageTemplate({ config, templateData = {} }) {
             ) : null}
           </div>
         </section>
+
+        <SeoContentSections
+          content={config.seoContent}
+          fallback={boardSeoContent}
+          title={page.label}
+        />
 
         {featuredResults.length ? (
           <section className="bg-white px-6 py-14">

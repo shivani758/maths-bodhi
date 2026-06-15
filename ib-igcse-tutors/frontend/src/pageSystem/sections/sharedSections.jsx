@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useDeferredValue, useId, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import SectionTitle from "../../components/SectionTitle";
@@ -211,7 +211,33 @@ function getRouteCardSearchText(card = {}) {
     .toLowerCase();
 }
 
-function RouteGroupSection({ group, index }) {
+function getRouteCardTarget(card = {}) {
+  return card.to || card.href || card.url || "";
+}
+
+function getCombinedRouteCards(groups = []) {
+  const routeMap = new Map();
+
+  groups.forEach((group) => {
+    (group.cards ?? []).forEach((card) => {
+      const target = getRouteCardTarget(card);
+
+      if (!target || routeMap.has(target)) {
+        return;
+      }
+
+      routeMap.set(target, {
+        ...card,
+        eyebrow: card.eyebrow ?? group.badge ?? "Locality route",
+        searchText: `${getRouteCardSearchText(card)} ${group.title ?? ""} ${group.badge ?? ""}`.toLowerCase(),
+      });
+    });
+  });
+
+  return Array.from(routeMap.values());
+}
+
+function RouteGroupSection({ group, index, suppressSearch = false }) {
   const searchId = useId();
   const [query, setQuery] = useState("");
   const hasCardLimit = Number.isFinite(group.initialVisibleCount);
@@ -234,7 +260,8 @@ function RouteGroupSection({ group, index }) {
   );
   const canLoadMore = hasCardLimit && visibleCount < filteredCards.length;
   const shouldShowLoadControl = hasCardLimit && filteredCards.length > initialVisibleCount;
-  const activeSearch = query.trim().length > 0;
+  const showSearch = group.searchable && !suppressSearch;
+  const activeSearch = showSearch && query.trim().length > 0;
 
   function handleSearchChange(event) {
     setQuery(event.target.value);
@@ -259,7 +286,7 @@ function RouteGroupSection({ group, index }) {
           </p>
         ) : null}
 
-        {group.searchable ? (
+        {showSearch ? (
           <label htmlFor={searchId} className="mt-7 block max-w-2xl">
             <span className="mb-2 block text-sm font-semibold text-slate-800">
               {group.searchLabel ?? "Find maths home tutors by sector, locality, or society"}
@@ -319,6 +346,122 @@ function RouteGroupSection({ group, index }) {
   );
 }
 
+function CombinedRouteSearchSection({ groups = [], config = {} }) {
+  const searchId = useId();
+  const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
+  const allCards = useMemo(() => getCombinedRouteCards(groups), [groups]);
+  const normalizedQuery = deferredQuery.trim().toLowerCase();
+  const activeSearch = normalizedQuery.length > 0;
+  const resultLimit = Math.max(3, config.resultLimit ?? 12);
+  const initialVisibleCount = Math.max(3, config.initialVisibleCount ?? 6);
+  const linkListId = `${searchId}-all-links`;
+  const filteredCards = useMemo(() => {
+    if (!normalizedQuery) {
+      return allCards;
+    }
+
+    return allCards.filter((card) =>
+      (card.searchText ?? getRouteCardSearchText(card)).includes(normalizedQuery),
+    );
+  }, [allCards, normalizedQuery]);
+  const visibleCards = activeSearch
+    ? filteredCards.slice(0, resultLimit)
+    : allCards.slice(0, initialVisibleCount);
+  const allLinkItems = allCards.filter((card) => getRouteCardTarget(card));
+
+  if (!allCards.length) {
+    return null;
+  }
+
+  return (
+    <section className={`${config.backgroundClassName ?? "bg-white"} px-4 py-12 sm:px-6 lg:px-8`}>
+      <div className="mx-auto max-w-7xl min-w-0">
+        <SectionTitle
+          badge={config.badge ?? "Search Gurugram localities"}
+          title={config.title ?? "Search all Gurugram sectors and locality pages"}
+          subtitle={
+            config.subtitle ??
+            "Search existing Maths Bodhi locality, sector, society, and corridor routes without creating new pages or sending a server request."
+          }
+          align="left"
+        />
+
+        <label htmlFor={searchId} className="mt-7 block max-w-3xl">
+          <span className="mb-2 block text-sm font-semibold text-slate-800">
+            {config.searchLabel ?? "Search an existing Gurugram locality or sector"}
+          </span>
+          <input
+            id={searchId}
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={config.searchPlaceholder ?? "Try Sector 56, DLF, Golf Course Road, Sohna Road, or South City"}
+            aria-describedby={`${searchId}-hint ${searchId}-status ${linkListId}`}
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          />
+          <span id={`${searchId}-hint`} className="mt-2 block text-xs leading-5 text-slate-500">
+            Results are filtered in your browser from existing published Maths Bodhi links.
+          </span>
+        </label>
+
+        <div className="mt-8" aria-live="polite" id={`${searchId}-status`}>
+          {visibleCards.length ? (
+            <>
+              <p className="mb-4 text-sm text-slate-600">
+                {activeSearch
+                  ? `Showing ${visibleCards.length} of ${filteredCards.length} matching locality routes.`
+                  : `Showing ${visibleCards.length} suggested routes. Search to filter all ${allCards.length} available locality routes.`}
+              </p>
+              <MathsRouteCardGrid
+                cards={visibleCards}
+                className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+              />
+              {activeSearch && filteredCards.length > visibleCards.length ? (
+                <p className="mt-4 text-sm text-slate-500">
+                  Keep typing to narrow the list further.
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 text-sm leading-6 text-slate-600 shadow-sm">
+              {config.noResultsText ??
+                "No matching locality found. Try a broader sector, road, society, or nearby Gurugram area."}
+            </div>
+          )}
+        </div>
+
+        {allLinkItems.length ? (
+          <nav
+            id={linkListId}
+            aria-label={config.linkListLabel ?? "All Gurugram locality and sector pages"}
+            className="mt-8 rounded-[24px] border border-slate-200 bg-slate-50 p-5"
+          >
+            <h3 className="text-base font-bold text-slate-950">
+              {config.linkListTitle ?? "All existing Gurugram locality pages"}
+            </h3>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+              {config.linkListDescription ??
+                "These are normal internal links to published Maths Bodhi locality pages, so users and search engines can discover them without using the search box."}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {allLinkItems.map((card) => (
+                <Link
+                  key={getRouteCardTarget(card)}
+                  to={getRouteCardTarget(card)}
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
+                >
+                  {card.title}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 export function PageRouteGroupsSection({ groups = [] }) {
   const visibleGroups = (groups ?? []).filter((group) => group?.cards?.length);
 
@@ -326,15 +469,44 @@ export function PageRouteGroupsSection({ groups = [] }) {
     return null;
   }
 
+  const combinedGroupsById = visibleGroups.reduce((groupMap, group) => {
+    if (!group.combinedSearchGroup) {
+      return groupMap;
+    }
+
+    const currentGroups = groupMap.get(group.combinedSearchGroup) ?? [];
+    groupMap.set(group.combinedSearchGroup, [...currentGroups, group]);
+    return groupMap;
+  }, new Map());
+  const renderedCombinedGroups = new Set();
+
   return (
     <>
       {visibleGroups.map((group, index) => {
+        const combinedSearchId = group.combinedSearchGroup;
+        const shouldRenderCombinedSearch =
+          combinedSearchId && !renderedCombinedGroups.has(combinedSearchId);
+
+        if (shouldRenderCombinedSearch) {
+          renderedCombinedGroups.add(combinedSearchId);
+        }
+
         const groupKey = [
           group.id ?? group.title ?? index,
           group.cards.length,
           group.initialVisibleCount ?? "",
           group.loadStep ?? "",
         ].join("|");
+
+        if (combinedSearchId) {
+          return shouldRenderCombinedSearch ? (
+            <CombinedRouteSearchSection
+              key={groupKey}
+              groups={combinedGroupsById.get(combinedSearchId)}
+              config={group.combinedSearch}
+            />
+          ) : null;
+        }
 
         return <RouteGroupSection key={groupKey} group={group} index={index} />;
       })}

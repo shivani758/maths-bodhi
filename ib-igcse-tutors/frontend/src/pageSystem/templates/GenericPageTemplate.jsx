@@ -1,6 +1,8 @@
 import Seo from "../../components/Seo";
 import AjayMentorBlock from "../../components/AjayMentorBlock";
 import MainLayout from "../../layouts/MainLayout";
+import { SeoContentSections } from "../../components/seo/SeoContentSections";
+import { buildDefaultSeoContent } from "../../components/seo/seoContentDefaults";
 import { getAjayRecommendationForPath } from "../config/ajayRecommendations";
 import { buildConfigPageSchema } from "../pageConfigService";
 import {
@@ -37,6 +39,17 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
   const blogsSection = config.sections?.relatedBlogs ?? {};
   const faqSection = config.sections?.faqSection ?? {};
   const ajayRecommendation = getAjayRecommendationForPath(config.canonicalUrl);
+  const relatedSeoLinks = routeGroups.flatMap((group) => group.cards ?? []).slice(0, 6);
+  const fallbackSeoContent = buildDefaultSeoContent({
+    title: config.title,
+    intro: config.intro,
+    primaryKeyword: config.entity?.primaryKeyword || config.entity?.keyword,
+    area: config.entity?.cityLabel || config.entity?.localityLabel || "Gurugram",
+    boards: [config.entity?.boardLabel, config.entity?.board].filter(Boolean),
+    classes: [config.entity?.classLevel, config.entity?.educationalLevel].filter(Boolean),
+    relatedLinks: relatedSeoLinks,
+    cta: config.sections?.cta,
+  });
 
   return (
     <MainLayout>
@@ -76,6 +89,14 @@ function GenericPageTemplate({ config, templateData = {}, heroActions = [] }) {
 
         {isSectionEnabled(config, "route-groups") ? (
           <PageRouteGroupsSection groups={routeGroups} />
+        ) : null}
+
+        {isSectionEnabled(config, "seo-content") ? (
+          <SeoContentSections
+            content={config.seoContent}
+            fallback={fallbackSeoContent}
+            title={config.title}
+          />
         ) : null}
 
         {isSectionEnabled(config, "featured-tutors") ? (

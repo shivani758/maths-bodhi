@@ -7,7 +7,22 @@ import {
 } from "./seoRecoveryCluster.js";
 
 function routeCard({ eyebrow, title, description, tags = [], to }) {
-  return { eyebrow, title, description, tags, to };
+  return { eyebrow, title, description, tags, to: canonicalizePublicPath(to) };
+}
+
+const PUBLIC_PATH_ALIASES = new Map([
+  ["/book-free-demo-class", "/book-demo"],
+  ["/city/gurugram", "/gurugram"],
+  ["/class-10-maths-tutor", "/gurugram/class-10-maths-home-tutor"],
+  ["/class-12-maths-tutor", "/gurugram/class-12-maths-home-tutor"],
+]);
+
+function canonicalizePublicPath(path) {
+  if (!path) {
+    return path;
+  }
+
+  return PUBLIC_PATH_ALIASES.get(path) ?? path;
 }
 
 function supportPoint(title, description) {
@@ -18,12 +33,8 @@ function faqItem(question, answer) {
   return { question, answer };
 }
 
-function getLocalitySeoDescription(label, context = "") {
-  const contextText = context
-    ? ` ${context.replace(/\.$/, "")}.`
-    : "";
-
-  return `Find verified Maths Bodhi home tutors in ${label}, Gurugram for CBSE, IB, IGCSE, JEE, and school maths support.${contextText} Book a free demo.`;
+function getLocalitySeoDescription(label) {
+  return `Find Maths Bodhi home tutors in ${label}, Gurugram for CBSE, IB, IGCSE, JEE, and school maths. Share class, board, timing, and goals.`;
 }
 
 function getBoardLocalitySeoDescription(page) {
@@ -969,6 +980,134 @@ export const gurugramHubPageConfig = {
   ],
   schemaType: "Service",
   publishStatus: "published",
+  seoContent: {
+    intro: {
+      eyebrow: "Gurugram parent guide",
+      title: "How to use the Gurugram maths tutor hub",
+      paragraphs: [
+        "This page is designed for families who want to compare maths home tutor options in Gurugram without jumping between unrelated pages. Start with the student's board, class, locality, and current pressure point, then move into the route that best matches the need.",
+        "Parents can use the hub to understand whether the first conversation should focus on weekly school support, board exam planning, JEE preparation, IB or IGCSE maths, or a locality-specific home tuition match.",
+      ],
+    },
+    whyChoose: {
+      title: "Why locality and curriculum fit should be checked together",
+      items: [
+        {
+          title: "A better first shortlist",
+          description:
+            "The right match usually depends on board depth, class level, teaching style, timing, and whether the tutor can realistically support the home location.",
+        },
+        {
+          title: "Less confusion for parents",
+          description:
+            "Families can compare CBSE, ICSE, ISC, IGCSE, IB, JEE, and Olympiad support from one Gurugram starting point before opening a narrower page.",
+        },
+        {
+          title: "Clearer next steps",
+          description:
+            "A focused route helps the demo conversation cover weak chapters, school pace, target score, preferred mode, and schedule fit from the beginning.",
+        },
+      ],
+    },
+    whoItHelps: {
+      title: "Who this Gurugram page is for",
+      bullets: [
+        {
+          title: "Parents comparing home tuition options",
+          description:
+            "Useful when travel, school corridor, tutor seniority, and class timing matter as much as subject knowledge.",
+        },
+        {
+          title: "Students needing board-specific help",
+          description:
+            "Helpful for students who need support with NCERT, ICSE or ISC pace, international curriculum maths, JEE preparation, or advanced problem solving.",
+        },
+        {
+          title: "Families still deciding the right route",
+          description:
+            "Start here when the need is clear, but the best page is not yet obvious: class, board, locality, online support, or exam preparation.",
+        },
+      ],
+    },
+    howItWorks: {
+      title: "How Maths Bodhi helps families narrow the choice",
+      steps: [
+        {
+          title: "Share the learning context",
+          description:
+            "Tell Maths Bodhi the class, board, school area, locality, recent marks, weak chapters, and preferred timing.",
+        },
+        {
+          title: "Compare the right route",
+          description:
+            "Use board, class, sector, and format pages to understand which kind of maths support fits the student best.",
+        },
+        {
+          title: "Book a focused demo",
+          description:
+            "Use the first conversation to check explanation style, homework rhythm, exam plan, and whether the tutor match feels practical for the family.",
+        },
+      ],
+    },
+    localContext: {
+      title: "Gurugram context parents usually care about",
+      paragraphs: [
+        "Gurugram maths home tuition often depends on school timing, sector distance, traffic, after-school activities, and whether online backup is needed during exam weeks or travel-heavy days.",
+      ],
+      items: [
+        {
+          title: "Sector and corridor fit",
+          description:
+            "Golf Course Road, Golf Course Extension Road, DLF areas, South City, Sohna Road, and nearby sectors often need different travel and timing plans.",
+        },
+        {
+          title: "Board and exam pressure",
+          description:
+            "Senior-school students may need board paper practice, JEE problem solving, international curriculum support, or a mix of school and entrance preparation.",
+        },
+        {
+          title: "Parent decision support",
+          description:
+            "The goal is to help families ask sharper questions before choosing between regular tuition, revision help, crash-course support, or mentor-led planning.",
+        },
+      ],
+    },
+    relatedLinks: [
+      {
+        label: "CBSE maths tutor in Gurugram",
+        to: "/gurugram/cbse-maths-home-tutor",
+        description: "For families looking for NCERT pace, Class 10 or 12 board planning, and weekly CBSE maths support.",
+      },
+      {
+        label: "Class 10 maths tutor in Gurugram",
+        to: "/gurugram/class-10-maths-home-tutor",
+        description: "For students preparing for board-year maths, school tests, pre-boards, and chapter revision.",
+      },
+      {
+        label: "Sector 56 maths tutor",
+        to: "/gurugram/sector-56",
+        description: "For locality-aware home tuition planning around Sector 56 and nearby Gurugram areas.",
+      },
+      {
+        label: "Book a free demo",
+        to: "/book-demo",
+        description: "Share the board, class, locality, and current maths concern so Maths Bodhi can guide the next step.",
+      },
+    ],
+    cta: {
+      title: "Need help choosing the right Gurugram maths route?",
+      description:
+        "Share the student's board, class, locality, recent marks, weak chapters, and preferred mode. Maths Bodhi can help you choose the most relevant next page or demo conversation.",
+      primaryAction: {
+        label: "Book a free demo",
+        to: "/book-demo",
+      },
+      secondaryAction: {
+        label: "Explore CBSE support",
+        to: "/gurugram/cbse-maths-home-tutor",
+      },
+    },
+  },
   sections: {
     hero: {
       badge: "Gurugram Maths Hub",
@@ -1038,49 +1177,34 @@ export const gurugramHubPageConfig = {
       },
       {
         id: "gurugram-locality-links",
-        badge: "By Locality",
-        title: "Find verified maths home tutors by Gurugram locality",
-        subtitle:
-          "Choose the area that best matches the student's school corridor, travel routine, and home-tuition preference.",
         cards: gurugramHubSectorCards,
-        searchable: true,
-        searchLabel: "Search Gurugram locality",
-        searchPlaceholder: "Try Sector 54, Sector 56, Golf Course Road, or DLF",
-        initialVisibleCount: 6,
-        loadStep: 6,
-        itemLabel: "localities",
-        backgroundClassName: "bg-slate-50",
+        combinedSearchGroup: "gurugram-locality-search",
+        combinedSearch: {
+          badge: "Search Gurugram localities",
+          title: "Search Maths Tutors by Gurugram Sector or Locality",
+          subtitle:
+            "Use one search bar to find existing Maths Bodhi sector, locality, society, and corridor pages. Results link only to real pages already available on the website.",
+          searchLabel: "Search Gurugram locality, sector, society, or corridor",
+          searchPlaceholder: "Try Sector 54, Sector 55, Sector 56, Golf Course Road, DLF, Sohna Road, or South City",
+          noResultsText:
+            "No matching locality found. Try a broader sector, road, society, or nearby Gurugram area.",
+          linkListTitle: "All Gurugram locality links",
+          linkListDescription:
+            "Important Gurugram locality pages remain visible as internal links below, even before a search is used.",
+          backgroundClassName: "bg-white",
+          initialVisibleCount: 9,
+          resultLimit: 12,
+        },
       },
       {
         id: "gurugram-more-locality-links",
-        badge: "More Localities",
-        title: "Choose another Gurugram sector or neighbourhood",
-        subtitle:
-          "Choose your area to explore relevant maths home tuition support nearby.",
         cards: gurugramHubMoreLocalityCards,
-        searchable: true,
-        searchLabel: "Search sector or neighbourhood",
-        searchPlaceholder: "Try Sector 57, Sector 62, Sohna Road, South City, or Sushant Lok",
-        initialVisibleCount: 6,
-        loadStep: 6,
-        itemLabel: "localities",
+        combinedSearchGroup: "gurugram-locality-search",
       },
       {
         id: "gurugram-sector-society-links",
-        badge: "Sectors And Societies",
-        title: "Find maths home tutors by Gurugram sector or society",
-        subtitle:
-          "Choose your area to explore verified maths support and local planning context nearby.",
         cards: gurugramHubSectorSocietyCards,
-        searchable: true,
-        searchLabel: "Search sector, society, or nearby area",
-        searchPlaceholder: "Try Sector 46, DLF Crest, Park Place, or a nearby area",
-        initialVisibleCount: 6,
-        loadStep: 6,
-        itemLabel: "sectors and societies",
-        loadMoreLabel: "Load more sectors",
-        showLessLabel: "Show fewer sectors",
-        backgroundClassName: "bg-slate-50",
+        combinedSearchGroup: "gurugram-locality-search",
       },
       {
         id: "gurugram-class-service-links",

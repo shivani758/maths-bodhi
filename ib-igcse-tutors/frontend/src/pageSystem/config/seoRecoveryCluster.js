@@ -928,7 +928,7 @@ const BATCH_B_INTENT_META = [
     classLevel: "10",
     intent: "test series",
     cluster: "Class 10 Test Series",
-    parentHubPath: "/maths-test-series",
+      parentHubPath: "/maths-revision-program",
     focus: "chapter tests, board-style mocks, error review, and weekly score visibility without fake outcome claims",
   }),
   batchBPage({
@@ -937,7 +937,7 @@ const BATCH_B_INTENT_META = [
     classLevel: "12",
     intent: "test series",
     cluster: "Class 12 Test Series",
-    parentHubPath: "/maths-test-series",
+      parentHubPath: "/maths-revision-program",
     focus: "senior-school chapter tests, mixed papers, calculus practice, and honest error tracking",
   }),
   batchBPage({

@@ -288,7 +288,6 @@ function getHeroIntro(rowData) {
 function getCoreSeoDescription(rowData) {
   const keyword = String(rowData.keyword || rowData.title || "maths support").toLowerCase();
   const title = rowData.title || "Maths Bodhi";
-  const audience = rowData.audience && rowData.audience !== "All" ? ` for ${rowData.audience.toLowerCase()}` : "";
 
   if (/contact/i.test(rowData.pageType) || /contact/i.test(title)) {
     return "Contact Maths Bodhi to discuss the student's class, board, locality, weak chapters, and whether home tuition or online maths support is the right next step.";
@@ -307,18 +306,18 @@ function getCoreSeoDescription(rowData) {
   }
 
   if (/jee/i.test(`${title} ${keyword}`)) {
-    return `Find Maths Bodhi support for ${keyword} with problem-solving structure, mock review, senior-school planning, and a clear demo next step.`;
+    return `Find Maths Bodhi ${keyword} support in Gurugram with problem-solving structure, mock review, senior-school planning, and a clear demo next step.`;
   }
 
   if (/cbse|icse|isc|igcse|ib|cambridge/i.test(`${title} ${keyword}`)) {
-    return `Find Maths Bodhi ${keyword} support${audience} with board-specific method, class fit, revision planning, and verified tutor shortlisting in Gurugram.`;
+    return `Explore Maths Bodhi ${keyword} in Gurugram with board method, class fit, revision planning, and tutor shortlisting.`;
   }
 
   if (/class|grade|myp/i.test(`${title} ${keyword}`)) {
-    return `Find Maths Bodhi ${keyword} support with class-wise planning, weak-chapter repair, school-test preparation, and home or online tutor fit in Gurugram.`;
+    return `Find Maths Bodhi ${keyword} support in Gurugram with class-wise planning, weak-chapter repair, school-test prep, and home or online tutor fit.`;
   }
 
-  return `Find Maths Bodhi ${keyword} guidance for Gurugram families comparing verified tutor fit, board or class needs, lesson mode, and a practical demo next step.`;
+  return `Find Maths Bodhi ${keyword} guidance in Gurugram with tutor fit, board or class needs, lesson mode, and a practical demo next step.`;
 }
 
 function getGeneratedSeoDescription(page) {
@@ -330,7 +329,7 @@ function getGeneratedSeoDescription(page) {
   const area = page.localityLabel ? ` in ${page.localityLabel}, Gurugram` : " in Gurugram";
 
   if (page.schoolName) {
-    return `Use this Maths Bodhi page for ${page.schoolName} search context without affiliation claims. Compare class, board, locality, tutor fit, and demo next steps.`;
+    return `${page.schoolName} maths tutor context. Compare class, board, locality, tutor fit, and demo next steps without affiliation claims.`;
   }
 
   if (page.societyLabel) {
@@ -357,7 +356,7 @@ function getGeneratedSeoDescription(page) {
     return `${title} gives parents a practical Maths Bodhi guide for revision planning, weak-topic repair, exam pressure, and the right tutor conversation.`;
   }
 
-  return `Find ${keyword} with Maths Bodhi for board fit, class needs, Gurugram tutor availability, home or online lessons, and a clear demo next step.`;
+  return `Find ${keyword} with Maths Bodhi for board fit, Gurugram tutor availability, home or online lessons, and a clear demo next step.`;
 }
 
 function buildSupportPoints(rowData) {
