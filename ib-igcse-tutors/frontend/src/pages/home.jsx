@@ -1075,6 +1075,7 @@ function Home() {
                     </label>
                     <select
                       id="home-class-filter"
+                      aria-label="Class or level"
                       value={selectedClass}
                       onChange={(event) => {
                         setSelectedClass(event.target.value);
@@ -1099,6 +1100,7 @@ function Home() {
                     </label>
                     <select
                       id="home-board-filter"
+                      aria-label="Board"
                       value={selectedBoard}
                       onChange={(event) => {
                         setSelectedBoard(event.target.value);
@@ -1123,6 +1125,7 @@ function Home() {
                     </label>
                     <select
                       id="home-sector-filter"
+                      aria-label="Gurugram sector"
                       value={selectedSector}
                       onChange={(event) => {
                         setSelectedSector(event.target.value);
@@ -1147,6 +1150,7 @@ function Home() {
                     </label>
                     <select
                       id="home-mode-filter"
+                      aria-label="Teaching mode"
                       value={selectedMode}
                       onChange={(event) => {
                         setSelectedMode(event.target.value);

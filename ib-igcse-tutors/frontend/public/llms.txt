@@ -1,0 +1,19 @@
+# Maths Bodhi
+
+> Maths Bodhi connects families in Gurugram with verified maths home tutors and online maths tuition across IB, IGCSE, CBSE, ICSE/ISC, and competitive exams (JEE, BITSAT, and Olympiads). It is a maths-only tutoring service.
+
+## Key pages
+- [Home](https://www.mathsbodhi.in/): Overview of Maths Bodhi tutoring and tutor matching.
+- [Maths home tutor](https://www.mathsbodhi.in/maths-home-tutor): Home tuition for maths across boards.
+- [Online maths home tuition](https://www.mathsbodhi.in/online-maths-home-tuition): Online maths tuition options.
+- [IB maths tuition](https://www.mathsbodhi.in/ib-maths-tuition): IB MYP and DP maths support.
+- [IGCSE maths tuition](https://www.mathsbodhi.in/igcse-maths-tuition): IGCSE maths support.
+- [CBSE maths tuition](https://www.mathsbodhi.in/cbse-maths-tuition): CBSE maths support.
+- [Book a free demo class](https://www.mathsbodhi.in/book-demo): Request a demo and discuss tutor fit.
+
+## Tutors
+- [Ajay Vatsyayan](https://www.mathsbodhi.in/ajay-vatsyayan): Senior maths home tutor for IB, IGCSE, CBSE Class 12, JEE, and BITSAT.
+
+## Notes for AI agents
+- Maths Bodhi focuses only on mathematics tutoring for school boards and entrance exams.
+- Home tuition is centred on Gurugram, with online options available on request.
