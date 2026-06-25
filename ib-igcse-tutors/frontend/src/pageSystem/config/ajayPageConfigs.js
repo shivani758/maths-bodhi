@@ -291,6 +291,68 @@ export const ajayIntentPageConfigs = [
     ],
   }),
   createAjayPage({
+    id: "ajay-ib-myp-5",
+    slug: "ib-myp-5-maths-home-tutor",
+    title: "IB MYP Year 5 maths home tutor with Ajay Vatsyayan",
+    badge: "IB MYP 5 to DP bridge mentor",
+    breadcrumbLabel: "IB MYP 5 Maths",
+    seoTitle: "IB MYP 5 Maths Home Tutor Ajay Vatsyayan | Maths Bodhi Gurugram",
+    seoDescription:
+      "Consider Ajay Vatsyayan for IB MYP Year 5 maths when a student needs to consolidate before IB DP, steady on-screen assessment work, and a clearer AA-or-AI direction in Gurugram.",
+    h1: "Ajay Vatsyayan for IB MYP Year 5 maths support in Gurugram",
+    intro:
+      "This page helps families in the final MYP year decide whether Ajay should be discussed as a senior mentor for consolidating maths before the IB Diploma, steadying assessment performance, and preparing for the AA-or-AI decision ahead.",
+    focus: "IB MYP Year 5 consolidation and readiness for IB DP mathematics",
+    audience: "IB MYP Year 5 students moving towards the Diploma Programme",
+    chips: ["IB MYP 5", "DP readiness", "AA vs AI", "Premium schools"],
+    stats: [
+      { value: "MYP 5", label: "Final middle-years year" },
+      { value: "Bridge", label: "MYP to DP transition" },
+      { value: "Direction", label: "AA or AI clarity" },
+    ],
+    knowsAbout: ["IB MYP Mathematics", "Extended mathematics", "Algebra", "Functions", "Trigonometry", "Statistics and probability", "DP readiness"],
+    fitBullets: [
+      "Best for MYP Year 5 learners whose gaps could become costly once IB DP maths begins.",
+      "Useful when the student needs to consolidate and choose an AA or AI direction with more confidence, not just finish homework.",
+      "Home or online mode should be chosen after reviewing maturity, location, and study discipline.",
+    ],
+    contentSections: [
+      contentSection("Why Year 5", "Why the final MYP year is its own conversation", [
+        "IB MYP Year 5 is the last year of the Middle Years Programme and the direct run-up to the IB Diploma. Even students who have coped with maths so far can struggle here, because the gap between MYP expectations and DP expectations is wider than it looks from the outside. Procedural answers that used to be enough start to lose marks, and weak algebra, functions, or trigonometry quietly become a problem that often surfaces only once DP begins.",
+        "This page is for families who want a senior mentor conversation specifically about that transition year. It is not presented as a generic middle-school tutor for every homework task. The fit call should decide whether Ajay's level suits the student now, or whether a different Maths Bodhi tutor is a better age-stage match for the remainder of MYP.",
+      ]),
+      contentSection("Consolidation", "What consolidation before DP actually means", [
+        "A useful MYP 5 plan is less about racing ahead and more about closing the specific gaps that make the Diploma harder than it needs to be. That usually means firming up algebraic manipulation, functions and graphs, trigonometry, and data handling, and making sure the student can explain a method rather than only reach an answer. Students in extended or higher-tier MYP maths especially benefit from cleaner written reasoning before the DP workload arrives.",
+        "The first sessions should map where marks are actually lost — arithmetic fluency, algebra, interpretation of word problems, geometry visualisation, or simply inconsistent practice — and turn that into a steady weekly routine. Rushing into scattered worksheets without that diagnosis tends to waste the limited time left before DP.",
+      ]),
+      contentSection("AA or AI", "Helping the AA-versus-AI decision come into focus", [
+        "Towards the end of MYP, families begin asking whether the student should take DP Mathematics: Analysis and Approaches (AA) or Applications and Interpretation (AI), and at higher or standard level. A good MYP 5 mentor does not push a fixed answer; instead the work itself reveals whether the student copes with and enjoys abstract algebraic reasoning, which leans towards AA, or prefers modelling and applied, technology-supported maths, which leans towards AI.",
+        "Ajay's role in a fit discussion is to give an honest read on which DP path looks realistic for the student's strengths and target subjects, so the family can choose with evidence rather than guesswork. Where the level looks borderline, the plan can focus on the skills that keep the harder option open for longer.",
+      ]),
+      contentSection("Assessment", "On-screen assessment and exam habits", [
+        "Many MYP students sit on-screen (eAssessment) maths components, and all of them face more open, criterion-style questions than in younger years. The habits that matter are showing method clearly, justifying steps, investigating patterns, and applying maths to unfamiliar contexts. These are also exactly the habits the Diploma rewards, so building them in MYP 5 pays off twice.",
+        "A senior tutor should help the student practise under realistic conditions, tidy written communication, and reduce avoidable mistakes, while keeping anxiety down. The aim is calmer, more reliable performance rather than last-minute cramming.",
+      ]),
+      contentSection("Route Boundaries", "Why this page is separate from general MYP and from IB DP", [
+        "This MYP Year 5 page is self-canonical because its search intent is genuinely different. The general IB MYP page covers foundation repair and confidence across the whole programme, while the IB DP pages talk about AA, AI, IA planning, calculators, and final papers. This page sits deliberately between them: it is about the final MYP year and the bridge into DP.",
+        "Families with a younger MYP student should use the broader IB MYP Ajay page, and families whose student is already in the Diploma should use the IB DP Ajay page. Anyone comparing the wider service can open the main IB Maths Home Tutor page before deciding whether to ask for Ajay specifically.",
+      ]),
+    ],
+    relatedLinks: [
+      relatedLink("Main Ajay profile", AJAY_MAIN_PATH, "Understand Ajay's wider senior maths positioning."),
+      relatedLink("IB MYP with Ajay", "/ib-myp-maths-home-tutor/ajay-vatsyayan", "Use this for general MYP foundation support across the programme."),
+      relatedLink("IB DP with Ajay", "/ib-dp-maths-home-tutor/ajay-vatsyayan", "Move here once the student is in Diploma maths."),
+      relatedLink("Book demo discussion", DEMO_PATH, "Share MYP year, school feedback, weak topics, and likely DP direction."),
+    ],
+    faqs: [
+      faq("Is Ajay always the right tutor for an MYP Year 5 student?", "No. Some students need a younger-stage tutor for routine practice. Ajay should be discussed when the need is deeper consolidation, senior mentoring, or preparation for the DP maths jump."),
+      faq("How is this different from the general IB MYP page?", "This page focuses only on the final MYP year and the move into IB DP — consolidation, the AA-or-AI decision, and assessment habits — rather than general MYP foundation support across all years."),
+      faq("Can Ajay help my child choose between AA and AI?", "He can give an honest read during the fit discussion based on how the student handles abstract versus applied maths, but the final choice stays with the family and school."),
+      faq("Does the page include hidden testimonials?", "No. It does not include fake testimonials, review structured data, or rating markup."),
+      faq("Should parents choose home or online?", "That depends on maturity, attention span, location, and family timing. Maths Bodhi can discuss both options during enquiry."),
+    ],
+  }),
+  createAjayPage({
     id: "ajay-igcse",
     slug: "igcse-maths-home-tutor",
     title: "IGCSE maths home tutor with Ajay Vatsyayan",
