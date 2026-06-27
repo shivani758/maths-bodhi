@@ -1,4 +1,27 @@
 {
+  "redirects": [
+    { "source": "/ib-dp-mathematics-home-tutor/ajay-vatsyayan", "destination": "/ib-dp-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/ib-myp-mathematics-home-tutor/ajay-vatsyayan", "destination": "/ib-myp-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/igcse-mathematics-home-tutor/ajay-vatsyayan", "destination": "/igcse-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/cambridge-igcse-maths-home-tutor/ajay-vatsyayan", "destination": "/igcse-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/igcse-extended-maths-home-tutor/ajay-vatsyayan", "destination": "/igcse-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/igcse-international-maths-home-tutor/ajay-vatsyayan", "destination": "/igcse-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/iit-jee-maths-home-tutor/ajay-vatsyayan", "destination": "/jee-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/jee-main-advanced-maths-tutor/ajay-vatsyayan", "destination": "/jee-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/iit-jee-advanced-maths-tutor/ajay-vatsyayan", "destination": "/jee-advanced-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/jee-mathematics-coach/ajay-vatsyayan", "destination": "/jee-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/jee-maths-personal-tutor/ajay-vatsyayan", "destination": "/jee-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/bitsat-mathematics-coaching/ajay-vatsyayan", "destination": "/bitsat-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/bits-pilani-entrance-maths-tutor/ajay-vatsyayan", "destination": "/bitsat-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/iit-jee-maths-crash-course/ajay-vatsyayan", "destination": "/jee-main-maths-crash-course/ajay-vatsyayan", "permanent": true },
+    { "source": "/class-12-maths-crash-course/ajay-vatsyayan", "destination": "/board-exam-maths-crash-course/ajay-vatsyayan", "permanent": true },
+    { "source": "/cbse-maths-crash-course/ajay-vatsyayan", "destination": "/board-exam-maths-crash-course/ajay-vatsyayan", "permanent": true },
+    { "source": "/competitive-exam-maths-tutor/ajay-vatsyayan", "destination": "/engineering-entrance-maths-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/maths-olympiad-coach/ajay-vatsyayan", "destination": "/olympiad-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/inmo-maths-tutor/ajay-vatsyayan", "destination": "/olympiad-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/prmo-maths-tutor/ajay-vatsyayan", "destination": "/olympiad-maths-home-tutor/ajay-vatsyayan", "permanent": true },
+    { "source": "/rmo-maths-tutor/ajay-vatsyayan", "destination": "/olympiad-maths-home-tutor/ajay-vatsyayan", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
