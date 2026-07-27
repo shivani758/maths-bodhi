@@ -336,7 +336,13 @@ jobs:
           #
           # Two passes so the site is never asking for an asset that has not
           # landed yet: everything except index.html first, index.html last.
-          rsync -rlt --delete --chmod=D775,F664 --no-perms --no-owner --no-group \
+          # -O (--omit-dir-times) matters as much as the rest. Without it, -t
+          # tries to set the modification time on directories that already exist
+          # in the served root — ".", "assets", "images" — and those belong to
+          # mathsbodhi, not to the deploy user. rsync reports "failed to set
+          # times ... Operation not permitted" and exits 23, which fails the
+          # deploy even though every file copied correctly.
+          rsync -rltO --delete --chmod=D775,F664 --no-perms --no-owner --no-group \
             --exclude="index.html" \
             "${FRONTEND_DIR}/dist/" "${SERVED_ROOT}/"
 
