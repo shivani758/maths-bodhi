@@ -350,6 +350,22 @@ jobs:
 
           echo "Published $(find "${SERVED_ROOT}" -type f | wc -l) files to ${SERVED_ROOT}"
 
+          # Remove the legacy directory whose name ends in a newline, left behind
+          # by the old broken path. Its contents belong to this deploy user, so
+          # this is the only account that can delete it — the site user cannot.
+          #
+          # Guarded three ways: it must actually exist as a directory, and it must
+          # be neither the served root nor the app directory. Nothing is deleted
+          # by pattern or glob; the path is constructed literally.
+          LEGACY_DIR="$(printf '%s\n' '/home/mathsbodhi/htdocs/www.mathsbodhi.in')"
+          if [ -d "${LEGACY_DIR}" ] \
+             && [ "${LEGACY_DIR}" != "${SERVED_ROOT}" ] \
+             && [ "${LEGACY_DIR}" != "${APP_DIR}" ] \
+             && [ "${LEGACY_DIR}" != "/" ]; then
+            rm -rf "${LEGACY_DIR}"
+            echo "Removed the legacy newline-suffixed directory."
+          fi
+
           cd "${BACKEND_DIR}"
           npm prune --omit=dev
           rm -rf "${FRONTEND_DIR}/node_modules"
