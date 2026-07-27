@@ -357,7 +357,12 @@ jobs:
           # Guarded three ways: it must actually exist as a directory, and it must
           # be neither the served root nor the app directory. Nothing is deleted
           # by pattern or glob; the path is constructed literally.
-          LEGACY_DIR="$(printf '%s\n' '/home/mathsbodhi/htdocs/www.mathsbodhi.in')"
+          # NOT $(printf '%s\n' ...). Command substitution strips trailing
+          # newlines, so that produced the path WITHOUT the newline — which is
+          # exactly the live site's directory. The guards below caught it and
+          # skipped the delete; without them that would have removed the served
+          # site. $'\n' appends a real newline instead.
+          LEGACY_DIR="/home/mathsbodhi/htdocs/www.mathsbodhi.in"$'\n'
           if [ -d "${LEGACY_DIR}" ] \
              && [ "${LEGACY_DIR}" != "${SERVED_ROOT}" ] \
              && [ "${LEGACY_DIR}" != "${APP_DIR}" ] \
