@@ -5,6 +5,8 @@ on:
     branches:
       - staging
       - main
+  # Lets a deploy be re-run from the Actions tab without inventing a commit —
+  # useful when a run failed on server state rather than on the code.
   workflow_dispatch:
 
 concurrency:
@@ -299,7 +301,10 @@ jobs:
           cd "${FRONTEND_DIR}"
           npm ci
           npm run build
-          chmod 755 "${APP_DIR}" "${APP_DIR}/${APP_SUBDIR}" "${FRONTEND_DIR}" "${FRONTEND_DIR}/dist"
+          # Tolerate failure: these paths belong to whoever created them, and a
+          # chmod on a directory this user does not own aborts the deploy under
+          # "set -e" without changing anything that matters.
+          chmod 755 "${APP_DIR}" "${APP_DIR}/${APP_SUBDIR}" "${FRONTEND_DIR}" "${FRONTEND_DIR}/dist" 2>/dev/null || true
           find "${FRONTEND_DIR}/dist" -type d -exec chmod 755 {} \;
           find "${FRONTEND_DIR}/dist" -type f -exec chmod 644 {} \;
 
@@ -318,13 +323,24 @@ jobs:
 
           mkdir -p "${SERVED_ROOT}"
 
+          # Deliberately -rlt and NOT -a.
+          #
+          # The served root belongs to the site user (mathsbodhi) while this
+          # deploy runs as mathsbodhi_user — group write is what lets it publish
+          # at all. "-a" implies -p -o -g, so rsync would try to change the
+          # permissions and ownership of files it does not own, which fails with
+          # "Operation not permitted" and takes the whole deploy down under
+          # "set -e". Same reason there is no chmod loop over the served root
+          # here: --chmod sets the mode as each file is written instead, which
+          # only touches files rsync itself creates.
+          #
           # Two passes so the site is never asking for an asset that has not
           # landed yet: everything except index.html first, index.html last.
-          rsync -a --delete --exclude="index.html" "${FRONTEND_DIR}/dist/" "${SERVED_ROOT}/"
-          cp "${FRONTEND_DIR}/dist/index.html" "${SERVED_ROOT}/index.html"
+          rsync -rlt --delete --chmod=D775,F664 --no-perms --no-owner --no-group \
+            --exclude="index.html" \
+            "${FRONTEND_DIR}/dist/" "${SERVED_ROOT}/"
 
-          find "${SERVED_ROOT}" -type d -exec chmod 775 {} \;
-          find "${SERVED_ROOT}" -type f -exec chmod 664 {} \;
+          cat "${FRONTEND_DIR}/dist/index.html" > "${SERVED_ROOT}/index.html"
 
           echo "Published $(find "${SERVED_ROOT}" -type f | wc -l) files to ${SERVED_ROOT}"
 
