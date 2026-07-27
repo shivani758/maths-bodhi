@@ -198,12 +198,22 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Strip whitespace here too. This step runs before the deploy script and
+          # creates the directory itself, so leaving it on the raw value would
+          # recreate the newline-suffixed folder even with the deploy script fixed.
+          APP_DIR="$(printf '%s' "${SERVER_PROJECT_PATH}" | tr -d '[:space:]')"
+
+          if [ -z "${APP_DIR}" ] || [ "${APP_DIR}" = "/" ]; then
+            echo "::error::SERVER_PROJECT_PATH is empty or unsafe."
+            exit 1
+          fi
+
           sshpass -p "${SSH_PASSWORD}" ssh \
             -p "${SSH_PORT}" \
             -o StrictHostKeyChecking=no \
             -o UserKnownHostsFile=/dev/null \
             "${SSH_USER}@${SSH_HOST}" \
-            "mkdir -p '${SERVER_PROJECT_PATH}/.deploy'"
+            "mkdir -p '${APP_DIR}/.deploy'"
 
           sshpass -p "${SSH_PASSWORD}" scp \
             -P "${SSH_PORT}" \
@@ -212,7 +222,7 @@ jobs:
             .deploy/source.tgz \
             .deploy/backend.env \
             .deploy/frontend.env.production \
-            "${SSH_USER}@${SSH_HOST}:${SERVER_PROJECT_PATH}/.deploy/"
+            "${SSH_USER}@${SSH_HOST}:${APP_DIR}/.deploy/"
 
       - name: Deploy on CloudPanel
         shell: bash
@@ -229,14 +239,34 @@ jobs:
           cat > "${remote_script}" <<'REMOTE_SCRIPT'
           set -euo pipefail
 
-          APP_DIR="${SERVER_PROJECT_PATH}"
+          # Strip every whitespace character, newlines included.
+          #
+          # This is the guard for the bug that took the site down on 24 July 2026:
+          # SERVER_PROJECT_PATH was saved in GitHub with an invisible trailing
+          # newline, so "mkdir -p" created a directory whose name literally ended
+          # in \n. Every path built from it inherited the newline, the backend was
+          # started from that folder, and the built frontend was written somewhere
+          # nginx does not serve. Two look-alike folders, three weeks of deploys
+          # that reached nobody. Pasting a value into GitHub's secret box picks up
+          # a trailing newline very easily, so this strips it rather than trusting
+          # the value to be clean.
+          APP_DIR="$(printf '%s' "${SERVER_PROJECT_PATH}" | tr -d '[:space:]')"
+          SERVED_ROOT="${SERVED_ROOT:-/home/mathsbodhi/htdocs/www.mathsbodhi.in}"
           APP_SUBDIR="ib-igcse-tutors"
           BACKEND_DIR="${APP_DIR}/${APP_SUBDIR}/backend"
           FRONTEND_DIR="${APP_DIR}/${APP_SUBDIR}/frontend"
           PM2_PROCESS_NAME="maths-bodhi-backend"
 
           if [ -z "${APP_DIR}" ] || [ "${APP_DIR}" = "/" ]; then
-            echo "SERVER_PROJECT_PATH is empty or unsafe."
+            echo "SERVER_PROJECT_PATH is empty or unsafe: '${APP_DIR}'"
+            exit 1
+          fi
+
+          # The source checkout must never land in the web root — it would publish
+          # the whole repository, .deploy/backend.env and its secrets included.
+          if [ "${APP_DIR}" = "${SERVED_ROOT}" ]; then
+            echo "SERVER_PROJECT_PATH must not be the served web root (${SERVED_ROOT})."
+            echo "Point it at a working directory outside htdocs."
             exit 1
           fi
 
@@ -272,6 +302,31 @@ jobs:
           chmod 755 "${APP_DIR}" "${APP_DIR}/${APP_SUBDIR}" "${FRONTEND_DIR}" "${FRONTEND_DIR}/dist"
           find "${FRONTEND_DIR}/dist" -type d -exec chmod 755 {} \;
           find "${FRONTEND_DIR}/dist" -type f -exec chmod 644 {} \;
+
+          # Publish the build to the folder nginx actually serves.
+          #
+          # This step did not exist before 27 July 2026, which is the real reason
+          # the live site sat on a 6 July build for three weeks. The deploy built
+          # correctly every time and then stopped, leaving the result in a folder
+          # nobody serves. It was patched by hand twice (11 July, 27 July); the
+          # note written the first time said the copy has to happen on every
+          # deploy, and nothing automated it. This is that automation.
+          if [ ! -f "${FRONTEND_DIR}/dist/index.html" ]; then
+            echo "Build produced no index.html — refusing to publish."
+            exit 1
+          fi
+
+          mkdir -p "${SERVED_ROOT}"
+
+          # Two passes so the site is never asking for an asset that has not
+          # landed yet: everything except index.html first, index.html last.
+          rsync -a --delete --exclude="index.html" "${FRONTEND_DIR}/dist/" "${SERVED_ROOT}/"
+          cp "${FRONTEND_DIR}/dist/index.html" "${SERVED_ROOT}/index.html"
+
+          find "${SERVED_ROOT}" -type d -exec chmod 775 {} \;
+          find "${SERVED_ROOT}" -type f -exec chmod 664 {} \;
+
+          echo "Published $(find "${SERVED_ROOT}" -type f | wc -l) files to ${SERVED_ROOT}"
 
           cd "${BACKEND_DIR}"
           npm prune --omit=dev
