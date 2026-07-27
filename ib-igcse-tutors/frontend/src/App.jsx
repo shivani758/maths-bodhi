@@ -17,6 +17,7 @@ const CityPage = lazy(() => import("./pages/CityPage"));
 const SectorPage = lazy(() => import("./pages/SectorPage"));
 const TutorProfile = lazy(() => import("./pages/TutorProfile"));
 const BookDemo = lazy(() => import("./pages/BookDemo"));
+const FounderPage = lazy(() => import("./pages/FounderPage"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
 const ConfigDrivenPageRoute = lazy(() => import("./pageSystem/routes/ConfigDrivenPageRoute"));
 const AdminProviders = lazy(() => import("./admin/AdminProviders"));
@@ -95,6 +96,7 @@ function App() {
           <Route path="/blogs/:slug" element={<BlogDetailPage />} />
           <Route path="/book-demo" element={<BookDemo />} />
           <Route path="/book-free-demo-class" element={<BookDemo />} />
+          <Route path="/founder" element={<FounderPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/student-login" element={<StudentLogin />} />
           <Route path="/student/login" element={<StudentLogin />} />

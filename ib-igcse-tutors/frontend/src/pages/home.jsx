@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import SectionTitle from "../components/SectionTitle";
 import Seo from "../components/Seo";
 import AjayMentorBlock from "../components/AjayMentorBlock";
+import FounderBlock from "../components/FounderBlock";
 import getAjayVatsyayanPremiumTutorSchema, {
   AJAY_VATSYAYAN_TUTOR_CARD,
 } from "../components/AjayVatsyayanPremiumTutorSchema";
@@ -1187,6 +1188,8 @@ function Home() {
             </div>
           </div>
         </section>
+
+        <FounderBlock />
 
         <AjayMentorBlock recommendation={HOME_AJAY_RECOMMENDATION} />
 
